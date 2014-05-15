@@ -1,0 +1,337 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Regular;\f2\fswiss\fcharset0 ArialMT;
+}
+{\colortbl;\red255\green255\blue255;\red92\green38\blue153;\red46\green13\blue110;\red170\green13\blue145;
+\red28\green0\blue207;\red0\green0\blue233;}
+\margl1440\margr1440\vieww32400\viewh19220\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\b\fs48 \cf0 Questions\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 Can I put this project on Github? Private repo? What account? Forking from another account's repo?\
+What does the gear icon do?\
+Page for profile? With the metrics described of projected vs. actual time/cost?\
+How am I reaching backend for authentication/login?\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Most Important Features (In Order)\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 Login Screen with email and password fields\
+Dummy data being fed when logging in and populating a tableView\
+Ability to click on a table cell and bring up a new view with a given contract's information\
+ - List of todo items, newest first\
+ - \
+Ability to edit data on that new view and have it be updated when going back to tableviewcell list\
+Image can be blank and uploaded or already have an image\
++ button in top left of tableView for adding a new contract\
+ - Successfully adding a new table cell in correct place when adding new contract\
+Improve design to be more flat as per Dribbble mockups below\
+ - Create border around button\
+ - Use white background with orange/blue elements\
+Proper authentication on login screen with real live data\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Stretch Goals\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 Sign up screen (can merge login and signup into one screen as per Dribbble design)
+\b \
+\
+Overview
+\b0 \
+often word of mouth referral but of bad contractors\
+\
+hard to get good word of mouth referral\
+\
+younger crowd uses yelp/angies list\
+ - yelp uses subjective measures of quality\
+ - angies list requires people to generate reviews/often not accurate\
+\
+Objective metrics rather than subjective metrics of yelp/angies\
+ - web interface has grid with balls representing number of jobs completed\
+ - y-axis is projected time versus real time\
+ - x-axis is projected cost vs. real cost\
+\
+Main list view \
+\
+Calendar view listed by due date\
+\
+Click on a specific project to get sublist\
+ - each sublist item has sublist item title, due date, and picture when done\
+\
+Trust a big issue because have to leave stranger in your home while you go to work\
+ - Picture gives instant snapshot to client to ease some worries\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Technologies\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 Ionic?\
+PhoneGap?\
+iOS? \uc0\u8730 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Design\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\i\b0 \cf0 Color Scheme
+\i0 \
+FF9900 - rgb(255, 153, 0) - orange\
+6599FF - rgb(101, 153, 255) - blue\
+
+\i Login Screen
+\i0 \
+ - http://dribbble.com/shots/917819-iPad-Calendar-Login?list=searches&tag=login\
+ - http://dribbble.com/shots/713946-Login-or-Register?list=searches&tag=login?list=searches&tag=login\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Views\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 Login\
+Sign up\
+List of contracts\
+Single contract (clicking a list item in List of contracts view)\
+Creating a contract ('+' button in top left corner of List of contracts view)\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\i \cf0 Login
+\i0 \
+\
+\
+
+\i List of contracts\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\i0 \cf0 Populate headers for projects based on date
+\i \
+
+\i0 Populate table cells in code based on projects from backend\
+ - Create size and alignment of each table cell inside code\
+	- Elements include: \
+		- Image upload section \
+		- Title (label with bold text)\
+		- Next Step (label with small grey text)\
+		- Due date (label with small grey text)\
+ - \
+\
+Image upload section is a button with a background image that links to an IBAction, which creates a UIImagePickerController and replaces the button with an image of the given image.\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Code\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 Recognizing taps on a single subview (e.g. an image)
+\b \
+\pard\tx1252\pardeftab1252\pardirnatural
+
+\f1\b0 \cf0 \CocoaLigature0     \cf2 UITapGestureRecognizer\cf0 * tap = [[\cf2 UITapGestureRecognizer\cf0  \cf3 alloc\cf0 ] \cf3 initWithTarget\cf0 :\cf4 self\cf0  \cf3 action\cf0 :\cf4 @selector\cf0 (imageViewTapDetected:)];\
+    [tap \cf3 setDelegate\cf0 :\cf4 self\cf0 ];\
+    [tap \cf3 setNumberOfTapsRequired\cf0 :\cf5 1\cf0 ];\
+    [image \cf3 addGestureRecognizer\cf0 :tap];\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0 \cf0 \CocoaLigature1 \
+Use table headers for each date range\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Issues\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 Login screen starts too low yet there's no scroll view\
+Create Github repo\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Steroids app commands
+\b0 \
+steroids connect\
+steroids connect --serve\
+"simulator" (after running "steroids connect")\
+\
+
+\b Improvements 4/22/14
+\b0 \
+ \uc0\u8730  - Integrate Parse\
+	\uc0\u8730  - Add authentication for logging in\
+	\uc0\u8730  - Look for credentials from Danny's email\
+		\uc0\u8730  - Send Danny email to verify keys are still the same\
+		\uc0\u8730  - Ask SO Question about why Parse isn't linking properly\
+		\uc0\u8730  - Object names\
+			- clientInfo\
+			- notes\
+			- title\
+			- user (pointer)\
+			- ACL\
+			- start\
+			- end\
+			- timeline (array of objects)\
+			- price\
+			- photoURL\
+		\uc0\u8730  - Create new Parse account for Frankie and create tables that mirror what Danny had\
+	\uc0\u8730  - Try placing in app and see if it stills works (grab some data)\
+		\uc0\u8730  - Did not work because Parse not linking properly\
+		\uc0\u8730  - Try to get base app working with quickstart guide\
+			\uc0\u8730  - {\field{\*\fldinst{HYPERLINK "https://parse.com/apps/quickstart#ios/native/blank"}}{\fldrslt https://parse.com/apps/quickstart#ios/native/blank}}\
+			\uc0\u8730  - {\field{\*\fldinst{HYPERLINK "https://parse.com/docs/ios_guide#top/iOS"}}{\fldrslt https://parse.com/docs/ios_guide#top/iOS}}\
+\
+ - Improve detail view\
+	- Consistent styling\
+\
+ - Improve add contract view\
+	- Have text fields dismiss properly\
+\
+ - Create a settings (gear) icon at top of table view\
+\
+ - Get Android from Danny/Ryan to download/test Android app\
+	- What is the in the settings/hamburger menu?\
+\
+ - Add tests with XCTest\
+	- Tests for each VC? Best practices for unit testing in Obj-C?\
+\
+ \uc0\u8730  - Change project to XCworkspace by separating project and dependencies\
+\
+ - Clean up/refactor code:\
+	- Change all setBlah to .blah = \
+	- Any numbers that are used often should be changed to constants e.g. setContentOffset in addContractVC\
+	- Remove excess empty lines \
+	- Give all method signatures consistent spacing\
+	- Remove any stupid comments\
+	- Give all curly braces consistent spacing\
+	- Add more pragma marks\
+	- Rename class names to be the same as their file names\
+	- Change class names in comments at top of each file\
+	- Create a sharedInstance of storyboard from loginViewController (currently being created in MasterVC). Refactor all pushViewController calls to use this Storyboard sharedInstance\
+		- May need to give each VC in the storyboard an identifier\
+\
+ \uc0\u8730  - When registering, check to make sure given email isn't already in database (already done with Parse PFUser object)\
+\
+ - Once registered, send email to address to verify (this can be set in Parse settings)\
+\
+ \uc0\u8730  - In register view, check to see if Parse throws an error and create UIAlertView accordingly\
+\
+ \uc0\u8730  - When transitioning from register view to contract view, make sure view controller is the same as when going from login to contract\
+	\uc0\u8730  - Change login button to be an IBAction instead of a simple segue. Only perform the segue when authenticated. Can probably remove the navigation controller. But you may want it for the navigation bar.\
+	- Remove embedded navigation controller?\
+\
+ \uc0\u8730  - Find a guide for how to have best chances of being accepted into App Store (see "links" file)\
+\
+ - Get rid of Storyboard AutoLayout warnings\
+\
+ \uc0\u8730  - Fix error of janky transition followed by black screen\
+\
+ \uc0\u8730  - Create "Sign Out" button in top-right corner of master VC and user Parse to log out\
+	\uc0\u8730  - Override navigation bar to not have a back button\
+	\uc0\u8730  - To start, + for add contract and "log out"\
+	- Later have hamburger and settings icon\
+	- Possibly integrate log out into hamburger or settings screen\
+\
+ \uc0\u8730  - Change mastervc to not using named segue and instead push into detailvc from code\
+\
+ \uc0\u8730  - Create currentUser object so user login is kept track of\
+\
+ - Store contracts into Parse\
+\
+ - Load contracts from Parse\
+\
+ - Ability to take picture for contract\
+\
+ - Create alert view when passwords don't match\
+	- Do not actually register person when something wrong with passwords\
+\
+ - Cache objects pulled from Parse into Core Data and periodically make call to Parse for updated objects\
+	- Yes, ideally you should use both Parse and Core Data\
+\
+ - Change Table View\
+	- Grab data from cached Core Data or Parse Project table\
+	- Run poll to grab Parse data every now and then\
+	- Populate MasterContractVC from cached Core Data objects or, if needed, Parse fetched objects\
+	- Use NSFetchedResultsController?\
+	- Add search at top of MasterContractVC\
+\
+ - Pay Ruben to do a code review and ask for any advice on getting accepted into App Store\
+	- How to make sure app doesn't look like when rotated\
+\
+ - Is there a way to cache Quartz animations so the circle renders immediately when going back to a VC?\
+	- You currently have the animations redrawing every time the tableView is loaded\
+	- This only happens for the cell that was currently selected\
+\
+ - Remove need for username by simply creating a random one for each user that registers\
+\
+ - Add placeholder to text view\
+	- {\field{\*\fldinst{HYPERLINK "http://stackoverflow.com/questions/1328638/placeholder-in-uitextview"}}{\fldrslt http://stackoverflow.com/questions/1328638/placeholder-in-uitextview}}\
+\
+ - If there is info in the text boxes and user presses "back" button, confirm with alert view because data will be wiped\
+\
+ - Create custom back button so that it's touch can be intercepted and user can be alerted when going away from new contract page with data already entered\
+	- Can maybe just intercept back button press but can't really stop/control when VC is popped {\field{\*\fldinst{HYPERLINK "http://stackoverflow.com/questions/14256051/uinavigationcontroller-and-back-button-action"}}{\fldrslt http://stackoverflow.com/questions/14256051/uinavigationcontroller-and-back-button-action}}\
+	- Can maybe override some VC methods to make this happen {\field{\*\fldinst{HYPERLINK "http://www.hanspinckaers.com/custom-action-on-back-button-uinavigationcontroller"}}{\fldrslt http://www.hanspinckaers.com/custom-action-on-back-button-uinavigationcontroller}}\
+\
+ - Add $ to price in relevant text field with textFieldDidEndEditing delegate method\
+\
+
+\b Data\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\i\b0 \cf0 Project Table
+\i0 \
+client (object)\
+ - email\
+ - first\
+ - last\
+notes (string)\
+title (string)\
+user (pointer)\
+ACL (object)\
+start (string)\
+end (string)\
+timeline (array of objects)\
+price (number)\
+photo (string)\
+completed (boolean)\
+\
+
+\i User Table
+\i0\b \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 username (string)\
+password (string)\
+authData (authData)\
+emailVerified (boolean)\
+bio (string)\
+company (string)\
+email (string)\
+city (string)\
+firstName (string)\
+lastName (string)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Google Play link: 
+\f2\fs26 \cf6 \ul \ulc6 https://play.google.com/store/apps/details?id=com.ionicframework.frankie\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\fs48 \cf0 \ulnone \
+treebookpig\
+\
+}

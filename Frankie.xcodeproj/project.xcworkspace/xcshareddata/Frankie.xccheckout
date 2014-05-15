@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>A20FC538-54CB-4B06-8FCE-9CEC525C6043</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Frankie</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>067561FD-2CDD-47CB-A15F-36A6CE003698</key>
+		<string>ssh://github.com/hackreactor/hrhq-base.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>hack-reactor-materials/hir/Frankie/Frankie.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>067561FD-2CDD-47CB-A15F-36A6CE003698</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/hackreactor/hrhq-base.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>067561FD-2CDD-47CB-A15F-36A6CE003698</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>067561FD-2CDD-47CB-A15F-36A6CE003698</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Dropbox</string>
+		</dict>
+	</array>
+</dict>
+</plist>

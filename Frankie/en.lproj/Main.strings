@@ -1,0 +1,57 @@
+
+/* Class = "IBUIButton"; normalTitle = "submit"; ObjectID = "1Sa-Yf-Cvu"; */
+"1Sa-Yf-Cvu.normalTitle" = "submit";
+
+/* Class = "IBUILabel"; text = "DueDate"; ObjectID = "2IW-vR-mP4"; */
+"2IW-vR-mP4.text" = "DueDate";
+
+/* Class = "IBUITextField"; placeholder = "password"; ObjectID = "CqB-VC-HYi"; */
+"CqB-VC-HYi.placeholder" = "password";
+
+/* Class = "IBUILabel"; text = "Frankie"; ObjectID = "FJp-mb-Dkx"; */
+"FJp-mb-Dkx.text" = "Frankie";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "MmB-Mc-iMF"; */
+"MmB-Mc-iMF.text" = "Label";
+
+/* Class = "IBUIButton"; normalTitle = "Edit"; ObjectID = "Okx-Yt-z0b"; */
+"Okx-Yt-z0b.normalTitle" = "Edit";
+
+/* Class = "IBUITextField"; placeholder = "title of project"; ObjectID = "Tsu-Eg-wdz"; */
+"Tsu-Eg-wdz.placeholder" = "title of project";
+
+/* Class = "IBUITextField"; placeholder = "password"; ObjectID = "Ua5-Dg-hlS"; */
+"Ua5-Dg-hlS.placeholder" = "password";
+
+/* Class = "IBUITextField"; placeholder = "email"; ObjectID = "UtR-CY-vEh"; */
+"UtR-CY-vEh.placeholder" = "email";
+
+/* Class = "IBUITextField"; placeholder = "username"; ObjectID = "VZS-bR-th3"; */
+"VZS-bR-th3.placeholder" = "username";
+
+/* Class = "IBUIButton"; normalTitle = "register"; ObjectID = "WaC-2b-BJH"; */
+"WaC-2b-BJH.normalTitle" = "register";
+
+/* Class = "IBUITextField"; placeholder = "first step"; ObjectID = "ZXE-0N-4oO"; */
+"ZXE-0N-4oO.placeholder" = "first step";
+
+/* Class = "IBUIButton"; normalTitle = "register"; ObjectID = "ZbK-q9-0rd"; */
+"ZbK-q9-0rd.normalTitle" = "register";
+
+/* Class = "IBUITextField"; placeholder = "date"; ObjectID = "b59-KK-Ba1"; */
+"b59-KK-Ba1.placeholder" = "date";
+
+/* Class = "IBUITextField"; placeholder = "email"; ObjectID = "c5x-bZ-uaT"; */
+"c5x-bZ-uaT.placeholder" = "email";
+
+/* Class = "IBUIButton"; normalTitle = "login"; ObjectID = "efB-2d-CjU"; */
+"efB-2d-CjU.normalTitle" = "login";
+
+/* Class = "IBUITextField"; placeholder = "re-type password"; ObjectID = "gq5-Cp-Wim"; */
+"gq5-Cp-Wim.placeholder" = "re-type password";
+
+/* Class = "IBUITextField"; text = "DueDate"; ObjectID = "l3x-Rx-rci"; */
+"l3x-Rx-rci.text" = "DueDate";
+
+/* Class = "IBUINavigationItem"; title = "Projects"; ObjectID = "neP-uG-6T7"; */
+"neP-uG-6T7.title" = "Projects";
