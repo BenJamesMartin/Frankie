@@ -353,7 +353,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="66" id="pCj-Uj-D1b"/>
                                         </constraints>
-                                        <color key="textColor" red="0.72549019607843135" green="0.72549019607843135" blue="0.72549019607843135" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                                     </textView>
@@ -457,159 +457,207 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Okx-Yt-z0b">
-                                <rect key="frame" x="250" y="373" width="53" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="meg-Ux-9Gl">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Okx-Yt-z0b">
+                                        <rect key="frame" x="260" y="288" width="53" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="53" id="gSJ-YA-32m"/>
+                                        </constraints>
+                                        <state key="normal" title="Edit">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="editDueDate:" destination="vL1-ub-e7x" eventType="touchUpInside" id="gWR-wZ-27P"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2IW-vR-mP4">
+                                        <rect key="frame" x="29" y="288" width="223" height="33"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="33" id="pYT-KI-Rkm"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
+                                        <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ga9-kq-eJK">
+                                        <rect key="frame" x="260" y="249" width="53" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="53" id="SpV-TN-9R6"/>
+                                        </constraints>
+                                        <state key="normal" title="Edit">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="editPrice:" destination="vL1-ub-e7x" eventType="touchUpInside" id="CwX-Dq-tSG"/>
+                                        </connections>
+                                    </button>
+                                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hTU-ra-uE4">
+                                        <rect key="frame" x="29" y="246" width="223" height="33"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="33" id="Qru-Jg-V7Z"/>
+                                        </constraints>
+                                        <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="decimalPad" returnKeyType="done"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="vL1-ub-e7x" id="0gz-RY-Y2n"/>
+                                        </connections>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="itu-1O-mie">
+                                        <rect key="frame" x="260" y="206" width="53" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="53" id="xCC-Cg-UtF"/>
+                                        </constraints>
+                                        <state key="normal" title="Edit">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="editTitle:" destination="vL1-ub-e7x" eventType="touchUpInside" id="MQf-Uk-jQA"/>
+                                        </connections>
+                                    </button>
+                                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jp9-q7-dRZ">
+                                        <rect key="frame" x="29" y="204" width="223" height="33"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="223" id="RBu-MI-6JM"/>
+                                            <constraint firstAttribute="height" constant="33" id="ZTh-jt-Ils"/>
+                                        </constraints>
+                                        <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="vL1-ub-e7x" id="e8x-HB-ifE"/>
+                                        </connections>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Jd-PX-x6m">
+                                        <rect key="frame" x="47" y="472" width="227" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.40000000000000002" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="npt-E3-eFJ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="16"/>
+                                        <state key="normal" title="done">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="editModelObject:" destination="vL1-ub-e7x" eventType="touchUpInside" id="1DV-Rf-eSW"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4kD-KN-pem">
+                                        <rect key="frame" x="47" y="515" width="227" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.92941176470588238" green="0.2627450980392157" blue="0.21568627450980393" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="AEx-AK-fcJ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="16"/>
+                                        <state key="normal" title="delete">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="deleteProject:" destination="vL1-ub-e7x" eventType="touchUpInside" id="52l-5V-iJt"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="right" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rZr-fn-9Hm">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="169"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="320" id="UhL-UE-beH"/>
+                                            <constraint firstAttribute="height" constant="169" id="UjC-EM-9IJ"/>
+                                        </constraints>
+                                        <state key="normal">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="editPhoto:" destination="vL1-ub-e7x" eventType="touchUpInside" id="jix-zx-Agp"/>
+                                        </connections>
+                                    </button>
+                                    <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="OZ3-cs-hBx">
+                                        <rect key="frame" x="29" y="330" width="223" height="127"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="127" id="W8g-bI-uEH"/>
+                                        </constraints>
+                                        <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="vL1-ub-e7x" id="E5O-Ud-elu"/>
+                                        </connections>
+                                    </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gNI-66-Cqd">
+                                        <rect key="frame" x="263" y="379" width="46" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Edit">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="editNotes:" destination="vL1-ub-e7x" eventType="touchUpInside" id="dKe-jc-iSs"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="53" id="gSJ-YA-32m"/>
+                                    <constraint firstItem="gNI-66-Cqd" firstAttribute="top" secondItem="Okx-Yt-z0b" secondAttribute="bottom" constant="61" id="12g-vn-hjQ"/>
+                                    <constraint firstItem="rZr-fn-9Hm" firstAttribute="centerX" secondItem="4kD-KN-pem" secondAttribute="centerX" id="6RG-mp-Sj1"/>
+                                    <constraint firstItem="hTU-ra-uE4" firstAttribute="top" secondItem="Jp9-q7-dRZ" secondAttribute="bottom" constant="9" id="6of-sw-6Zv"/>
+                                    <constraint firstAttribute="bottom" secondItem="4kD-KN-pem" secondAttribute="bottom" constant="19" id="7ky-ss-EXR"/>
+                                    <constraint firstItem="2IW-vR-mP4" firstAttribute="top" secondItem="Okx-Yt-z0b" secondAttribute="top" id="9ak-tH-bBC"/>
+                                    <constraint firstItem="gNI-66-Cqd" firstAttribute="leading" secondItem="OZ3-cs-hBx" secondAttribute="trailing" constant="11" id="9xy-Fe-0LH"/>
+                                    <constraint firstItem="8Jd-PX-x6m" firstAttribute="top" secondItem="OZ3-cs-hBx" secondAttribute="bottom" constant="15" id="BDI-uI-lh6"/>
+                                    <constraint firstItem="rZr-fn-9Hm" firstAttribute="leading" secondItem="meg-Ux-9Gl" secondAttribute="leading" id="BZK-2H-lEv"/>
+                                    <constraint firstItem="Okx-Yt-z0b" firstAttribute="leading" secondItem="2IW-vR-mP4" secondAttribute="trailing" constant="8" symbolic="YES" id="EQm-1U-O5w"/>
+                                    <constraint firstItem="Jp9-q7-dRZ" firstAttribute="leading" secondItem="meg-Ux-9Gl" secondAttribute="leading" constant="29" id="GRi-9u-7Ir"/>
+                                    <constraint firstItem="4kD-KN-pem" firstAttribute="leading" secondItem="8Jd-PX-x6m" secondAttribute="leading" id="Iet-gN-2tH"/>
+                                    <constraint firstItem="Ga9-kq-eJK" firstAttribute="leading" secondItem="hTU-ra-uE4" secondAttribute="trailing" constant="8" symbolic="YES" id="ItT-Ak-a9u"/>
+                                    <constraint firstItem="Jp9-q7-dRZ" firstAttribute="trailing" secondItem="2IW-vR-mP4" secondAttribute="trailing" id="JC9-Ne-puV"/>
+                                    <constraint firstItem="itu-1O-mie" firstAttribute="leading" secondItem="Jp9-q7-dRZ" secondAttribute="trailing" constant="8" symbolic="YES" id="KbV-bR-hB0"/>
+                                    <constraint firstItem="Jp9-q7-dRZ" firstAttribute="top" secondItem="rZr-fn-9Hm" secondAttribute="bottom" constant="35" id="MXz-gd-gu3"/>
+                                    <constraint firstItem="2IW-vR-mP4" firstAttribute="top" secondItem="hTU-ra-uE4" secondAttribute="bottom" constant="9" id="NI0-zZ-EfT"/>
+                                    <constraint firstItem="Jp9-q7-dRZ" firstAttribute="leading" secondItem="OZ3-cs-hBx" secondAttribute="leading" id="NiB-Cg-HIY"/>
+                                    <constraint firstItem="rZr-fn-9Hm" firstAttribute="centerX" secondItem="8Jd-PX-x6m" secondAttribute="centerX" id="Uqg-yJ-300"/>
+                                    <constraint firstItem="Jp9-q7-dRZ" firstAttribute="trailing" secondItem="hTU-ra-uE4" secondAttribute="trailing" id="V3f-be-kSd"/>
+                                    <constraint firstItem="Jp9-q7-dRZ" firstAttribute="trailing" secondItem="OZ3-cs-hBx" secondAttribute="trailing" id="WCe-XA-QRn"/>
+                                    <constraint firstItem="Jp9-q7-dRZ" firstAttribute="leading" secondItem="hTU-ra-uE4" secondAttribute="leading" id="Ys3-FH-rVd"/>
+                                    <constraint firstItem="rZr-fn-9Hm" firstAttribute="centerX" secondItem="meg-Ux-9Gl" secondAttribute="centerX" id="dOH-OV-e6j"/>
+                                    <constraint firstItem="OZ3-cs-hBx" firstAttribute="top" secondItem="2IW-vR-mP4" secondAttribute="bottom" constant="9" id="jdV-2l-Oyl"/>
+                                    <constraint firstItem="rZr-fn-9Hm" firstAttribute="top" secondItem="meg-Ux-9Gl" secondAttribute="top" id="jrm-qw-Wud"/>
+                                    <constraint firstItem="4kD-KN-pem" firstAttribute="leading" secondItem="meg-Ux-9Gl" secondAttribute="leading" constant="47" id="krd-Lg-eOs"/>
+                                    <constraint firstItem="4kD-KN-pem" firstAttribute="top" secondItem="8Jd-PX-x6m" secondAttribute="bottom" constant="9" id="lrk-zD-syi"/>
+                                    <constraint firstAttribute="bottom" secondItem="rZr-fn-9Hm" secondAttribute="bottom" constant="399" id="m2e-q2-kDv"/>
+                                    <constraint firstAttribute="trailing" secondItem="rZr-fn-9Hm" secondAttribute="trailing" id="mx7-DY-c3i"/>
+                                    <constraint firstItem="Ga9-kq-eJK" firstAttribute="centerX" secondItem="gNI-66-Cqd" secondAttribute="centerX" id="p2g-Gc-ZOe"/>
+                                    <constraint firstItem="Jp9-q7-dRZ" firstAttribute="baseline" secondItem="itu-1O-mie" secondAttribute="baseline" id="yDx-ZZ-SbW"/>
+                                    <constraint firstItem="Jp9-q7-dRZ" firstAttribute="leading" secondItem="2IW-vR-mP4" secondAttribute="leading" id="z8B-q5-oBM"/>
+                                    <constraint firstItem="Ga9-kq-eJK" firstAttribute="bottom" secondItem="hTU-ra-uE4" secondAttribute="bottom" id="zj0-UB-MYU"/>
                                 </constraints>
-                                <state key="normal" title="Edit">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="editDueDate:" destination="vL1-ub-e7x" eventType="touchUpInside" id="gWR-wZ-27P"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2IW-vR-mP4">
-                                <rect key="frame" x="19" y="377" width="223" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="33" id="pYT-KI-Rkm"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
-                                <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ga9-kq-eJK">
-                                <rect key="frame" x="250" y="328" width="53" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="53" id="SpV-TN-9R6"/>
-                                </constraints>
-                                <state key="normal" title="Edit">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="editPrice:" destination="vL1-ub-e7x" eventType="touchUpInside" id="CwX-Dq-tSG"/>
-                                </connections>
-                            </button>
-                            <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hTU-ra-uE4">
-                                <rect key="frame" x="19" y="332" width="223" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="decimalPad" returnKeyType="done"/>
-                                <connections>
-                                    <outlet property="delegate" destination="vL1-ub-e7x" id="0gz-RY-Y2n"/>
-                                </connections>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="itu-1O-mie">
-                                <rect key="frame" x="250" y="283" width="53" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="53" id="xCC-Cg-UtF"/>
-                                </constraints>
-                                <state key="normal" title="Edit">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="editTitle:" destination="vL1-ub-e7x" eventType="touchUpInside" id="MQf-Uk-jQA"/>
-                                </connections>
-                            </button>
-                            <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jp9-q7-dRZ">
-                                <rect key="frame" x="19" y="287" width="223" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="33" id="ZTh-jt-Ils"/>
-                                </constraints>
-                                <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
-                                <connections>
-                                    <outlet property="delegate" destination="vL1-ub-e7x" id="e8x-HB-ifE"/>
-                                </connections>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Jd-PX-x6m">
-                                <rect key="frame" x="47" y="456" width="227" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.40000000000000002" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="34" id="npt-E3-eFJ"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="16"/>
-                                <state key="normal" title="done">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="editModelObject:" destination="vL1-ub-e7x" eventType="touchUpInside" id="1DV-Rf-eSW"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4kD-KN-pem">
-                                <rect key="frame" x="47" y="500" width="227" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.92941176470588238" green="0.2627450980392157" blue="0.21568627450980393" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="16"/>
-                                <state key="normal" title="delete">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="deleteProject:" destination="vL1-ub-e7x" eventType="touchUpInside" id="52l-5V-iJt"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="right" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rZr-fn-9Hm">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="231"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="231" id="UjC-EM-9IJ"/>
-                                </constraints>
-                                <state key="normal">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="editPhoto:" destination="vL1-ub-e7x" eventType="touchUpInside" id="jix-zx-Agp"/>
-                                </connections>
-                            </button>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="8Jd-PX-x6m" firstAttribute="centerX" secondItem="p2O-eJ-dpP" secondAttribute="centerX" id="1H7-97-7fo"/>
-                            <constraint firstItem="8Jd-PX-x6m" firstAttribute="leading" secondItem="p2O-eJ-dpP" secondAttribute="leading" constant="47" id="4xf-fy-NAV"/>
-                            <constraint firstItem="itu-1O-mie" firstAttribute="leading" secondItem="Jp9-q7-dRZ" secondAttribute="trailing" constant="8" symbolic="YES" id="5RQ-lZ-6z6"/>
-                            <constraint firstItem="Ga9-kq-eJK" firstAttribute="leading" secondItem="hTU-ra-uE4" secondAttribute="trailing" constant="8" symbolic="YES" id="8fd-0Q-Du7"/>
-                            <constraint firstItem="rZr-fn-9Hm" firstAttribute="centerX" secondItem="8Jd-PX-x6m" secondAttribute="centerX" id="Fj1-zl-9Xg"/>
-                            <constraint firstItem="Jp9-q7-dRZ" firstAttribute="baseline" secondItem="itu-1O-mie" secondAttribute="baseline" id="GCR-nO-OzX"/>
-                            <constraint firstItem="Jp9-q7-dRZ" firstAttribute="top" secondItem="rZr-fn-9Hm" secondAttribute="bottom" constant="56" id="GEw-H8-7eu"/>
-                            <constraint firstItem="86y-6D-9k7" firstAttribute="top" secondItem="Okx-Yt-z0b" secondAttribute="bottom" constant="165" id="HRp-z9-LoI"/>
-                            <constraint firstItem="rZr-fn-9Hm" firstAttribute="top" secondItem="p2O-eJ-dpP" secondAttribute="top" id="I7D-Sn-EuQ"/>
-                            <constraint firstAttribute="trailing" secondItem="Okx-Yt-z0b" secondAttribute="trailing" constant="17" id="Ogg-dd-ZxI"/>
-                            <constraint firstItem="hTU-ra-uE4" firstAttribute="top" secondItem="Jp9-q7-dRZ" secondAttribute="bottom" constant="12" id="RfZ-0Y-pbO"/>
-                            <constraint firstItem="8Jd-PX-x6m" firstAttribute="leading" secondItem="4kD-KN-pem" secondAttribute="leading" id="TCc-4e-DRh"/>
-                            <constraint firstItem="Okx-Yt-z0b" firstAttribute="leading" secondItem="2IW-vR-mP4" secondAttribute="trailing" constant="8" symbolic="YES" id="Tkx-Bf-BNa"/>
-                            <constraint firstItem="Jp9-q7-dRZ" firstAttribute="leading" secondItem="2IW-vR-mP4" secondAttribute="leading" id="Vce-Xr-oG5"/>
-                            <constraint firstItem="hTU-ra-uE4" firstAttribute="baseline" secondItem="Ga9-kq-eJK" secondAttribute="baseline" constant="6" id="WVO-5E-TJk"/>
-                            <constraint firstItem="Jp9-q7-dRZ" firstAttribute="trailing" secondItem="2IW-vR-mP4" secondAttribute="trailing" id="ahz-8y-0Y0"/>
-                            <constraint firstItem="8Jd-PX-x6m" firstAttribute="trailing" secondItem="4kD-KN-pem" secondAttribute="trailing" id="dLe-TY-lfG"/>
-                            <constraint firstItem="Jp9-q7-dRZ" firstAttribute="leading" secondItem="hTU-ra-uE4" secondAttribute="leading" id="kw8-Z5-bVA"/>
-                            <constraint firstItem="2IW-vR-mP4" firstAttribute="leading" secondItem="p2O-eJ-dpP" secondAttribute="leading" constant="19" id="mSW-Ob-4j7"/>
-                            <constraint firstItem="8Jd-PX-x6m" firstAttribute="top" secondItem="Okx-Yt-z0b" secondAttribute="bottom" constant="53" id="pmY-qa-uxl"/>
-                            <constraint firstItem="Jp9-q7-dRZ" firstAttribute="trailing" secondItem="hTU-ra-uE4" secondAttribute="trailing" id="qP7-KE-c23"/>
-                            <constraint firstItem="8Jd-PX-x6m" firstAttribute="top" secondItem="2IW-vR-mP4" secondAttribute="bottom" constant="46" id="t8v-k2-OCf"/>
-                            <constraint firstItem="2IW-vR-mP4" firstAttribute="top" secondItem="hTU-ra-uE4" secondAttribute="bottom" constant="12" id="tNk-4C-6Tq"/>
-                            <constraint firstItem="4kD-KN-pem" firstAttribute="top" secondItem="8Jd-PX-x6m" secondAttribute="bottom" constant="10" id="xEY-9F-ARR"/>
-                            <constraint firstItem="rZr-fn-9Hm" firstAttribute="leading" secondItem="p2O-eJ-dpP" secondAttribute="leading" id="zwi-tY-eyt"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="7aj-Aj-rAa"/>
                     <connections>
                         <outlet property="dueDate" destination="2IW-vR-mP4" id="Gd2-vj-agb"/>
+                        <outlet property="editNotesButton" destination="gNI-66-Cqd" id="NnL-Na-WnD"/>
                         <outlet property="editPriceButton" destination="Ga9-kq-eJK" id="mWP-oo-y2c"/>
                         <outlet property="editTitleButton" destination="itu-1O-mie" id="JSj-Iq-VAY"/>
+                        <outlet property="notesField" destination="OZ3-cs-hBx" id="Gg4-5E-fh8"/>
                         <outlet property="picture" destination="rZr-fn-9Hm" id="9dE-he-kLe"/>
                         <outlet property="priceField" destination="hTU-ra-uE4" id="yGO-Mv-iuP"/>
+                        <outlet property="scrollView" destination="meg-Ux-9Gl" id="E9H-YP-ikH"/>
                         <outlet property="titleField" destination="Jp9-q7-dRZ" id="BI4-4f-zJQ"/>
                     </connections>
                 </viewController>

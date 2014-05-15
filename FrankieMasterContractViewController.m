@@ -359,6 +359,7 @@
                      @"title" : [self.tableData objectAtIndex:path.row][@"title"],
                      @"nextStep":  [self.tableData objectAtIndex:path.row][@"nextStep"],
                      @"dueDate": [self.tableData objectAtIndex:path.row][@"dueDate"],
+                     @"notes": [self.tableData objectAtIndex:path.row][@"notes"],
                      @"picture": [self.tableData objectAtIndex:path.row][@"picture"],
                      @"price": [self.tableData objectAtIndex:path.row][@"price"],
                      @"objectId": [self.tableData objectAtIndex:path.row][@"objectId"],

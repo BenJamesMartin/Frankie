@@ -63,6 +63,7 @@
 
 #pragma mark - UIScrollView delegate methods
 
+// Just setting the x-position to 0?
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
     if (sender.contentOffset.x != 0) {
         CGPoint offset = sender.contentOffset;

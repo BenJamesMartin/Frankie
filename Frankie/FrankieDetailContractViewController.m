@@ -57,7 +57,12 @@
         [dateformatter setDateFormat:@"MM/dd/yyyy"];
         self.dueDate.text  = [dateformatter stringFromDate:[self.project objectForKey:@"dueDate"]];
     }
-    
+    if ([self.project objectForKey:@"notes"] == nil || [self.project objectForKey:@"notes"] == [NSNull null] || [[self.project objectForKey:@"notes"] isEqualToString:@"additional notes"]) {
+        self.notesField.text = @"[No Notes]";
+    }
+    else {
+        self.notesField.text = [self.project objectForKey:@"notes"];
+    }
     if (self.project[@"picture"] != nil && self.project[@"picture"] != [NSNull null]) {
         [self.picture setImage:[UIImage imageWithData:self.project[@"picture"]] forState:UIControlStateNormal];
     }
@@ -66,10 +71,6 @@
     }
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
-//    [self.navigationItem.backBarButtonItem setAction:@selector(saveProject)];
-    
-//    [self.navigationItem.backBarButtonItem setAction:@selector(saveProject)];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -128,6 +129,19 @@
     self.pickerView.bounds = pickerRect;
 }
 
+- (IBAction)editNotes:(id)sender {
+    if (self.notesField.userInteractionEnabled == NO) {
+        [self.notesField setUserInteractionEnabled:YES];
+        [self.notesField becomeFirstResponder];
+        [sender setTitle:@"Done" forState:UIControlStateNormal];
+    }
+    else {
+        [self.notesField resignFirstResponder];
+    }
+
+}
+
+
 - (IBAction)editModelObject:(id)sender {
     
     // Update data for given project in both Parse and Core Data
@@ -162,6 +176,9 @@
                 [dateformatter setDateFormat:@"MM/dd/yyyy"];
                 project[@"end"] = [dateformatter dateFromString:self.dueDate.text];
             }
+            if (![self.notesField.text isEqualToString:@"[No Notes"] || self.notesField.text != nil) {
+                project[@"notes"] = self.notesField.text;
+            }
             if (imageData != nil) {
                 project[@"photo"] = [PFFile fileWithData:imageData];
             }
@@ -195,6 +212,9 @@
         NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
         [dateformatter setDateFormat:@"MM/dd/yyyy"];
         job.dueDate = [dateformatter dateFromString:self.dueDate.text];
+    }
+    if (![self.notesField.text isEqualToString:@"[No Notes"]) {
+        job.notes = self.notesField.text;
     }
 
     if (imageData != nil) {
@@ -238,7 +258,6 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
             [self.navigationController popViewControllerAnimated:YES];
         }
-
     }
 }
 
@@ -249,15 +268,60 @@
     [alert show];
 }
 
+#pragma mark - UITextViewDelegate methods
 
-#pragma mark - UITextField delegate methods
-
-- (CGRect)textRecForBounds:(CGRect)bounds {
-    return CGRectInset(bounds, 10, 10);
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    if ([textView.text isEqualToString:@"[No Notes]"]) {
+        textView.text = @"";
+    }
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - self.navigationController.navigationBar.frame.size.height*4)];
+    }];
 }
 
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    [textView setUserInteractionEnabled:NO];
+    [self.editNotesButton setTitle:@"Edit" forState:UIControlStateNormal];
+    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+}
+
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if([text isEqualToString:@"\n"])
+        [textView resignFirstResponder];
+    return YES;
+}
+
+
+#pragma mark - UITextFieldDelegate methods
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (textField == self.titleField) {
+        if ([textField.text isEqualToString:@"[Title Not Set]"]) {
+            textField.text = @"";
+        }
+    }
+    if (textField == self.priceField) {
+        if ([textField.text isEqualToString:@"[Price Not Set]"]) {
+            textField.text = @"";
+        }
+    }
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [textField setUserInteractionEnabled:NO];
+    if (textField == self.titleField) {
+        [self.editTitleButton setTitle:@"Edit" forState:UIControlStateNormal];
+    }
+    else if (textField == self.priceField) {
+        float price = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]].floatValue;
+        textField.text = [NSString stringWithFormat:@"$%.02f", price];
+        [self.editPriceButton setTitle:@"Edit" forState:UIControlStateNormal];
+    }
+}
+
+
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    NSLog(@"text from edit endediting: %@", textField.text);
     return YES;
 }
 
@@ -374,33 +438,6 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];
-}
-
-#pragma mark - UITextField delegate methods
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    [textField setUserInteractionEnabled:NO];
-    if (textField == self.titleField) {
-        [self.editTitleButton setTitle:@"Edit" forState:UIControlStateNormal];
-    }
-    else if (textField == self.priceField) {
-        float price = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]].floatValue;
-        textField.text = [NSString stringWithFormat:@"$%.02f", price];
-        [self.editPriceButton setTitle:@"Edit" forState:UIControlStateNormal];
-    }
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    if (textField == self.titleField) {
-        if ([textField.text isEqualToString:@"[Title Not Set]"]) {
-            textField.text = @"";
-        }
-    }
-    if (textField == self.priceField) {
-        if ([textField.text isEqualToString:@"[Price Not Set]"]) {
-            textField.text = @"";
-        }
-    }
 }
 
 - (void)didReceiveMemoryWarning
