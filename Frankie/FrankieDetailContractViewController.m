@@ -34,6 +34,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    
     if ([[self.project objectForKey:@"title"] isEqualToString:@""]) {
             self.titleField.text = @"[Title Not Set]";
     }
@@ -293,7 +294,7 @@
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
             [request setPredicate:predicate];
             
-            NSLog(@"current button title: %@", self.projectCompleteButton.currentTitle);
+//            NSLog(@"current button title: %@", self.projectCompleteButton.currentTitle);
             
             NSError *error;
             Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];

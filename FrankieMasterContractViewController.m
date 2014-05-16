@@ -7,6 +7,7 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import <CoreData/CoreData.h>
 #import <Parse/Parse.h>
 
 #import "FrankieMasterContractViewController.h"
@@ -32,6 +33,10 @@
     return self;
 }
 
+- (void)viewDidUnload {
+    self.fetchedResultsController = nil;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -39,6 +44,12 @@
     [self syncParseCoreData];
     
     self.fetchedResultsController.delegate = self;
+    
+    NSError *error;
+	if (![[self fetchedResultsController] performFetch:&error]) {
+		// Update to handle the error appropriately.
+		NSLog(@"fetchedResults error %@, %@", error, [error userInfo]);
+	}
 
     self.defaultImage.frame = CGRectMake(10, 12, 60, 60);
     self.defaultImage.backgroundColor = [UIColor colorWithRed:(240/255.f) green:(240/255.f) blue:(240/255.f) alpha:1.0];
@@ -81,6 +92,99 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadTable" object:nil];
     
     self.navigationController.navigationBar.alpha = 0.96;
+}
+
+- (NSFetchedResultsController *)fetchedResultsController
+{
+    // Because both the property name and the method name are 'fetchedResultsController', we must use _fetchedResultsController to access the property. self.fetchedResultsController will call the method, resulting in an infinite loop. The exception is when setting the property as we do below, e.g. self.fetchedResultsController = [something] or when sending a message to that instance as we do below with [fetchedResultsController performFetch:].
+    if (_fetchedResultsController != nil) {
+        return _fetchedResultsController;
+    }
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    
+    NSManagedObjectContext *context =
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    NSEntityDescription *entity =
+    [NSEntityDescription entityForName:NSStringFromClass([Job class])
+                inManagedObjectContext:context];
+    
+    [fetchRequest setEntity:entity];
+    [fetchRequest setFetchBatchSize:20];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title"
+                                                                   ascending:YES];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    NSFetchedResultsController *aFetchedResultsController =
+    [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                        managedObjectContext:context
+                                          sectionNameKeyPath:@"title"
+                                                   cacheName:nil];
+    
+    aFetchedResultsController.delegate = self;
+    self.fetchedResultsController = aFetchedResultsController;
+    
+	NSError *error = nil;
+	if (![self.fetchedResultsController performFetch:&error])
+    {
+	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+	    abort();
+	}
+    
+    return _fetchedResultsController;
+}
+
+#pragma mark - NSFetchedResultsController delegate methods
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            [self configureCell:(UITableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView endUpdates];
 }
 
 // Test method for syncing Parse with Core Data.
@@ -184,10 +288,17 @@
 }
 
 - (void)reloadTable {
-    self.tableData = [self loadDataFromModel:nil];
-    NSSortDescriptor* sortByDate = [NSSortDescriptor sortDescriptorWithKey:@"dueDate"
-                                                                 ascending:NO];
-    self.tableData = [self.tableData sortedArrayUsingDescriptors:@[sortByDate]];
+//    self.tableData = [self loadDataFromModel:nil];
+    
+    NSError *error;
+	if (![[self fetchedResultsController] performFetch:&error]) {
+		// Update to handle the error appropriately.
+		NSLog(@"fetchedResults error %@, %@", error, [error userInfo]);
+	}
+    
+//    NSSortDescriptor* sortByDate = [NSSortDescriptor sortDescriptorWithKey:@"dueDate"
+//                                                                 ascending:NO];
+//    self.tableData = [self.tableData sortedArrayUsingDescriptors:@[sortByDate]];
     
 //    NSLog(@"tableData: %@", self.tableData);
     [self.tableView reloadData];
@@ -271,7 +382,7 @@
     return YES;
 }
 
--(void)tableView:(UITableView *)tableViefw commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
 
         PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
@@ -308,9 +419,19 @@
 
 #pragma mark - Table view data source
 
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return [[self.fetchedResultsController sections] count];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    id sectionInfo = [self.fetchedResultsController sections][section];
+    return [sectionInfo numberOfObjects];
+}
+
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 //{
-////    return 2;
+//    return [self.tableData count];
 //}
 
 //- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -322,7 +443,7 @@
 //    headerLabel.textColor = [UIColor colorWithRed:(255/255.f) green:(255/255.f) blue:(255/255.f) alpha:1.0];
 //    
 //    
-//    // I have heard that UINavigationController has parralax automatticly applied to it, so you could hack a solution from that.
+//    // I have heard that UINavigationController has parralax automatically applied to it, so you could hack a solution from that.
 //    // http://stackoverflow.com/questions/18972994/ios-7-parallax-effect-in-my-view-controller
 //    
 //    UINavigationController *test = [UINavigationController new];
@@ -338,91 +459,69 @@
 //    
 //}
 
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [self.tableData count];
-}
-
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 
 #pragma mark - cellForRow
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
     
     UIImageView *image = [UIImageView new];
     image.frame = CGRectMake(10, 12, 60, 60);
-    
-    
-    if ([[self.tableData objectAtIndex:indexPath.row][@"picture"] isEqual:[NSNull null]]) {
+    if ([job.picture isEqual:[NSNull null]] || job.picture == NULL) {
         image.image = [UIImage imageNamed:@"image-upload-icon-small"];
     }
     else {
         CALayer *layer = [image layer];
         [layer setMasksToBounds:YES];
         [layer setCornerRadius:30.0];
-        image.image = [UIImage imageWithData:[self.tableData objectAtIndex:indexPath.row][@"picture"]];
+        image.image = [UIImage imageWithData:job.picture];
         image.contentMode = UIViewContentModeScaleAspectFill;
     }
     
-    
-//    CALayer *border = image.layer;
-//    border.borderColor = [[UIColor blackColor] CGColor];
-//    border.borderWidth = 1;
-    
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(80, 10, 200, 30)];
     
-    if ([[self.tableData objectAtIndex:indexPath.row][@"title"] isEqualToString:@""]) {
+    if ([job.title isEqualToString:@""]) {
         title.text = @"[No Title]";
     }
     else {
-        title.text = [self.tableData objectAtIndex:indexPath.row][@"title"];
+        title.text = job.title;
     }
     title.font = [UIFont fontWithName:@"Helvetica-Bold" size:14];
     title.textColor = [UIColor grayColor];
-//    CALayer *labelBorder = title.layer;
-//    labelBorder.borderColor = [[UIColor blackColor] CGColor];
-//    labelBorder.borderWidth = 1;
-    
     
     UILabel *price = [[UILabel alloc] initWithFrame:CGRectMake(80, 30, 200, 30)];
-    if ([[self.tableData objectAtIndex:indexPath.row][@"price"] floatValue] == 0) {
+    if ([job.price floatValue] == 0) {
         price.text = @"Price: [Not Set]";
     }
     else {
-        NSNumber *number = (NSNumber*)[self.tableData objectAtIndex:indexPath.row][@"price"];
+        NSNumber *number = (NSNumber*)job.price;
         [price setText:[NSString stringWithFormat:@"Price: $%.02f", number.floatValue]];
     }
     price.font = [UIFont fontWithName:@"Helvetica" size:12];
     price.textColor = [UIColor grayColor];
     
     UILabel *dueDate = [[UILabel alloc] initWithFrame:CGRectMake(80, 45, 200, 30)];
-//    NSDateFormatter *dateToString = [[NSDateFormatter alloc] init];
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     [format setDateFormat:@"MMM dd, yyyy"];
     
-    if ([self.tableData objectAtIndex:indexPath.row][@"dueDate"] == nil || [self.tableData objectAtIndex:indexPath.row][@"dueDate"] == [NSNull null]) {
+    if (job.dueDate == nil || job.dueDate == NULL) {
         dueDate.text = @"Due Date: [Not Set]";
     }
     else {
-        dueDate.text = [NSString stringWithFormat:@"Due Date: %@",[NSString stringWithFormat:@"%@", [format stringFromDate:[self.tableData objectAtIndex:indexPath.row][@"dueDate"]]]];
+        dueDate.text = [NSString stringWithFormat:@"Due Date: %@",[NSString stringWithFormat:@"%@", [format stringFromDate:job.dueDate]]];
     }
     
     dueDate.font = [UIFont fontWithName:@"Helvetica" size:12];
     dueDate.textColor = [UIColor grayColor];
-
-    if ([[self.tableData objectAtIndex:indexPath.row] objectForKey:@"completed"] == [NSNumber numberWithInt:1]) {
-        NSLog(@"this is true?");
+    
+    if (job.completed == [NSNumber numberWithInt:1]) {
         UILabel *completed = [[UILabel alloc] initWithFrame:CGRectMake(80, 60, 200, 30)];
         completed.font = [UIFont fontWithName:@"Helvetica" size:12];
         completed.textColor = [UIColor colorWithRed:77/255.f green:189/255.f blue:51/255.f alpha:1.0];
-        completed.text = @"Projected Complete";
+        completed.text = @"Projecte Complete";
         [cell addSubview:completed];
     }
     
@@ -432,41 +531,128 @@
     [cell addSubview:dueDate];
     
     UIButton *myAccessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 8, 14)];
-    // 183, 79, 48
-//    [myAccessoryButton setBackgroundColor:[UIColor colorWithRed:(183/255.f) green:(79/255.f) blue:(48/255.f) alpha:1.0]];
     [myAccessoryButton setImage:[UIImage imageNamed:@"custom-detail-disclosure.png"] forState:UIControlStateNormal];
     [cell setAccessoryView:myAccessoryButton];
-    
-//    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+}
 
-//    cell.textLabel.text = [NSString stringWithFormat:@"This row is %d", indexPath.row+1];
-//    
-//    cell.detailTextLabel.text = @"hi";
-//    
-//    cell.imageView.image = [UIImage imageNamed:@"camera-upload.png"];
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    
+    // Set up the cell...
+    [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
 }
+
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    
+//    static NSString *CellIdentifier = @"Cell";
+//
+//    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+//    
+//    UIImageView *image = [UIImageView new];
+//    image.frame = CGRectMake(10, 12, 60, 60);
+//    
+//    
+//    if ([[self.tableData objectAtIndex:indexPath.row][@"picture"] isEqual:[NSNull null]]) {
+//        image.image = [UIImage imageNamed:@"image-upload-icon-small"];
+//    }
+//    else {
+//        CALayer *layer = [image layer];
+//        [layer setMasksToBounds:YES];
+//        [layer setCornerRadius:30.0];
+//        image.image = [UIImage imageWithData:[self.tableData objectAtIndex:indexPath.row][@"picture"]];
+//        image.contentMode = UIViewContentModeScaleAspectFill;
+//    }
+//    
+//    NSLog(@"cellForRow fired with title: %@", [[self.tableData objectAtIndex:indexPath.row] objectForKey:@"title"]);
+//    
+//    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(80, 10, 200, 30)];
+//    
+//    if ([[self.tableData objectAtIndex:indexPath.row][@"title"] isEqualToString:@""]) {
+//        title.text = @"[No Title]";
+//    }
+//    else {
+//        title.text = [self.tableData objectAtIndex:indexPath.row][@"title"];
+//    }
+//    title.font = [UIFont fontWithName:@"Helvetica-Bold" size:14];
+//    title.textColor = [UIColor grayColor];
+//    
+//    UILabel *price = [[UILabel alloc] initWithFrame:CGRectMake(80, 30, 200, 30)];
+//    if ([[self.tableData objectAtIndex:indexPath.row][@"price"] floatValue] == 0) {
+//        price.text = @"Price: [Not Set]";
+//    }
+//    else {
+//        NSNumber *number = (NSNumber*)[self.tableData objectAtIndex:indexPath.row][@"price"];
+//        [price setText:[NSString stringWithFormat:@"Price: $%.02f", number.floatValue]];
+//    }
+//    price.font = [UIFont fontWithName:@"Helvetica" size:12];
+//    price.textColor = [UIColor grayColor];
+//    
+//    UILabel *dueDate = [[UILabel alloc] initWithFrame:CGRectMake(80, 45, 200, 30)];
+//    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+//    [format setDateFormat:@"MMM dd, yyyy"];
+//    
+//    if ([self.tableData objectAtIndex:indexPath.row][@"dueDate"] == nil || [self.tableData objectAtIndex:indexPath.row][@"dueDate"] == [NSNull null]) {
+//        dueDate.text = @"Due Date: [Not Set]";
+//    }
+//    else {
+//        dueDate.text = [NSString stringWithFormat:@"Due Date: %@",[NSString stringWithFormat:@"%@", [format stringFromDate:[self.tableData objectAtIndex:indexPath.row][@"dueDate"]]]];
+//    }
+//    
+//    dueDate.font = [UIFont fontWithName:@"Helvetica" size:12];
+//    dueDate.textColor = [UIColor grayColor];
+//
+//    if ([[self.tableData objectAtIndex:indexPath.row] objectForKey:@"completed"] == [NSNumber numberWithInt:1]) {
+//        NSLog(@"this is true?");
+//        UILabel *completed = [[UILabel alloc] initWithFrame:CGRectMake(80, 60, 200, 30)];
+//        completed.font = [UIFont fontWithName:@"Helvetica" size:12];
+//        completed.textColor = [UIColor colorWithRed:77/255.f green:189/255.f blue:51/255.f alpha:1.0];
+//        completed.text = @"Projected Complete";
+//        [cell addSubview:completed];
+//    }
+//    
+//    [cell addSubview:title];
+//    [cell addSubview:image];
+//    [cell addSubview:price];
+//    [cell addSubview:dueDate];
+//    
+//    UIButton *myAccessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 8, 14)];
+//    [myAccessoryButton setImage:[UIImage imageNamed:@"custom-detail-disclosure.png"] forState:UIControlStateNormal];
+//    [cell setAccessoryView:myAccessoryButton];
+//    
+//    return cell;
+//}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Push view controller instead of performing segue
  
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     FrankieDetailContractViewController *detailContractVC = [storyboard instantiateViewControllerWithIdentifier:@"DetailContract"];
-    NSIndexPath *path = [self.tableView indexPathForSelectedRow];
     
-    detailContractVC.project = @{
-                     @"title" : [self.tableData objectAtIndex:path.row][@"title"],
-                     @"nextStep":  [self.tableData objectAtIndex:path.row][@"nextStep"],
-                     @"dueDate": [self.tableData objectAtIndex:path.row][@"dueDate"],
-                     @"notes": [self.tableData objectAtIndex:path.row][@"notes"],
-                     @"completed": [self.tableData objectAtIndex:path.row][@"completed"],
-                     @"picture": [self.tableData objectAtIndex:path.row][@"picture"],
-                     @"price": [self.tableData objectAtIndex:path.row][@"price"],
-                     @"objectId": [self.tableData objectAtIndex:path.row][@"objectId"],
-                     @"parseId" : [self.tableData objectAtIndex:path.row][@"parseId"]
-                     };
-    [self.navigationController pushViewController:detailContractVC animated:YES];
+    Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
+    NSEntityDescription *entity = [job entity];
+    NSDictionary *attributes = [entity attributesByName];
+    NSMutableDictionary *keysAndValues = [NSMutableDictionary new];
+    
+    // Changing nil to NSNull because app is crashing due to setting a nil value in the detailContractVC.project dictionary.
+    for (NSString *attribute in attributes) {
+        id value = [job valueForKey: attribute];
+        if (value == nil) {
+            [keysAndValues setValue:[NSNull null] forKey:attribute];
+        }
+        else {
+            [keysAndValues setObject:value forKey:attribute];
+        }
+    }
+    detailContractVC.project = keysAndValues;
+    
+   [self.navigationController pushViewController:detailContractVC animated:YES];
 }
 
 //-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
