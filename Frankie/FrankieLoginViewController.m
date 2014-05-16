@@ -74,7 +74,9 @@
 
 -(void)keyboardShow
 {
-    [self.keyboardScrollView setContentOffset:CGPointMake(0, 130) animated:YES];
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.keyboardScrollView setContentOffset:CGPointMake(0, 130)];
+    }];
 }
 
 - (void)keyboardDismiss

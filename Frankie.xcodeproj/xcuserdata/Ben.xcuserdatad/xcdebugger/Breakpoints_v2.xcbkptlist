@@ -38,11 +38,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Frankie/FrankieLoginViewController.m"
-            timestampString = "421885296.455113"
+            timestampString = "421892030.363496"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "130"
-            endingLineNumber = "130"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
             landmarkName = "-authenticateUser:"
             landmarkType = "5">
          </BreakpointContent>

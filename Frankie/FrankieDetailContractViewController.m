@@ -310,6 +310,7 @@
 
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     // the user clicked one of the OK/Cancel buttons
+    NSLog(@"button clicked");
     if ([actionSheet.title isEqualToString:@"Delete"]) {
         if (buttonIndex == 1)
         {
@@ -341,6 +342,7 @@
         }
     }
     else if ([actionSheet.title isEqualToString:@"Complete Project"]) {
+        NSLog(@"complete button clicked");
         if (buttonIndex == 1) {
             PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
             [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
@@ -359,12 +361,7 @@
             NSError *error;
             Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
             job.completed = [NSNumber numberWithBool:YES];
-            
-            if (job == nil) {
-                NSLog(@"Error: %@", error);
-            }
-            
-            [context deleteObject:job];
+
             if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
                 [self.navigationController popViewControllerAnimated:YES];

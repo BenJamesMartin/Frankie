@@ -457,8 +457,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="meg-Ux-9Gl">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="meg-Ux-9Gl">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="591"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Okx-Yt-z0b">
@@ -629,7 +629,7 @@
                                     <constraint firstItem="gNI-66-Cqd" firstAttribute="top" secondItem="Okx-Yt-z0b" secondAttribute="bottom" constant="61" id="12g-vn-hjQ"/>
                                     <constraint firstItem="rZr-fn-9Hm" firstAttribute="centerX" secondItem="4kD-KN-pem" secondAttribute="centerX" id="6RG-mp-Sj1"/>
                                     <constraint firstItem="hTU-ra-uE4" firstAttribute="top" secondItem="Jp9-q7-dRZ" secondAttribute="bottom" constant="9" id="6of-sw-6Zv"/>
-                                    <constraint firstAttribute="bottom" secondItem="4kD-KN-pem" secondAttribute="bottom" constant="-23" id="7ky-ss-EXR"/>
+                                    <constraint firstAttribute="bottom" secondItem="4kD-KN-pem" secondAttribute="bottom" id="7ky-ss-EXR"/>
                                     <constraint firstItem="2IW-vR-mP4" firstAttribute="top" secondItem="Okx-Yt-z0b" secondAttribute="top" id="9ak-tH-bBC"/>
                                     <constraint firstItem="gNI-66-Cqd" firstAttribute="leading" secondItem="OZ3-cs-hBx" secondAttribute="trailing" constant="11" id="9xy-Fe-0LH"/>
                                     <constraint firstItem="8Jd-PX-x6m" firstAttribute="top" secondItem="OZ3-cs-hBx" secondAttribute="bottom" constant="15" id="BDI-uI-lh6"/>
@@ -656,7 +656,7 @@
                                     <constraint firstItem="rZr-fn-9Hm" firstAttribute="top" secondItem="meg-Ux-9Gl" secondAttribute="top" id="jrm-qw-Wud"/>
                                     <constraint firstItem="4kD-KN-pem" firstAttribute="leading" secondItem="meg-Ux-9Gl" secondAttribute="leading" constant="47" id="krd-Lg-eOs"/>
                                     <constraint firstItem="4kD-KN-pem" firstAttribute="top" secondItem="8Jd-PX-x6m" secondAttribute="bottom" constant="51" id="lrk-zD-syi"/>
-                                    <constraint firstAttribute="bottom" secondItem="rZr-fn-9Hm" secondAttribute="bottom" constant="399" id="m2e-q2-kDv"/>
+                                    <constraint firstAttribute="bottom" secondItem="rZr-fn-9Hm" secondAttribute="bottom" constant="422" id="m2e-q2-kDv"/>
                                     <constraint firstAttribute="trailing" secondItem="rZr-fn-9Hm" secondAttribute="trailing" id="mx7-DY-c3i"/>
                                     <constraint firstItem="Ga9-kq-eJK" firstAttribute="centerX" secondItem="gNI-66-Cqd" secondAttribute="centerX" id="p2g-Gc-ZOe"/>
                                     <constraint firstItem="Jp9-q7-dRZ" firstAttribute="baseline" secondItem="itu-1O-mie" secondAttribute="baseline" id="yDx-ZZ-SbW"/>
@@ -666,6 +666,11 @@
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="meg-Ux-9Gl" secondAttribute="bottom" constant="-23" id="CsJ-JZ-ffN"/>
+                            <constraint firstItem="meg-Ux-9Gl" firstAttribute="top" secondItem="p2O-eJ-dpP" secondAttribute="top" id="Qmk-eo-iwj"/>
+                            <constraint firstItem="meg-Ux-9Gl" firstAttribute="leading" secondItem="p2O-eJ-dpP" secondAttribute="leading" id="fQR-yY-cgU"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="7aj-Aj-rAa"/>
                     <connections>
