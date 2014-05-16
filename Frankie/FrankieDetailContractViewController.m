@@ -384,6 +384,7 @@
                 job.completed = [NSNumber numberWithBool:NO];
             }
 
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
             [(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
         }
     }

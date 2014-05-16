@@ -325,9 +325,18 @@
     dueDate.font = [UIFont fontWithName:@"Helvetica" size:12];
     dueDate.textColor = [UIColor grayColor];
     
+    NSLog(@"completed in cellforRow: %@", [[self.tableData objectAtIndex:indexPath.row] objectForKey:@"completed"]);
+    if ([[self.tableData objectAtIndex:indexPath.row] objectForKey:@"completed"] == [NSNumber numberWithInt:1]) {
+        NSLog(@"this is true?");
+        UILabel *completed = [[UILabel alloc] initWithFrame:CGRectMake(80, 60, 200, 30)];
+        completed.font = [UIFont fontWithName:@"Helvetica" size:12];
+        completed.textColor = [UIColor colorWithRed:77/255.f green:189/255.f blue:51/255.f alpha:1.0];
+        completed.text = @"Projected Completed!";
+        [cell addSubview:completed];
+    }
+    
     [cell addSubview:title];
     [cell addSubview:image];
-//    [cell addSubview:self.defaultImage];
     [cell addSubview:price];
     [cell addSubview:dueDate];
     
@@ -383,7 +392,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 85;
+    return 87;
 }
 
 /*
