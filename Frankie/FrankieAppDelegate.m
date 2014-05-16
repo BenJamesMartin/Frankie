@@ -1,5 +1,5 @@
 //
-//  AppDelegate.m
+//  FrankieAppDelegate.m
 //  Frankie
 //
 //  Created by Benjamin Martin on 1/6/14.
@@ -9,6 +9,7 @@
 #import <Parse/Parse.h>
 
 #import "FrankieAppDelegate.h"
+#import "Job.h"
 
 @interface AppDelegate ()
 
@@ -20,17 +21,115 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+// Test method for syncing Parse with Core Data.
+//- (void)addParseObject {
+//    PFObject *project = [PFObject objectWithClassName:@"Project"];
+//    project[@"user"] = [PFUser currentUser];
+//    project[@"title"] = @"random";
+//    
+//    project[@"start"] = [NSDate date];
+//    project[@"end"] = [NSDate date];
+//    
+//    project[@"completed"] = [NSNumber numberWithBool:NO];
+//    project[@"price"] = [NSNumber numberWithFloat:44.3];
+//    project[@"notes"] = @"notes";
+//    project.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+//    
+//    [project saveInBackground];
+//}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
     [Parse setApplicationId:@"khSDDzBANcF6RXKWBojSeDOweONmVysgIjvs5ceW" clientKey:@"urVIj0DX37q8Vc79SBRrob5T4okhIusgu4qwt6Kq"];
 
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
+    [self syncParseCoreData];
+    
     // Override point for customization after application launch.
     return YES;
 }
-							
+
+- (void)syncParseCoreData {
+    NSError *error;
+    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    NSEntityDescription *entityDesc = [NSEntityDescription entityForName:NSStringFromClass([Job class])
+                                                  inManagedObjectContext:context];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDesc];
+    
+    NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
+    
+    NSLog(@"all the entities: %@", fetchedObjects);
+    
+    for (Job *job in fetchedObjects)
+    {
+        NSLog(@"title of each entity: %@", job.title);
+    }
+    
+    PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
+    [postQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    
+    [postQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            NSLog(@"all the parse objects: %@", objects);
+            NSMutableArray *projectsToAdd = [NSMutableArray new];
+            NSMutableArray *projectsToDelete = [NSMutableArray new];
+            BOOL found = NO;
+            
+            for (PFObject *project in objects) {
+                for (Job *job in fetchedObjects)
+                {
+                    if ([job.parseId isEqualToString:[project objectId]]) {
+                        found = YES;
+                        break;
+                    }
+                }
+                if (found == NO) {
+                    [projectsToAdd addObject:project];
+                }
+                found = NO;
+            }
+            for (Job *job in fetchedObjects)
+            {
+                for (PFObject *project in objects) {
+                    if ([job.parseId isEqualToString:[project objectId]]) {
+                        found = YES;
+                        break;
+                    }
+                }
+                if (found == NO) {
+                    [projectsToDelete addObject:job];
+                }
+                found = NO;
+            }
+            for (PFObject *project in projectsToAdd) {
+                NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Job class]) inManagedObjectContext:context];
+                
+                [entity setValue:project[@"title"] forKeyPath:@"title"];
+                [entity setValue:project[@"end"] forKeyPath:@"dueDate"];
+                [entity setValue:project[@"price"] forKeyPath:@"price"];
+                [entity setValue:project[@"notes"] forKeyPath:@"notes"];
+                [entity setValue:UIImagePNGRepresentation(project[@"photo"]) forKeyPath:@"picture"];
+                [entity setValue:[project objectId] forKeyPath:@"parseId"];
+                [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString] forKeyPath:@"objectId"];
+                [entity setValue:project[@"completed"] forKeyPath:@"completed"];
+            }
+            for (Job *job in projectsToDelete) {
+                [context deleteObject:job];
+            }
+            if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+            }
+        }
+        else {
+            NSLog(@"Parse find all objects error: %@", error);
+        }
+    }];
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

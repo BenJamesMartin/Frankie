@@ -249,7 +249,7 @@
     [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
     // Run the query
     [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *project, NSError *error) {
-        if (!error) {
+            if (!error) {
             if (![self.titleField.text isEqualToString:@"[Title Not Set]"] || self.titleField.text != nil) {
                 project[@"title"] = self.titleField.text;
             }
@@ -316,8 +316,6 @@
 #pragma mark - UIAlertViewDelegate methods
 
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    // the user clicked one of the OK/Cancel buttons
-    NSLog(@"button clicked");
     if ([actionSheet.title isEqualToString:@"Delete"]) {
         if (buttonIndex == 1)
         {
@@ -349,20 +347,23 @@
         }
     }
     else if ([actionSheet.title isEqualToString:@"Complete Project"]) {
-        NSLog(@"complete button clicked");
         if (buttonIndex == 1) {
             PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
             [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
             [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                NSLog(@"current button title in parse: %@", self.projectCompleteButton.currentTitle);
+                NSMutableDictionary *dict = [self.project mutableCopy];
+                
                 if ([self.projectCompleteButton.currentTitle isEqualToString:@"complete project"]) {
                     object[@"completed"] = [NSNumber numberWithBool:YES];
                     [self.projectCompleteButton setTitle:@"mark project as incomplete" forState:UIControlStateNormal];
+                    [dict setObject:[NSNumber numberWithBool:NO] forKey:@"completed"];
                 }
                 else {
                     object[@"completed"] = [NSNumber numberWithBool:NO];
                     [self.projectCompleteButton setTitle:@"complete project" forState:UIControlStateNormal];
+                    [dict setObject:[NSNumber numberWithBool:YES] forKey:@"completed"];
                 }
+                self.project = dict;
                 [object saveInBackground];
             }];
             
@@ -400,8 +401,16 @@
 #pragma mark - mark as complete
 
 - (IBAction)completeProject:(id)sender {
+    NSString *alertMessage = [NSString new];
+    NSLog(@"what is completed in button press: %@ and is htis true %d", [self.project objectForKey:@"completed"], [self.project objectForKey:@"completed"] == [NSNumber numberWithInt:1]);
+    if ([self.project objectForKey:@"completed"] == [NSNumber numberWithInt:1]) {
+        alertMessage = @"Are you sure you want to mark this project as incomplete?";
+    }
+    else {
+        alertMessage = @"Are you sure you want to mark this project as complete?";
+    }
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Complete Project" message:@"Are you sure you want to mark this project as complete?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Complete Project" message:alertMessage delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
     [alert show];
 }
 

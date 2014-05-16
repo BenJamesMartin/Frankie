@@ -331,7 +331,7 @@
         UILabel *completed = [[UILabel alloc] initWithFrame:CGRectMake(80, 60, 200, 30)];
         completed.font = [UIFont fontWithName:@"Helvetica" size:12];
         completed.textColor = [UIColor colorWithRed:77/255.f green:189/255.f blue:51/255.f alpha:1.0];
-        completed.text = @"Projected Completed!";
+        completed.text = @"Projected Complete";
         [cell addSubview:completed];
     }
     
