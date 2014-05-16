@@ -563,7 +563,7 @@
                                             <constraint firstAttribute="height" constant="34" id="3zE-YE-y44"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="16"/>
-                                        <state key="normal" title="project complete">
+                                        <state key="normal" title="complete project ">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
@@ -681,6 +681,7 @@
                         <outlet property="notesField" destination="OZ3-cs-hBx" id="Gg4-5E-fh8"/>
                         <outlet property="picture" destination="rZr-fn-9Hm" id="9dE-he-kLe"/>
                         <outlet property="priceField" destination="hTU-ra-uE4" id="yGO-Mv-iuP"/>
+                        <outlet property="projectCompleteButton" destination="qMj-dc-8Xl" id="Ss6-k2-Ebf"/>
                         <outlet property="scrollView" destination="meg-Ux-9Gl" id="E9H-YP-ikH"/>
                         <outlet property="titleField" destination="Jp9-q7-dRZ" id="BI4-4f-zJQ"/>
                     </connections>

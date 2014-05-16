@@ -163,6 +163,7 @@
     float price = [[self.price.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]] floatValue];
     [entity setValue:[NSNumber numberWithFloat:price] forKey:@"price"];
     [entity setValue:self.notes.text forKey:@"notes"];
+    [entity setValue:[NSNumber numberWithBool:NO] forKeyPath:@"completed"];
     [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString]
               forKey:@"objectId"];
     
@@ -375,7 +376,9 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    [self.keyboardScrollView setContentOffset:CGPointMake(0, textField.frame.origin.y - self.navigationController.navigationBar.frame.size.height*2) animated:YES];
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.keyboardScrollView setContentOffset:CGPointMake(0, textField.frame.origin.y - self.navigationController.navigationBar.frame.size.height*2)];
+    }];
     self.activeField = textField;
 }
 

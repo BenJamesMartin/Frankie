@@ -63,6 +63,13 @@
     else {
         self.notesField.text = [self.project objectForKey:@"notes"];
     }
+    NSLog(@"what is completed? %@ then this? %d", [self.project objectForKey:@"completed"], [self.project objectForKey:@"completed"] == [NSNumber numberWithInt:1]);
+    if ([self.project objectForKey:@"completed"] == nil || [self.project objectForKey:@"completed"] == [NSNull null] || [self.project objectForKey:@"completed"] == [NSNumber numberWithInt:YES]) {
+        [self.projectCompleteButton setTitle:@"mark project as incomplete" forState:UIControlStateNormal];
+    }
+    else {
+        [self.projectCompleteButton setTitle:@"complete project" forState:UIControlStateNormal];
+    }
     if (self.project[@"picture"] != nil && self.project[@"picture"] != [NSNull null]) {
         [self.picture setImage:[UIImage imageWithData:self.project[@"picture"]] forState:UIControlStateNormal];
     }
@@ -347,7 +354,15 @@
             PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
             [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
             [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                object[@"completed"] = [NSNumber numberWithBool:YES];
+                NSLog(@"current button title in parse: %@", self.projectCompleteButton.currentTitle);
+                if ([self.projectCompleteButton.currentTitle isEqualToString:@"complete project"]) {
+                    object[@"completed"] = [NSNumber numberWithBool:YES];
+                    [self.projectCompleteButton setTitle:@"mark project as incomplete" forState:UIControlStateNormal];
+                }
+                else {
+                    object[@"completed"] = [NSNumber numberWithBool:NO];
+                    [self.projectCompleteButton setTitle:@"complete project" forState:UIControlStateNormal];
+                }
                 [object saveInBackground];
             }];
             
@@ -358,14 +373,18 @@
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
             [request setPredicate:predicate];
             
+            NSLog(@"current button title: %@", self.projectCompleteButton.currentTitle);
+            
             NSError *error;
             Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
-            job.completed = [NSNumber numberWithBool:YES];
-
-            if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-                [self.navigationController popViewControllerAnimated:YES];
+            if ([self.projectCompleteButton.currentTitle isEqualToString:@"complete project"]) {
+                job.completed = [NSNumber numberWithBool:YES];
             }
+            else {
+                job.completed = [NSNumber numberWithBool:NO];
+            }
+
+            [(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
         }
     }
 }
