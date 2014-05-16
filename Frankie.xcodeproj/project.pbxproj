@@ -17,6 +17,7 @@
 		B55BB6A2187B647200BE3703 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B55BB6A0187B647200BE3703 /* Main.storyboard */; };
 		B55BB6B8187B647200BE3703 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B55BB6B6187B647200BE3703 /* InfoPlist.strings */; };
 		B55BB6BA187B647200BE3703 /* FrankieTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B55BB6B9187B647200BE3703 /* FrankieTests.m */; };
+		B575077B19258D97001D97E6 /* Job.m in Sources */ = {isa = PBXBuildFile; fileRef = B575077A19258D97001D97E6 /* Job.m */; };
 		B58554611919B0CE00CA987C /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B58554601919B0CE00CA987C /* Accounts.framework */; };
 		B58554631919B36B00CA987C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B58554621919B36B00CA987C /* AdSupport.framework */; };
 		B58554651919B39400CA987C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B58554641919B39400CA987C /* AudioToolbox.framework */; };
@@ -39,7 +40,6 @@
 		B5C12C77188DCAC80064986D /* FrankieAddContractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C12C76188DCAC80064986D /* FrankieAddContractViewController.m */; };
 		B5CDB55219075A35001CB69F /* Parse.framework in Resources */ = {isa = PBXBuildFile; fileRef = B5CDB53E19075A35001CB69F /* Parse.framework */; };
 		B5CDB55C190762D6001CB69F /* FrankieLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55BB6A4187B647200BE3703 /* FrankieLoginViewController.m */; };
-		B5FD447C192196F0006020C6 /* Job.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FD447B192196F0006020C6 /* Job.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +73,8 @@
 		B55BB6B5187B647200BE3703 /* FrankieTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FrankieTests-Info.plist"; sourceTree = "<group>"; };
 		B55BB6B7187B647200BE3703 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B55BB6B9187B647200BE3703 /* FrankieTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FrankieTests.m; sourceTree = "<group>"; };
+		B575077919258D97001D97E6 /* Job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Job.h; sourceTree = "<group>"; };
+		B575077A19258D97001D97E6 /* Job.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Job.m; sourceTree = "<group>"; };
 		B58554601919B0CE00CA987C /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		B58554621919B36B00CA987C /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		B58554641919B39400CA987C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -96,8 +98,6 @@
 		B5C12C75188DCAC80064986D /* FrankieAddContractViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieAddContractViewController.h; sourceTree = "<group>"; };
 		B5C12C76188DCAC80064986D /* FrankieAddContractViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieAddContractViewController.m; sourceTree = "<group>"; };
 		B5CDB53E19075A35001CB69F /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
-		B5FD447A192196EF006020C6 /* Job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Job.h; sourceTree = "<group>"; };
-		B5FD447B192196F0006020C6 /* Job.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Job.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,8 +219,8 @@
 			isa = PBXGroup;
 			children = (
 				B58AE0981888AB6F0083A645 /* Model.xcdatamodeld */,
-				B5FD447A192196EF006020C6 /* Job.h */,
-				B5FD447B192196F0006020C6 /* Job.m */,
+				B575077919258D97001D97E6 /* Job.h */,
+				B575077A19258D97001D97E6 /* Job.m */,
 			);
 			name = Model;
 			path = ..;
@@ -353,7 +353,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B5FD447C192196F0006020C6 /* Job.m in Sources */,
+				B575077B19258D97001D97E6 /* Job.m in Sources */,
 				B555856D187F8A1C007608EB /* FrankieDetailContractViewController.m in Sources */,
 				B540A5D9187E087400C7BD7D /* FrankieMasterContractViewController.m in Sources */,
 				B519804B1908673B00F3DF16 /* FrankieRegisterViewController.m in Sources */,

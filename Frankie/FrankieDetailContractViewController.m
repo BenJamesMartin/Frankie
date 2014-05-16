@@ -74,6 +74,85 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+//    [self performSelector:@selector(updateModel) withObject:nil afterDelay:0];
+}
+
+- (void)updateModel {
+//    NSData *imageData;
+//    if (!([self.picture imageForState:UIControlStateNormal] == [UIImage imageNamed:@"image-upload-icon"])) {
+//        UIImage *image = [self.picture imageForState:UIControlStateNormal];
+//        imageData = UIImageJPEGRepresentation(image, 0.9f);
+//    }
+//    else {
+//        imageData = nil;
+//    }
+//    
+//    PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
+//    [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
+//    // Run the query
+//    [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *project, NSError *error) {
+//        if (!error) {
+//            if (![self.titleField.text isEqualToString:@"[Title Not Set]"] || self.titleField.text != nil) {
+//                project[@"title"] = self.titleField.text;
+//            }
+//            if (![self.priceField.text isEqualToString:@"[Price Not Set]"] || self.priceField.text != nil) {
+//                float price = [self.priceField.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]].floatValue;
+//                project[@"price"] = [NSNumber numberWithFloat:price];
+//            }
+//            if (![self.dueDate.text isEqualToString:@"[Due Date Not Set]"]) {
+//                NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
+//                [dateformatter setDateFormat:@"MM/dd/yyyy"];
+//                project[@"end"] = [dateformatter dateFromString:self.dueDate.text];
+//            }
+//            if (![self.notesField.text isEqualToString:@"[No Notes"] || self.notesField.text != nil) {
+//                project[@"notes"] = self.notesField.text;
+//            }
+//            if (imageData != nil) {
+//                project[@"photo"] = [PFFile fileWithData:imageData];
+//            }
+//            
+//            [project saveInBackground];
+//        }
+//    }];
+//    
+//    NSError *error;
+//    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+//    
+//    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
+//    
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
+//    [request setPredicate:predicate];
+//    
+//    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"objectId" ascending:YES];
+//    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+//    [request setSortDescriptors:sortDescriptors];
+//    
+//    Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
+//    
+//    if (![self.titleField.text isEqualToString:@"[Title Not Set"]) {
+//        job.title = self.titleField.text;
+//    }
+//    if (![self.priceField.text isEqualToString:@"[Price Not Set"]) {
+//        float price = [self.priceField.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]].floatValue;
+//        job.price = [NSNumber numberWithFloat:price];
+//    }
+//    if (![self.priceField.text isEqualToString:@"[Date Not Set"]) {
+//        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
+//        [dateformatter setDateFormat:@"MM/dd/yyyy"];
+//        job.dueDate = [dateformatter dateFromString:self.dueDate.text];
+//    }
+//    if (![self.notesField.text isEqualToString:@"[No Notes"]) {
+//        job.notes = self.notesField.text;
+//    }
+//    
+//    if (imageData != nil) {
+//        job.picture = imageData;
+//    }
+//    
+//    if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+//        [self.navigationController popViewControllerAnimated:YES];
+//    }
 }
 
 #pragma mark - Edit buttons for title, price, and due date
@@ -231,32 +310,65 @@
 
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     // the user clicked one of the OK/Cancel buttons
-    if (buttonIndex == 1)
-    {
-        PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
-        [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
-        [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            [object deleteEventually];
-        }];
-        
-        NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-        
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
-        [request setPredicate:predicate];
-        
-        NSError *error;
-        Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
+    if ([actionSheet.title isEqualToString:@"Delete"]) {
+        if (buttonIndex == 1)
+        {
+            PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
+            [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
+            [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                [object deleteEventually];
+            }];
+            
+            NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+            
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
+            [request setPredicate:predicate];
+            
+            NSError *error;
+            Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
 
-        if (job == nil) {
-            NSLog(@"Error: %@", error);
+            if (job == nil) {
+                NSLog(@"Error: %@", error);
+            }
+            
+            [context deleteObject:job];
+            if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
         }
-        
-        [context deleteObject:job];
-        if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-            [self.navigationController popViewControllerAnimated:YES];
+    }
+    else if ([actionSheet.title isEqualToString:@"Complete Project"]) {
+        if (buttonIndex == 1) {
+            PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
+            [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
+            [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                object[@"completed"] = [NSNumber numberWithBool:YES];
+                [object saveInBackground];
+            }];
+            
+            NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+            
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
+            [request setPredicate:predicate];
+            
+            NSError *error;
+            Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
+            job.completed = [NSNumber numberWithBool:YES];
+            
+            if (job == nil) {
+                NSLog(@"Error: %@", error);
+            }
+            
+            [context deleteObject:job];
+            if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
         }
     }
 }
@@ -267,6 +379,15 @@
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete" message:@"Are you sure you want to delete this contract?"  delegate:self cancelButtonTitle:@"No" otherButtonTitles: @"Yes", nil];
     [alert show];
 }
+
+#pragma mark - mark as complete
+
+- (IBAction)completeProject:(id)sender {
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Complete Project" message:@"Are you sure you want to mark this project as complete?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    [alert show];
+}
+
 
 #pragma mark - UITextViewDelegate methods
 
