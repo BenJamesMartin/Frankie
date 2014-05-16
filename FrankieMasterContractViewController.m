@@ -187,6 +187,8 @@
     [self.tableView endUpdates];
 }
 
+#pragma mark - miscellaneous
+
 // Test method for syncing Parse with Core Data.
 - (void)addParseObject {
     PFObject *project = [PFObject objectWithClassName:@"Project"];
@@ -376,7 +378,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - UITableViewDelegate
+#pragma mark - UITableViewDelegate methods
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
@@ -384,9 +386,10 @@
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-
+        Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
+        
         PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
-        [postQuery whereKey:@"objectId" equalTo:[self.tableData objectAtIndex:indexPath.row][@"parseId"]];
+        [postQuery whereKey:@"objectId" equalTo:job.parseId];
         [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if (!error) {
                 [object deleteEventually];
@@ -399,7 +402,7 @@
         NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", [self.tableData objectAtIndex:indexPath.row][@"objectId"]];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", job.objectId];
         [request setPredicate:predicate];
         
         NSError *error;
@@ -411,9 +414,6 @@
             [context deleteObject:job];
         }
         [context save:&error];
-        
-        // Goes inside background thread block where thing is being deleted
-        [self reloadTable];
     }
 }
 
