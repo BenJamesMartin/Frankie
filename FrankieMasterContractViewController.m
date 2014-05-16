@@ -81,14 +81,7 @@
       initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
       target:self
       action:@selector(loadAddContractViewController)];
-    
-    self.tableData = [NSMutableArray new];
-    self.tableData = [self loadDataFromModel:nil];
-    NSSortDescriptor* sortByDate = [NSSortDescriptor sortDescriptorWithKey:@"dueDate"
-                                                                 ascending:NO];
-    
-    self.tableData = [self.tableData sortedArrayUsingDescriptors:@[sortByDate]];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadTable" object:nil];
     
     self.navigationController.navigationBar.alpha = 0.96;
@@ -290,7 +283,6 @@
 }
 
 - (void)reloadTable {
-//    self.tableData = [self loadDataFromModel:nil];
     
     NSError *error;
 	if (![[self fetchedResultsController] performFetch:&error]) {
@@ -298,48 +290,43 @@
 		NSLog(@"fetchedResults error %@, %@", error, [error userInfo]);
 	}
     
-//    NSSortDescriptor* sortByDate = [NSSortDescriptor sortDescriptorWithKey:@"dueDate"
-//                                                                 ascending:NO];
-//    self.tableData = [self.tableData sortedArrayUsingDescriptors:@[sortByDate]];
-    
-//    NSLog(@"tableData: %@", self.tableData);
     [self.tableView reloadData];
 }
 
--(NSArray *) loadDataFromModel:(NSString *)searchFor
-{
-    NSError *error;
-    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    
-    NSEntityDescription *entityDesc =
-    [NSEntityDescription entityForName:NSStringFromClass([Job class])
-                inManagedObjectContext:context];
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    
-    [request setEntity:entityDesc];
-    
-    NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
-    if (fetchedObjects == nil)
-        NSLog(@"Error: %@", error);
-    
-    NSMutableArray *tableData = [NSMutableArray new];
-    
-    for (Job *entity in fetchedObjects)
-    {
-        NSArray *keys = [[[entity entity] attributesByName] allKeys];
-        NSDictionary *dict = [entity dictionaryWithValuesForKeys:keys];
-        [tableData addObject:dict];
-    }
-    
-    if (searchFor == nil)
-    {
-        return tableData;
-    }
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title contains[cd] %@",searchFor];
-    return [[NSArray alloc] initWithObjects:[tableData filteredArrayUsingPredicate:predicate], nil];
-}
+//-(NSArray *) loadDataFromModel:(NSString *)searchFor
+//{
+//    NSError *error;
+//    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+//    
+//    NSEntityDescription *entityDesc =
+//    [NSEntityDescription entityForName:NSStringFromClass([Job class])
+//                inManagedObjectContext:context];
+//    
+//    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+//    
+//    [request setEntity:entityDesc];
+//    
+//    NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
+//    if (fetchedObjects == nil)
+//        NSLog(@"Error: %@", error);
+//    
+//    NSMutableArray *tableData = [NSMutableArray new];
+//    
+//    for (Job *entity in fetchedObjects)
+//    {
+//        NSArray *keys = [[[entity entity] attributesByName] allKeys];
+//        NSDictionary *dict = [entity dictionaryWithValuesForKeys:keys];
+//        [tableData addObject:dict];
+//    }
+//    
+//    if (searchFor == nil)
+//    {
+//        return tableData;
+//    }
+//    
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title contains[cd] %@",searchFor];
+//    return [[NSArray alloc] initWithObjects:[tableData filteredArrayUsingPredicate:predicate], nil];
+//}
 
 - (void)deleteDataFromModel {
     NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
@@ -429,10 +416,7 @@
     return [sectionInfo numberOfObjects];
 }
 
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-//{
-//    return [self.tableData count];
-//}
+
 
 //- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 //{
@@ -654,18 +638,6 @@
     
    [self.navigationController pushViewController:detailContractVC animated:YES];
 }
-
-//-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    if ([segue.identifier isEqualToString: @"showDetail"]) {
-//        FrankieDetailContractViewController * SCVC = [segue destinationViewController];
-//        NSIndexPath *path = [self.tableView indexPathForSelectedRow];
-//        SCVC.project = @{
-//                         @"title" : [self.tableData objectAtIndex:path.row][@"title"],
-//                         @"nextStep":  [self.tableData objectAtIndex:path.row][@"nextStep"],
-//                         @"dueDate": [self.tableData objectAtIndex:path.row][@"dueDate"]
-//                         };
-//    }
-//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {

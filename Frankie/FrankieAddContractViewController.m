@@ -66,8 +66,7 @@
     [self.keyboardScrollView setScrollEnabled:YES];
 //    [imgScrollView setClipsToBounds:YES];
 
-    
-    self.notes.delegate = self;
+//    self.notes.delegate = self;
     self.projectDate.text = @"due date";
     self.keyboardScrollView.delegate = self;
     
