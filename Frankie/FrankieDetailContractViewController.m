@@ -63,7 +63,6 @@
     else {
         self.notesField.text = [self.project objectForKey:@"notes"];
     }
-    NSLog(@"what is completed? %@ then this? %d", [self.project objectForKey:@"completed"], [self.project objectForKey:@"completed"] == [NSNumber numberWithInt:1]);
     if ([self.project objectForKey:@"completed"] == nil || [self.project objectForKey:@"completed"] == [NSNull null] || [self.project objectForKey:@"completed"] == [NSNumber numberWithInt:YES]) {
         [self.projectCompleteButton setTitle:@"mark project as incomplete" forState:UIControlStateNormal];
     }
@@ -81,85 +80,6 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-//    [self performSelector:@selector(updateModel) withObject:nil afterDelay:0];
-}
-
-- (void)updateModel {
-//    NSData *imageData;
-//    if (!([self.picture imageForState:UIControlStateNormal] == [UIImage imageNamed:@"image-upload-icon"])) {
-//        UIImage *image = [self.picture imageForState:UIControlStateNormal];
-//        imageData = UIImageJPEGRepresentation(image, 0.9f);
-//    }
-//    else {
-//        imageData = nil;
-//    }
-//    
-//    PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
-//    [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
-//    // Run the query
-//    [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *project, NSError *error) {
-//        if (!error) {
-//            if (![self.titleField.text isEqualToString:@"[Title Not Set]"] || self.titleField.text != nil) {
-//                project[@"title"] = self.titleField.text;
-//            }
-//            if (![self.priceField.text isEqualToString:@"[Price Not Set]"] || self.priceField.text != nil) {
-//                float price = [self.priceField.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]].floatValue;
-//                project[@"price"] = [NSNumber numberWithFloat:price];
-//            }
-//            if (![self.dueDate.text isEqualToString:@"[Due Date Not Set]"]) {
-//                NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-//                [dateformatter setDateFormat:@"MM/dd/yyyy"];
-//                project[@"end"] = [dateformatter dateFromString:self.dueDate.text];
-//            }
-//            if (![self.notesField.text isEqualToString:@"[No Notes"] || self.notesField.text != nil) {
-//                project[@"notes"] = self.notesField.text;
-//            }
-//            if (imageData != nil) {
-//                project[@"photo"] = [PFFile fileWithData:imageData];
-//            }
-//            
-//            [project saveInBackground];
-//        }
-//    }];
-//    
-//    NSError *error;
-//    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-//    
-//    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
-//    
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
-//    [request setPredicate:predicate];
-//    
-//    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"objectId" ascending:YES];
-//    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-//    [request setSortDescriptors:sortDescriptors];
-//    
-//    Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
-//    
-//    if (![self.titleField.text isEqualToString:@"[Title Not Set"]) {
-//        job.title = self.titleField.text;
-//    }
-//    if (![self.priceField.text isEqualToString:@"[Price Not Set"]) {
-//        float price = [self.priceField.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]].floatValue;
-//        job.price = [NSNumber numberWithFloat:price];
-//    }
-//    if (![self.priceField.text isEqualToString:@"[Date Not Set"]) {
-//        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-//        [dateformatter setDateFormat:@"MM/dd/yyyy"];
-//        job.dueDate = [dateformatter dateFromString:self.dueDate.text];
-//    }
-//    if (![self.notesField.text isEqualToString:@"[No Notes"]) {
-//        job.notes = self.notesField.text;
-//    }
-//    
-//    if (imageData != nil) {
-//        job.picture = imageData;
-//    }
-//    
-//    if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-//        [self.navigationController popViewControllerAnimated:YES];
-//    }
 }
 
 #pragma mark - Edit buttons for title, price, and due date
@@ -224,7 +144,6 @@
     else {
         [self.notesField resignFirstResponder];
     }
-
 }
 
 
@@ -402,7 +321,6 @@
 
 - (IBAction)completeProject:(id)sender {
     NSString *alertMessage = [NSString new];
-    NSLog(@"what is completed in button press: %@ and is htis true %d", [self.project objectForKey:@"completed"], [self.project objectForKey:@"completed"] == [NSNumber numberWithInt:1]);
     if ([self.project objectForKey:@"completed"] == [NSNumber numberWithInt:1]) {
         alertMessage = @"Are you sure you want to mark this project as incomplete?";
     }

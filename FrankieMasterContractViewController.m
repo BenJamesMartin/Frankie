@@ -36,7 +36,10 @@
 {
     [super viewDidLoad];
     
-//    UIImageView *image = [UIImageView new];
+    [self syncParseCoreData];
+    
+    self.fetchedResultsController.delegate = self;
+
     self.defaultImage.frame = CGRectMake(10, 12, 60, 60);
     self.defaultImage.backgroundColor = [UIColor colorWithRed:(240/255.f) green:(240/255.f) blue:(240/255.f) alpha:1.0];
     
@@ -78,6 +81,95 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadTable" object:nil];
     
     self.navigationController.navigationBar.alpha = 0.96;
+}
+
+// Test method for syncing Parse with Core Data.
+- (void)addParseObject {
+    PFObject *project = [PFObject objectWithClassName:@"Project"];
+    project[@"user"] = [PFUser currentUser];
+    project[@"title"] = @"random";
+
+    project[@"start"] = [NSDate date];
+    project[@"end"] = [NSDate date];
+
+    project[@"completed"] = [NSNumber numberWithBool:NO];
+    project[@"price"] = [NSNumber numberWithFloat:44.3];
+    project[@"notes"] = @"notes";
+    project.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+
+    [project saveInBackground];
+}
+
+- (void)syncParseCoreData {
+    NSError *error;
+    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    NSEntityDescription *entityDesc = [NSEntityDescription entityForName:NSStringFromClass([Job class])
+                                                  inManagedObjectContext:context];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDesc];
+    
+    NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
+    
+    PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
+    [postQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    
+    [postQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            NSMutableArray *projectsToAdd = [NSMutableArray new];
+            NSMutableArray *projectsToDelete = [NSMutableArray new];
+            BOOL found = NO;
+            
+            for (PFObject *project in objects) {
+                for (Job *job in fetchedObjects)
+                {
+                    if ([job.parseId isEqualToString:[project objectId]]) {
+                        found = YES;
+                        break;
+                    }
+                }
+                if (found == NO) {
+                    [projectsToAdd addObject:project];
+                }
+                found = NO;
+            }
+            for (Job *job in fetchedObjects)
+            {
+                for (PFObject *project in objects) {
+                    if ([job.parseId isEqualToString:[project objectId]]) {
+                        found = YES;
+                        break;
+                    }
+                }
+                if (found == NO) {
+                    [projectsToDelete addObject:job];
+                }
+                found = NO;
+            }
+            for (PFObject *project in projectsToAdd) {
+                NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Job class]) inManagedObjectContext:context];
+                
+                [entity setValue:project[@"title"] forKeyPath:@"title"];
+                [entity setValue:project[@"end"] forKeyPath:@"dueDate"];
+                [entity setValue:project[@"price"] forKeyPath:@"price"];
+                [entity setValue:project[@"notes"] forKeyPath:@"notes"];
+                [entity setValue:UIImagePNGRepresentation(project[@"photo"]) forKeyPath:@"picture"];
+                [entity setValue:[project objectId] forKeyPath:@"parseId"];
+                [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString] forKeyPath:@"objectId"];
+                [entity setValue:project[@"completed"] forKeyPath:@"completed"];
+            }
+            for (Job *job in projectsToDelete) {
+                [context deleteObject:job];
+            }
+            if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+            }
+        }
+        else {
+            NSLog(@"Parse find all objects error: %@", error);
+        }
+    }];
 }
 
 - (void)loadAddContractViewController {
@@ -324,8 +416,7 @@
     
     dueDate.font = [UIFont fontWithName:@"Helvetica" size:12];
     dueDate.textColor = [UIColor grayColor];
-    
-    NSLog(@"completed in cellforRow: %@", [[self.tableData objectAtIndex:indexPath.row] objectForKey:@"completed"]);
+
     if ([[self.tableData objectAtIndex:indexPath.row] objectForKey:@"completed"] == [NSNumber numberWithInt:1]) {
         NSLog(@"this is true?");
         UILabel *completed = [[UILabel alloc] initWithFrame:CGRectMake(80, 60, 200, 30)];
