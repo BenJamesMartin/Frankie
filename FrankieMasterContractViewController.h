@@ -14,7 +14,6 @@
 @interface FrankieMasterContractViewController : UITableViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) UIImageView *defaultImage;
-@property (strong, nonatomic) NSArray *tableData;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 - (void)loadAddContractViewController;
