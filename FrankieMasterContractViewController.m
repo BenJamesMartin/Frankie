@@ -24,7 +24,6 @@
 
 @implementation FrankieMasterContractViewController
 
-
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -39,37 +38,6 @@
 }
 
 
-//- (void)showSIAlert {
-//    SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:@"Delete project?"];
-//    
-//    [alertView addButtonWithTitle:@"No"
-//                             type:SIAlertViewButtonTypeCancel
-//                          handler:^(SIAlertView *alert) {
-//                              NSLog(@"Button1 Clicked");
-//                          }];
-//    [alertView addButtonWithTitle:@"Yes"
-//                             type:SIAlertViewButtonTypeDestructive
-//                          handler:^(SIAlertView *alert) {
-//                              NSLog(@"Button2 Clicked");
-//                          }];
-//    
-//    alertView.willShowHandler = ^(SIAlertView *alertView) {
-//        NSLog(@"%@, willShowHandler", alertView);
-//    };
-//    alertView.didShowHandler = ^(SIAlertView *alertView) {
-//        NSLog(@"%@, didShowHandler", alertView);
-//    };
-//    alertView.willDismissHandler = ^(SIAlertView *alertView) {
-//        NSLog(@"%@, willDismissHandler", alertView);
-//    };
-//    alertView.didDismissHandler = ^(SIAlertView *alertView) {
-//        NSLog(@"%@, didDismissHandler", alertView);
-//    };
-//    
-//    alertView.transitionStyle = SIAlertViewTransitionStyleFade;
-//    
-//    [alertView show];
-//}
 
 - (void)viewDidLoad
 {
@@ -78,8 +46,6 @@
     [self syncParseCoreData];
     
     self.fetchedResultsController.delegate = self;
-    
-//    [self showSIAlert];
     
     NSError *error;
 	if (![[self fetchedResultsController] performFetch:&error]) {
@@ -223,11 +189,15 @@
 - (void)addParseObject {
     PFObject *project = [PFObject objectWithClassName:@"Project"];
     project[@"user"] = [PFUser currentUser];
-    project[@"title"] = @"random";
+    project[@"title"] = @"hi";
 
     project[@"start"] = [NSDate date];
     project[@"end"] = [NSDate date];
-
+    
+    UIImage *image = [UIImage imageNamed:@"random.jpg"];
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.9f);
+    project[@"picture"] = [PFFile fileWithData:imageData];
+    
     project[@"completed"] = [NSNumber numberWithBool:NO];
     project[@"price"] = [NSNumber numberWithFloat:44.3];
     project[@"notes"] = @"notes";

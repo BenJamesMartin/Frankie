@@ -41,6 +41,7 @@
     }
     else {
         self.titleField.text = [self.project objectForKey:@"title"];
+        self.navigationItem.title = [self.project objectForKey:@"title"];
     }
     
     if ([[self.project objectForKey:@"price"] floatValue] == 0) {
@@ -447,6 +448,7 @@
     [textField setUserInteractionEnabled:NO];
     if (textField == self.titleField) {
         [self.editTitleButton setTitle:@"Edit" forState:UIControlStateNormal];
+        self.navigationItem.title = self.titleField.text;
     }
     else if (textField == self.priceField) {
         float price = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]].floatValue;
