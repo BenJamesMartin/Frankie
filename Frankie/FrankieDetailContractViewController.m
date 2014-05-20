@@ -12,6 +12,7 @@
 #import "FrankieAppDelegate.h"
 #import "Job.h"
 #import "FrankieDetailContractViewController.h"
+#import "SIAlertView.h"
 
 
 @interface FrankieDetailContractViewController ()
@@ -237,91 +238,109 @@
 #pragma mark - UIAlertViewDelegate methods
 
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([actionSheet.title isEqualToString:@"Delete"]) {
-        if (buttonIndex == 1)
-        {
-            PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
-            [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
-            [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                [object deleteEventually];
-            }];
-            
-            NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-            
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
-            
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
-            [request setPredicate:predicate];
-            
-            NSError *error;
-            Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
-
-            if (job == nil) {
-                NSLog(@"Error: %@", error);
-            }
-            
-            [context deleteObject:job];
-            if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-                [self.navigationController popViewControllerAnimated:YES];
-            }
-        }
-    }
-    else if ([actionSheet.title isEqualToString:@"Complete Project"]) {
-        if (buttonIndex == 1) {
-            PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
-            [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
-            
-            [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                NSMutableDictionary *dict = [self.project mutableCopy];
-                if ([self.projectCompleteButton.currentTitle isEqualToString:@"complete project"]) {
-                    object[@"completed"] = [NSNumber numberWithBool:YES];
-                    [self.projectCompleteButton setTitle:@"mark project as incomplete" forState:UIControlStateNormal];
-                    [dict setObject:[NSNumber numberWithBool:YES] forKey:@"completed"];
-                }
-                else {
-                    object[@"completed"] = [NSNumber numberWithBool:NO];
-                    [self.projectCompleteButton setTitle:@"complete project" forState:UIControlStateNormal];
-                    [dict setObject:[NSNumber numberWithBool:NO] forKey:@"completed"];
-                }
-                self.project = dict;
-                [object saveInBackground];
-            }];
-            
-            NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-            
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
-            
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
-            [request setPredicate:predicate];
-            
-//            NSLog(@"current button title: %@", self.projectCompleteButton.currentTitle);
-            
-            NSError *error;
-            Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
-            if ([self.projectCompleteButton.currentTitle isEqualToString:@"complete project"]) {
-                job.completed = [NSNumber numberWithBool:YES];
-            }
-            else {
-                job.completed = [NSNumber numberWithBool:NO];
-            }
-
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-            [(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
-        }
-    }
+//    if ([actionSheet.title isEqualToString:@"Complete Project"]) {
+//        if (buttonIndex == 1) {
+//            PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
+//            [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
+//            
+//            [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+//                NSMutableDictionary *dict = [self.project mutableCopy];
+//                if ([self.projectCompleteButton.currentTitle isEqualToString:@"complete project"]) {
+//                    object[@"completed"] = [NSNumber numberWithBool:YES];
+//                    [self.projectCompleteButton setTitle:@"mark project as incomplete" forState:UIControlStateNormal];
+//                    [dict setObject:[NSNumber numberWithBool:YES] forKey:@"completed"];
+//                }
+//                else {
+//                    object[@"completed"] = [NSNumber numberWithBool:NO];
+//                    [self.projectCompleteButton setTitle:@"complete project" forState:UIControlStateNormal];
+//                    [dict setObject:[NSNumber numberWithBool:NO] forKey:@"completed"];
+//                }
+//                self.project = dict;
+//                [object saveInBackground];
+//            }];
+//            
+//            NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+//            
+//            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
+//            
+//            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
+//            [request setPredicate:predicate];
+//            
+////            NSLog(@"current button title: %@", self.projectCompleteButton.currentTitle);
+//            
+//            NSError *error;
+//            Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
+//            if ([self.projectCompleteButton.currentTitle isEqualToString:@"complete project"]) {
+//                job.completed = [NSNumber numberWithBool:YES];
+//            }
+//            else {
+//                job.completed = [NSNumber numberWithBool:NO];
+//            }
+//
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+//            [(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
+//        }
+//    }
 }
 
 #pragma mark - delete project
+- (IBAction)deleteProjectButtonTapped:(id)sender {
+    SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:@"Are you sure you want to delete this project?"];
+    
+    [alertView addButtonWithTitle:@"No"
+                             type:SIAlertViewButtonTypeCancel
+                          handler:^(SIAlertView *alert) {
+                              //                              NSLog(@"Button1 Clicked");
+                          }];
+    
+    [alertView addButtonWithTitle:@"Yes"
+                             type:SIAlertViewButtonTypeDestructive
+                          handler:^(SIAlertView *alert) {
+                              [self deleteProject];
+                          }];
+    alertView.transitionStyle = SIAlertViewTransitionStyleFade;
+    
+    [alertView show];
 
-- (IBAction)deleteProject:(id)sender {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete" message:@"Are you sure you want to delete this contract?"  delegate:self cancelButtonTitle:@"No" otherButtonTitles: @"Yes", nil];
-    [alert show];
 }
 
-#pragma mark - mark as complete
+- (void)deleteProject {
+    PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
+    [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
+    [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        [object deleteEventually];
+    }];
+    
+    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
+    [request setPredicate:predicate];
+    
+    NSError *error;
+    Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
+    
+    if (job == nil) {
+        NSLog(@"Error: %@", error);
+    }
+    
+    [context deleteObject:job];
+    if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
 
-- (IBAction)completeProject:(id)sender {
+//- (IBAction)deleteProject:(id)sender {
+//
+//
+////    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete" message:@"Are you sure you want to delete this contract?"  delegate:self cancelButtonTitle:@"No" otherButtonTitles: @"Yes", nil];
+////    [alert show];
+//}
+
+#pragma mark - mark as complete
+- (IBAction)completeProjectButtonTapped:(id)sender {
     NSString *alertMessage = [NSString new];
     if ([self.project objectForKey:@"completed"] == [NSNumber numberWithInt:1] || [self.project objectForKey:@"completed"] == [NSNumber numberWithBool:YES]) {
         alertMessage = @"Are you sure you want to mark this project as incomplete?";
@@ -329,11 +348,62 @@
     else {
         alertMessage = @"Are you sure you want to mark this project as complete?";
     }
+
+    SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:alertMessage];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Complete Project" message:alertMessage delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
-    [alert show];
+    [alertView addButtonWithTitle:@"No"
+                             type:SIAlertViewButtonTypeCancel
+                          handler:^(SIAlertView *alert) {
+                          }];
+    [alertView addButtonWithTitle:@"Yes"
+                             type:SIAlertViewButtonTypeDestructive
+                          handler:^(SIAlertView *alert) {
+                              [self changeProjectCompletionState];
+                          }];
+    alertView.transitionStyle = SIAlertViewTransitionStyleFade;
+    
+    [alertView show];
 }
 
+- (void)changeProjectCompletionState {
+    PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
+    [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
+    
+    [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        NSMutableDictionary *dict = [self.project mutableCopy];
+        if ([self.projectCompleteButton.currentTitle isEqualToString:@"complete project"]) {
+            object[@"completed"] = [NSNumber numberWithBool:YES];
+            [self.projectCompleteButton setTitle:@"mark project as incomplete" forState:UIControlStateNormal];
+            [dict setObject:[NSNumber numberWithBool:YES] forKey:@"completed"];
+        }
+        else {
+            object[@"completed"] = [NSNumber numberWithBool:NO];
+            [self.projectCompleteButton setTitle:@"complete project" forState:UIControlStateNormal];
+            [dict setObject:[NSNumber numberWithBool:NO] forKey:@"completed"];
+        }
+        self.project = dict;
+        [object saveInBackground];
+    }];
+    
+    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
+    [request setPredicate:predicate];
+    
+    NSError *error;
+    Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
+    if ([self.projectCompleteButton.currentTitle isEqualToString:@"complete project"]) {
+        job.completed = [NSNumber numberWithBool:YES];
+    }
+    else {
+        job.completed = [NSNumber numberWithBool:NO];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
+}
 
 #pragma mark - UITextViewDelegate methods
 

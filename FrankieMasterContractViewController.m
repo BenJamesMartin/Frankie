@@ -39,42 +39,37 @@
 }
 
 
-- (void)showSIAlert {
-    SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:@"Delete project?"];
-    
-    [alertView addButtonWithTitle:@"No"
-                             type:SIAlertViewButtonTypeCancel
-                          handler:^(SIAlertView *alert) {
-                              NSLog(@"Button1 Clicked");
-                          }];
-    [alertView addButtonWithTitle:@"Yes"
-                             type:SIAlertViewButtonTypeDestructive
-                          handler:^(SIAlertView *alert) {
-                              NSLog(@"Button2 Clicked");
-                          }];
-//    [alertView addButtonWithTitle:@"Button3"
+//- (void)showSIAlert {
+//    SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:@"Delete project?"];
+//    
+//    [alertView addButtonWithTitle:@"No"
 //                             type:SIAlertViewButtonTypeCancel
 //                          handler:^(SIAlertView *alert) {
-//                              NSLog(@"Button3 Clicked");
+//                              NSLog(@"Button1 Clicked");
 //                          }];
-    
-    alertView.willShowHandler = ^(SIAlertView *alertView) {
-        NSLog(@"%@, willShowHandler", alertView);
-    };
-    alertView.didShowHandler = ^(SIAlertView *alertView) {
-        NSLog(@"%@, didShowHandler", alertView);
-    };
-    alertView.willDismissHandler = ^(SIAlertView *alertView) {
-        NSLog(@"%@, willDismissHandler", alertView);
-    };
-    alertView.didDismissHandler = ^(SIAlertView *alertView) {
-        NSLog(@"%@, didDismissHandler", alertView);
-    };
-    
-    alertView.transitionStyle = SIAlertViewTransitionStyleFade;
-    
-    [alertView show];
-}
+//    [alertView addButtonWithTitle:@"Yes"
+//                             type:SIAlertViewButtonTypeDestructive
+//                          handler:^(SIAlertView *alert) {
+//                              NSLog(@"Button2 Clicked");
+//                          }];
+//    
+//    alertView.willShowHandler = ^(SIAlertView *alertView) {
+//        NSLog(@"%@, willShowHandler", alertView);
+//    };
+//    alertView.didShowHandler = ^(SIAlertView *alertView) {
+//        NSLog(@"%@, didShowHandler", alertView);
+//    };
+//    alertView.willDismissHandler = ^(SIAlertView *alertView) {
+//        NSLog(@"%@, willDismissHandler", alertView);
+//    };
+//    alertView.didDismissHandler = ^(SIAlertView *alertView) {
+//        NSLog(@"%@, didDismissHandler", alertView);
+//    };
+//    
+//    alertView.transitionStyle = SIAlertViewTransitionStyleFade;
+//    
+//    [alertView show];
+//}
 
 - (void)viewDidLoad
 {
@@ -84,7 +79,7 @@
     
     self.fetchedResultsController.delegate = self;
     
-    [self showSIAlert];
+//    [self showSIAlert];
     
     NSError *error;
 	if (![[self fetchedResultsController] performFetch:&error]) {

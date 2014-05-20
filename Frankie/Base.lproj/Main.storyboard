@@ -570,7 +570,7 @@
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="completeProject:" destination="vL1-ub-e7x" eventType="touchUpInside" id="31o-mz-L1t"/>
+                                            <action selector="completeProjectButtonTapped:" destination="vL1-ub-e7x" eventType="touchUpInside" id="fAk-Bd-rGW"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4kD-KN-pem">
@@ -585,7 +585,7 @@
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="deleteProject:" destination="vL1-ub-e7x" eventType="touchUpInside" id="52l-5V-iJt"/>
+                                            <action selector="deleteProjectButtonTapped:" destination="vL1-ub-e7x" eventType="touchUpInside" id="cYr-Pt-bN2"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="right" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rZr-fn-9Hm">
