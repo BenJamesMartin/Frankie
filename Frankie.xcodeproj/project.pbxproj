@@ -37,6 +37,10 @@
 		B58554811919B46700CA987C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B58554801919B46700CA987C /* UIKit.framework */; };
 		B5855483191E485200CA987C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5855482191E485200CA987C /* Images.xcassets */; };
 		B58AE09A1888AB6F0083A645 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B58AE0981888AB6F0083A645 /* Model.xcdatamodeld */; };
+		B59BD0CC192BE6210067234D /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = B59BD0C6192BE6210067234D /* LICENSE.md */; };
+		B59BD0CD192BE6210067234D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = B59BD0C7192BE6210067234D /* README.md */; };
+		B59BD0CE192BE6210067234D /* SIAlertView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B59BD0C9192BE6210067234D /* SIAlertView.bundle */; };
+		B59BD0CF192BE6210067234D /* SIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = B59BD0CB192BE6210067234D /* SIAlertView.m */; };
 		B5C12C77188DCAC80064986D /* FrankieAddContractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C12C76188DCAC80064986D /* FrankieAddContractViewController.m */; };
 		B5CDB55219075A35001CB69F /* Parse.framework in Resources */ = {isa = PBXBuildFile; fileRef = B5CDB53E19075A35001CB69F /* Parse.framework */; };
 		B5CDB55C190762D6001CB69F /* FrankieLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55BB6A4187B647200BE3703 /* FrankieLoginViewController.m */; };
@@ -95,6 +99,11 @@
 		B5855482191E485200CA987C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Frankie/Images.xcassets; sourceTree = "<group>"; };
 		B5896F2C191096140051319A /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		B58AE0991888AB6F0083A645 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		B59BD0C6192BE6210067234D /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.md; sourceTree = "<group>"; };
+		B59BD0C7192BE6210067234D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		B59BD0C9192BE6210067234D /* SIAlertView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SIAlertView.bundle; sourceTree = "<group>"; };
+		B59BD0CA192BE6210067234D /* SIAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SIAlertView.h; sourceTree = "<group>"; };
+		B59BD0CB192BE6210067234D /* SIAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SIAlertView.m; sourceTree = "<group>"; };
 		B5C12C75188DCAC80064986D /* FrankieAddContractViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieAddContractViewController.h; sourceTree = "<group>"; };
 		B5C12C76188DCAC80064986D /* FrankieAddContractViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieAddContractViewController.m; sourceTree = "<group>"; };
 		B5CDB53E19075A35001CB69F /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
@@ -189,6 +198,7 @@
 		B55BB695187B647200BE3703 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B59BD0C5192BE6210067234D /* SIAlertView */,
 				B55BB696187B647200BE3703 /* Frankie-Info.plist */,
 				B55BB697187B647200BE3703 /* InfoPlist.strings */,
 				B55BB69A187B647200BE3703 /* main.m */,
@@ -224,6 +234,26 @@
 			);
 			name = Model;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		B59BD0C5192BE6210067234D /* SIAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				B59BD0C6192BE6210067234D /* LICENSE.md */,
+				B59BD0C7192BE6210067234D /* README.md */,
+				B59BD0C8192BE6210067234D /* SIAlertView */,
+			);
+			path = SIAlertView;
+			sourceTree = "<group>";
+		};
+		B59BD0C8192BE6210067234D /* SIAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				B59BD0C9192BE6210067234D /* SIAlertView.bundle */,
+				B59BD0CA192BE6210067234D /* SIAlertView.h */,
+				B59BD0CB192BE6210067234D /* SIAlertView.m */,
+			);
+			path = SIAlertView;
 			sourceTree = "<group>";
 		};
 		B5CDB54619075A35001CB69F /* Frameworks */ = {
@@ -331,6 +361,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B59BD0CD192BE6210067234D /* README.md in Resources */,
+				B59BD0CE192BE6210067234D /* SIAlertView.bundle in Resources */,
+				B59BD0CC192BE6210067234D /* LICENSE.md in Resources */,
 				B55BB699187B647200BE3703 /* InfoPlist.strings in Resources */,
 				B5855483191E485200CA987C /* Images.xcassets in Resources */,
 				B5CDB55219075A35001CB69F /* Parse.framework in Resources */,
@@ -354,6 +387,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B575077B19258D97001D97E6 /* Job.m in Sources */,
+				B59BD0CF192BE6210067234D /* SIAlertView.m in Sources */,
 				B555856D187F8A1C007608EB /* FrankieDetailContractViewController.m in Sources */,
 				B540A5D9187E087400C7BD7D /* FrankieMasterContractViewController.m in Sources */,
 				B519804B1908673B00F3DF16 /* FrankieRegisterViewController.m in Sources */,

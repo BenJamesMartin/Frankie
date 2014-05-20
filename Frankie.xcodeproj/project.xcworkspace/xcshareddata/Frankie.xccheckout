@@ -5,13 +5,15 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>A20FC538-54CB-4B06-8FCE-9CEC525C6043</string>
+	<string>222F6BCC-A4A9-4A55-8508-9FBBFB0E052C</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Frankie</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>067561FD-2CDD-47CB-A15F-36A6CE003698</key>
 		<string>ssh://github.com/hackreactor/hrhq-base.git</string>
+		<key>A6851F66-2434-4FF9-8DC4-650AE730FCC0</key>
+		<string>https://github.com/BenJamesMartin/Frankie.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>hack-reactor-materials/hir/Frankie/Frankie.xcodeproj/project.xcworkspace</string>
@@ -19,9 +21,11 @@
 	<dict>
 		<key>067561FD-2CDD-47CB-A15F-36A6CE003698</key>
 		<string>../../../../..</string>
+		<key>A6851F66-2434-4FF9-8DC4-650AE730FCC0</key>
+		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/hackreactor/hrhq-base.git</string>
+	<string>https://github.com/BenJamesMartin/Frankie.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
@@ -35,6 +39,14 @@
 			<string>067561FD-2CDD-47CB-A15F-36A6CE003698</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Dropbox</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>A6851F66-2434-4FF9-8DC4-650AE730FCC0</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Frankie</string>
 		</dict>
 	</array>
 </dict>

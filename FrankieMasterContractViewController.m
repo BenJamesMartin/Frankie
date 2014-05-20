@@ -16,6 +16,7 @@
 #import "FrankieLoginViewController.h"
 #import "FrankieAppDelegate.h"
 #import "Job.h"
+#import "SIAlertView.h"
 
 @interface FrankieMasterContractViewController ()
 
@@ -37,6 +38,44 @@
     self.fetchedResultsController = nil;
 }
 
+
+- (void)showSIAlert {
+    SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:@"Delete project?"];
+    
+    [alertView addButtonWithTitle:@"No"
+                             type:SIAlertViewButtonTypeCancel
+                          handler:^(SIAlertView *alert) {
+                              NSLog(@"Button1 Clicked");
+                          }];
+    [alertView addButtonWithTitle:@"Yes"
+                             type:SIAlertViewButtonTypeDestructive
+                          handler:^(SIAlertView *alert) {
+                              NSLog(@"Button2 Clicked");
+                          }];
+//    [alertView addButtonWithTitle:@"Button3"
+//                             type:SIAlertViewButtonTypeCancel
+//                          handler:^(SIAlertView *alert) {
+//                              NSLog(@"Button3 Clicked");
+//                          }];
+    
+    alertView.willShowHandler = ^(SIAlertView *alertView) {
+        NSLog(@"%@, willShowHandler", alertView);
+    };
+    alertView.didShowHandler = ^(SIAlertView *alertView) {
+        NSLog(@"%@, didShowHandler", alertView);
+    };
+    alertView.willDismissHandler = ^(SIAlertView *alertView) {
+        NSLog(@"%@, willDismissHandler", alertView);
+    };
+    alertView.didDismissHandler = ^(SIAlertView *alertView) {
+        NSLog(@"%@, didDismissHandler", alertView);
+    };
+    
+    alertView.transitionStyle = SIAlertViewTransitionStyleFade;
+    
+    [alertView show];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -44,6 +83,8 @@
     [self syncParseCoreData];
     
     self.fetchedResultsController.delegate = self;
+    
+    [self showSIAlert];
     
     NSError *error;
 	if (![[self fetchedResultsController] performFetch:&error]) {
