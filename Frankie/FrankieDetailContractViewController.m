@@ -301,7 +301,6 @@
     alertView.transitionStyle = SIAlertViewTransitionStyleFade;
     
     [alertView show];
-
 }
 
 - (void)deleteProject {

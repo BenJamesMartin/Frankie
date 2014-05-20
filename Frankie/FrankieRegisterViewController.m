@@ -10,6 +10,7 @@
 
 #import "FrankieRegisterViewController.h"
 #import "FrankieMasterContractViewController.h"
+#import "SIAlertView.h"
 
 @interface FrankieRegisterViewController ()
 
@@ -45,74 +46,89 @@
     user.email = self.email.text;
     user.password = self.password.text;
     
+    NSString *alertMessage = [NSString new];
+    BOOL showAlertView = NO;
+    
     if (self.email.text.length == 0) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:@"Please enter an email." delegate:self cancelButtonTitle:nil
-                                              otherButtonTitles:@"OK", nil];
-        [alert show];
-        return;
+        alertMessage = @"Please enter an email";
+        showAlertView = YES;
     }
     else if (self.password.text.length == 0) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:@"Please enter a password." delegate:self cancelButtonTitle:nil
-                                              otherButtonTitles:@"OK", nil];
-        [alert show];
-        return;
+        alertMessage = @"Please enter a password";
+        showAlertView = YES;
     }
     else if (![self.password.text isEqualToString:self.verifyPassword.text]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:@"Passwords do not match." delegate:self cancelButtonTitle:nil
-                                              otherButtonTitles:@"OK", nil];
-        [alert show];
+        alertMessage = @"Passwords do not match";
+        showAlertView = YES;
+    }
+    if (showAlertView) {
+        SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:alertMessage];
+        
+        [alertView addButtonWithTitle:@"OK"
+                                 type:SIAlertViewButtonTypeDestructive
+                              handler:^(SIAlertView *alert) {
+                              }];
+        alertView.transitionStyle = SIAlertViewTransitionStyleFade;
+        
+        [alertView show];
         return;
     }
-    else {
-        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (!error) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Account Created!"
-                                                                message:@"Create a new contract by tapping the compose icon in the top right corner." delegate:self cancelButtonTitle:nil
-                                                      otherButtonTitles:@"OK", nil];
-                [alert show];
-      
-                FrankieMasterContractViewController * masterVC = [[FrankieMasterContractViewController alloc] init];
-                [self.navigationController pushViewController:masterVC animated:YES];
-            }
-            else {
-                NSLog(@"login error: %@", [error userInfo][@"error"]);
-                NSString *errorMessage = [[NSString alloc] init];
-                
-                switch ([[error userInfo][@"code"] integerValue]) {
-                    case 203:
-                        if ([self.email.text length] == 0) {
-                            errorMessage = @"Please enter an email address.";
-                        }
-                        else {
-                            errorMessage = @"Email address already in use.";
-                        }
-                        break;
-                    case 125:
-                        errorMessage = @"Email address is invalid.";
-                        break;
-                    case 200:
+    
+    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            
+            SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:@"Account Created!" andMessage:@"Create a new contract by tapping the compose icon in the top right corner."];
+            
+            [alertView addButtonWithTitle:@"OK"
+                                     type:SIAlertViewButtonTypeDestructive
+                                  handler:^(SIAlertView *alert) {
+                                  }];
+            alertView.transitionStyle = SIAlertViewTransitionStyleFade;    
+            [alertView show];
+  
+            FrankieMasterContractViewController * masterVC = [[FrankieMasterContractViewController alloc] init];
+            [self.navigationController pushViewController:masterVC animated:YES];
+        }
+        else {
+            NSLog(@"login error: %@", [error userInfo][@"error"]);
+            NSString *errorMessage = [[NSString alloc] init];
+            
+            switch ([[error userInfo][@"code"] integerValue]) {
+                case 203:
+                    if ([self.email.text length] == 0) {
                         errorMessage = @"Please enter an email address.";
-                        break;
-                    case 201:
-                        errorMessage = @"Please enter a password.";
-                        break;
-                    case 202:
+                    }
+                    else {
                         errorMessage = @"Email address already in use.";
-                        break;
-                    default:
-                        break;
-                }
-                
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:errorMessage delegate:self cancelButtonTitle:nil
-                                                      otherButtonTitles:@"OK", nil];
-                [alert show];
+                    }
+                    break;
+                case 125:
+                    errorMessage = @"Email address is invalid.";
+                    break;
+                case 200:
+                    errorMessage = @"Please enter an email address.";
+                    break;
+                case 201:
+                    errorMessage = @"Please enter a password.";
+                    break;
+                case 202:
+                    errorMessage = @"Email address already in use.";
+                    break;
+                default:
+                    break;
             }
-        }];
-    }
+            
+            SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:errorMessage];
+            
+            [alertView addButtonWithTitle:@"OK"
+                                     type:SIAlertViewButtonTypeDestructive
+                                  handler:^(SIAlertView *alert) {
+                                  }];
+            alertView.transitionStyle = SIAlertViewTransitionStyleFade;
+            
+            [alertView show];
+        }
+    }];
 }
 
 #pragma mark - valid email checker
