@@ -177,6 +177,7 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
+    // Have call here to reloadData?    http://stackoverflow.com/questions/3077332/how-to-refresh-a-uitableviewcontroller-or-nsfetchedresultscontroller
     [self.tableView endUpdates];
 }
 
@@ -470,7 +471,7 @@
         UILabel *completed = [[UILabel alloc] initWithFrame:CGRectMake(80, 60, 200, 30)];
         completed.font = [UIFont fontWithName:@"Helvetica" size:12];
         completed.textColor = [UIColor colorWithRed:77/255.f green:189/255.f blue:51/255.f alpha:1.0];
-        completed.text = @"Projecte Complete";
+        completed.text = @"Project Complete";
         [cell addSubview:completed];
     }
     

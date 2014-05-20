@@ -72,6 +72,7 @@
     }
     if (self.project[@"picture"] != nil && self.project[@"picture"] != [NSNull null]) {
         [self.picture setImage:[UIImage imageWithData:self.project[@"picture"]] forState:UIControlStateNormal];
+        self.picture.imageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     else {
         [self.picture setImage:[UIImage imageNamed:@"image-upload-icon"] forState:UIControlStateNormal];
@@ -270,18 +271,18 @@
         if (buttonIndex == 1) {
             PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
             [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
+            
             [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
                 NSMutableDictionary *dict = [self.project mutableCopy];
-                
                 if ([self.projectCompleteButton.currentTitle isEqualToString:@"complete project"]) {
                     object[@"completed"] = [NSNumber numberWithBool:YES];
                     [self.projectCompleteButton setTitle:@"mark project as incomplete" forState:UIControlStateNormal];
-                    [dict setObject:[NSNumber numberWithBool:NO] forKey:@"completed"];
+                    [dict setObject:[NSNumber numberWithBool:YES] forKey:@"completed"];
                 }
                 else {
                     object[@"completed"] = [NSNumber numberWithBool:NO];
                     [self.projectCompleteButton setTitle:@"complete project" forState:UIControlStateNormal];
-                    [dict setObject:[NSNumber numberWithBool:YES] forKey:@"completed"];
+                    [dict setObject:[NSNumber numberWithBool:NO] forKey:@"completed"];
                 }
                 self.project = dict;
                 [object saveInBackground];
@@ -322,7 +323,7 @@
 
 - (IBAction)completeProject:(id)sender {
     NSString *alertMessage = [NSString new];
-    if ([self.project objectForKey:@"completed"] == [NSNumber numberWithInt:1]) {
+    if ([self.project objectForKey:@"completed"] == [NSNumber numberWithInt:1] || [self.project objectForKey:@"completed"] == [NSNumber numberWithBool:YES]) {
         alertMessage = @"Are you sure you want to mark this project as incomplete?";
     }
     else {
@@ -358,7 +359,6 @@
     return YES;
 }
 
-
 #pragma mark - UITextFieldDelegate methods
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
@@ -385,7 +385,6 @@
         [self.editPriceButton setTitle:@"Edit" forState:UIControlStateNormal];
     }
 }
-
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
     return YES;
@@ -420,7 +419,7 @@
     }
 }
 
-#pragma mark - UIActionSheet delegate methods
+#pragma mark - UIActionSheetDelegate methods
 
 // Action sheet titles are "Date Picker" and nil
 
