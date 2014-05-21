@@ -95,7 +95,6 @@
                selector:@selector(keyboardShown)
                    name:UIKeyboardWillShowNotification
                  object:nil];
-
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -107,20 +106,12 @@
     // Added because app was crashing after making a new contract and returning to tableView
 }
 
-#pragma mark - UIScrollView delegate methods
-
-//- (void)scrollViewDidScroll:(UIScrollView *)sender {
-//    if (sender.contentOffset.x != 0) {
-//        CGPoint offset = sender.contentOffset;
-//        offset.x = 0;
-//        sender.contentOffset = offset;
-//    }
-//}
-
+// Adds gesture recognizer to image upload button so can be tapped to dismiss keyboard
 - (void)keyboardShown
 {
     if (self.touch == nil)
     {
+        // When the tap occurs on the imageView, dismiss keyboard
         self.touch = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismiss2)];
     }
     
@@ -131,17 +122,14 @@
 
 -(void) keyboardDismiss2
 {
-    [self.activeField resignFirstResponder];
+    [self.view endEditing:YES];
 }
 
+// When the keyboard dismisses, remove the tap gesture recognizer on the image upload button
 - (void)keyboardDismiss
 {
     [self.view removeGestureRecognizer:self.touch];
     [self.uploadButton removeGestureRecognizer:self.touch];
-    
-//    float navBarHeight = self.navigationController.navigationBar.frame.size.height;
-//    
-//    [self.keyboardScrollView setContentOffset:CGPointMake(0, -navBarHeight) animated:YES];
 }
 
 - (void)didReceiveMemoryWarning

@@ -37,8 +37,6 @@
     self.fetchedResultsController = nil;
 }
 
-
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -59,8 +57,6 @@
     CALayer *layer = [self.defaultImage layer];
     [layer setMasksToBounds:YES];
     [layer setCornerRadius:30.0];
-    
-//    [self deleteDataFromModel];
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
@@ -290,13 +286,6 @@
 }
 
 - (void)reloadTable {
-    
-    NSError *error;
-	if (![[self fetchedResultsController] performFetch:&error]) {
-		// Update to handle the error appropriately.
-		NSLog(@"fetchedResults error %@, %@", error, [error userInfo]);
-	}
-    
     [self.tableView reloadData];
 }
 
@@ -346,6 +335,12 @@
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
+        
+        // Protect from trying to delete a parse object immediately after it was created.
+        // This causes the program to crash with error "Can not do a comparison for query type: (null)"
+        if ([job.parseId isEqual:[NSNull null]] || job.parseId == nil) {
+            return;
+        }
         
         PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
         [postQuery whereKey:@"objectId" equalTo:job.parseId];
