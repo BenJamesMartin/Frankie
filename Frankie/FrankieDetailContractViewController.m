@@ -72,8 +72,8 @@
     else {
         [self.projectCompleteButton setTitle:@"complete project" forState:UIControlStateNormal];
     }
-    if (self.project[@"picture"] != nil && self.project[@"picture"] != [NSNull null]) {
-        [self.picture setImage:[UIImage imageWithData:self.project[@"picture"]] forState:UIControlStateNormal];
+    if ([self.project objectForKey:@"picture"] != nil && [self.project objectForKey:@"picture"] != [NSNull null]) {
+        [self.picture setImage:[UIImage imageWithData:[self.project objectForKey:@"picture"]] forState:UIControlStateNormal];
         self.picture.imageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     else {
