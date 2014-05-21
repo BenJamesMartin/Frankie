@@ -222,8 +222,10 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
     if ([actionSheet.title isEqualToString:@"Date Picker"]) {
         NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
         [dateformatter setDateFormat:@"MM/dd/yyyy"];
-        
         [self.projectDate setText:[dateformatter stringFromDate:[self.pickerView date]]];
+        [UIView animateWithDuration:0.25 animations:^{
+            [self.keyboardScrollView setContentOffset:CGPointMake(0, 0)];
+        }];
     }
 }
 
@@ -299,7 +301,7 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
     if (textField == self.projectDate) {
         textField.textColor = [UIColor colorWithRed:150/255.f green:150/255.f blue:160/255.f alpha:1.0];
         [UIView animateWithDuration:0.25 animations:^{
-            [self.keyboardScrollView setContentOffset:CGPointMake(0, textField.frame.origin.y - self.navigationController.navigationBar.frame.size.height*2) animated:YES];
+            [self.keyboardScrollView setContentOffset:CGPointMake(0, textField.frame.origin.y - self.navigationController.navigationBar.frame.size.height*2)];
         }];
         [self showDatePicker];
         return NO;
