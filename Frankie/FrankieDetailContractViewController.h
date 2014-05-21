@@ -28,5 +28,6 @@
 @property (strong, nonatomic) UIImagePickerController *mediaPicker;
 
 @property (strong, nonatomic) IBOutlet UIButton *projectCompleteButton;
+@property (strong, nonatomic) UIGestureRecognizer *touch;
 
 @end

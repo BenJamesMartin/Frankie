@@ -80,10 +80,43 @@
         [self.picture setImage:[UIImage imageNamed:@"image-upload-icon"] forState:UIControlStateNormal];
     }
     
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self
+               selector:@selector(keyboardDismiss)
+                   name:UIKeyboardWillHideNotification
+                 object:nil];
+    [center addObserver:self
+               selector:@selector(keyboardShown)
+                   name:UIKeyboardWillShowNotification
+                 object:nil];
+    
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+}
+
+- (void)keyboardShown {
+    if (self.touch == nil)
+    {
+        // When the tap occurs on the imageView, dismiss keyboard
+        self.touch = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismiss2)];
+    }
+    
+    [self.view addGestureRecognizer:self.touch];
+    [self.scrollView addGestureRecognizer:self.touch];
+    [self.picture addGestureRecognizer:self.touch];
+}
+
+
+- (void)keyboardDismiss {
+    [self.view removeGestureRecognizer:self.touch];
+    [self.picture removeGestureRecognizer:self.touch];
+}
+
+-(void) keyboardDismiss2
+{
+    [self.view endEditing:YES];
 }
 
 #pragma mark - Edit buttons for title, price, and due date
