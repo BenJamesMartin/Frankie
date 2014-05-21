@@ -156,10 +156,10 @@
 			children = (
 				B55BB6A3187B647200BE3703 /* FrankieLoginViewController.h */,
 				B55BB6A4187B647200BE3703 /* FrankieLoginViewController.m */,
-				B575948E192C89D700303786 /* FrankieResetPasswordViewController.h */,
-				B575948F192C89D700303786 /* FrankieResetPasswordViewController.m */,
 				B51980491908673B00F3DF16 /* FrankieRegisterViewController.h */,
 				B519804A1908673B00F3DF16 /* FrankieRegisterViewController.m */,
+				B575948E192C89D700303786 /* FrankieResetPasswordViewController.h */,
+				B575948F192C89D700303786 /* FrankieResetPasswordViewController.m */,
 				B540A5D7187E087400C7BD7D /* FrankieMasterContractViewController.h */,
 				B540A5D8187E087400C7BD7D /* FrankieMasterContractViewController.m */,
 				B555856B187F8A1C007608EB /* FrankieDetailContractViewController.h */,

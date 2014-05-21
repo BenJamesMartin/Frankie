@@ -74,6 +74,7 @@
                                         </state>
                                         <connections>
                                             <action selector="resetPassword:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="bOm-Bt-aXj"/>
+                                            <segue destination="5U6-BK-ybl" kind="push" id="vA3-g5-iVY"/>
                                         </connections>
                                     </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="email" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c5x-bZ-uaT">
@@ -163,10 +164,10 @@
             </objects>
             <point key="canvasLocation" x="587" y="99"/>
         </scene>
-        <!--View Controller-->
+        <!--Frankie Reset Password View Controller-->
         <scene sceneID="S11-9T-u1J">
             <objects>
-                <viewController id="5U6-BK-ybl" sceneMemberID="viewController">
+                <viewController id="5U6-BK-ybl" customClass="FrankieResetPasswordViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CN8-6X-GzJ"/>
                         <viewControllerLayoutGuide type="bottom" id="uGg-yD-8fu"/>
@@ -174,8 +175,47 @@
                     <view key="view" contentMode="scaleToFill" id="BdE-rI-B05">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rGw-yz-TDJ">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="email" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pbw-6N-22c">
+                                        <rect key="frame" x="47" y="44" width="227" height="33"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="done"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="5U6-BK-ybl" id="Aq3-cd-gq6"/>
+                                        </connections>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V2Y-Oq-U8G">
+                                        <rect key="frame" x="47" y="90" width="227" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.40000000000000002" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="hNA-h8-GcL"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="16"/>
+                                        <state key="normal" title="reset password">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="resetPassword:" destination="5U6-BK-ybl" eventType="touchUpInside" id="r7S-Hj-HTo"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </scrollView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="jFQ-fX-bQn"/>
+                    <connections>
+                        <outlet property="email" destination="pbw-6N-22c" id="ruY-Zx-Od2"/>
+                        <outlet property="scrollView" destination="rGw-yz-TDJ" id="JFy-V3-JmX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rxT-GA-gCB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -6,7 +6,10 @@
 //  Copyright (c) 2014 Benjamin Martin. All rights reserved.
 //
 
+#import <Parse/Parse.h>
+
 #import "FrankieResetPasswordViewController.h"
+#import "SIAlertView.h"
 
 @interface FrankieResetPasswordViewController ()
 
@@ -26,13 +29,51 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [self.scrollView bounces];
+    [self.scrollView alwaysBounceVertical];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
+- (void)showAlert:(NSString*)title withMessage:(NSString*)message {
+    SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:title andMessage:message];
+    
+    [alertView addButtonWithTitle:@"OK"
+                             type:SIAlertViewButtonTypeDestructive
+                          handler:^(SIAlertView *alert) {
+                          }];
+    alertView.transitionStyle = SIAlertViewTransitionStyleFade;
+    
+    [alertView show];
+}
+
+- (IBAction)resetPassword:(id)sender {
+    NSLog(@"email text: %@", self.email.text);
+    
+    [PFUser requestPasswordResetForEmailInBackground:self.email.text block:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            [self showAlert:nil withMessage:@"Please check your email to reset your password."];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+        else {
+            
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - UITextFieldDelegate methods
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField) {
+        [textField resignFirstResponder];
+        return YES;
+    }
+    return NO;
 }
 
 /*
