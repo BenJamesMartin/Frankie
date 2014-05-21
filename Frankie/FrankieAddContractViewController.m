@@ -49,38 +49,13 @@
     }
 }
 
-//- (void)viewDidAppear:(BOOL)animated {
-//    self.navigationController.delegate = self;
-//}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
-    // With AutoLayout, scrollView will only scroll as far as constraints have been set regardless of how large the contentSize of the scrollView is.
-    self.keyboardScrollView.alwaysBounceVertical = YES;
-    [self.keyboardScrollView setContentSize:CGSizeMake(4000, 8000)];
-    self.keyboardScrollView.userInteractionEnabled = YES;
-    [self.keyboardScrollView setClipsToBounds:NO];
-    [self.keyboardScrollView setScrollEnabled:YES];
-//    [imgScrollView setClipsToBounds:YES];
-
-//    self.notes.delegate = self;
-    self.projectDate.text = @"due date";
-    self.keyboardScrollView.delegate = self;
-    
-//    self.price.delegate = self;
-
-
-    
-    [self.uploadButton setImage:[UIImage imageNamed:@"image-upload-icon.png"] forState:UIControlStateNormal];
 
     self.navigationItem.title = @"New Project";
-    
-//    self.navigationController.navigationItem.title = @"New Contract";
-//    
-//    [self.navigationController.navigationBar pushNavigationItem:self.navigationItem animated:NO];
+    self.projectDate.text = @"due date";
+    [self.uploadButton setImage:[UIImage imageNamed:@"image-upload-icon.png"] forState:UIControlStateNormal];
     
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     

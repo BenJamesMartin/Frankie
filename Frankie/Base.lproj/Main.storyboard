@@ -72,6 +72,9 @@
                                         <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="done"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="vXZ-lx-hvc" id="qDz-PZ-86n"/>
+                                        </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ua5-Dg-hlS">
                                         <rect key="frame" x="46" y="283" width="227" height="32"/>
@@ -83,6 +86,9 @@
                                         <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="vXZ-lx-hvc" id="jWS-g4-0Wu"/>
+                                        </connections>
                                     </textField>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tool-icon-orange.png" translatesAutoresizingMaskIntoConstraints="NO" id="fVJ-RC-Fkf">
                                         <rect key="frame" x="110" y="75" width="101" height="100"/>
@@ -114,6 +120,9 @@
                                     <constraint firstItem="Ua5-Dg-hlS" firstAttribute="leading" secondItem="c5x-bZ-uaT" secondAttribute="leading" id="q3y-v7-G87"/>
                                     <constraint firstItem="WaC-2b-BJH" firstAttribute="trailing" secondItem="efB-2d-CjU" secondAttribute="trailing" id="xnd-DM-7sG"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="krW-tN-dCQ"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -388,6 +397,9 @@
                                     <constraint firstItem="1Sa-Yf-Cvu" firstAttribute="top" secondItem="GMG-2t-2M6" secondAttribute="bottom" constant="28" id="zCS-5E-erU"/>
                                     <constraint firstItem="JnZ-xY-ZAF" firstAttribute="leading" secondItem="lzb-Z7-FFi" secondAttribute="leading" constant="47" id="zL1-Ng-eNw"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="zVc-VQ-w16" id="HMD-il-cDk"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>

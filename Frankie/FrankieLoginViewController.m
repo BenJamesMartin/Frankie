@@ -32,10 +32,6 @@
     self.keyboardScrollView.alwaysBounceVertical = YES;
     self.keyboardScrollView.alwaysBounceHorizontal = NO;
     
-    self.email.delegate = self;
-    self.password.delegate = self;
-    self.keyboardScrollView.delegate = self;
-    
     // defaultCenter for hiding keyboard
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserver:self
