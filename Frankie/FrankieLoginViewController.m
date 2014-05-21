@@ -51,22 +51,16 @@
     }
 }
 
+- (IBAction)resetPassword:(id)sender {
+    
+    
+}
+
 - (void)showMasterContractViewController {
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     FrankieMasterContractViewController *masterVC = [storyboard instantiateViewControllerWithIdentifier:@"Master"];
     [self.navigationController pushViewController:masterVC animated:YES];
-}
-
-#pragma mark - UIScrollView delegate methods
-
-// Just setting the x-position to 0?
-- (void)scrollViewDidScroll:(UIScrollView *)sender {
-    if (sender.contentOffset.x != 0) {
-        CGPoint offset = sender.contentOffset;
-        offset.x = 0;
-        sender.contentOffset = offset;
-    }
 }
 
 -(void)keyboardShow
@@ -78,14 +72,14 @@
 
 - (void)keyboardDismiss
 {
-//    float navBarHeight = self.navigationController.navigationBar.frame.size.height;
-    [self.keyboardScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.keyboardScrollView setContentOffset:CGPointMake(0, 0)];
+    }];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - UITextField delegate methods

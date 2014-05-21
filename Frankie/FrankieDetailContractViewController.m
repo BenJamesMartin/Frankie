@@ -419,7 +419,9 @@
 - (void)textViewDidEndEditing:(UITextView *)textView {
     [textView setUserInteractionEnabled:NO];
     [self.editNotesButton setTitle:@"Edit" forState:UIControlStateNormal];
-    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.scrollView setContentOffset:CGPointMake(0, 0)];
+    }];
 }
 
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text

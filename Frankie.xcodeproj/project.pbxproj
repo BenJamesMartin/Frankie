@@ -18,6 +18,7 @@
 		B55BB6B8187B647200BE3703 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B55BB6B6187B647200BE3703 /* InfoPlist.strings */; };
 		B55BB6BA187B647200BE3703 /* FrankieTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B55BB6B9187B647200BE3703 /* FrankieTests.m */; };
 		B575077B19258D97001D97E6 /* Job.m in Sources */ = {isa = PBXBuildFile; fileRef = B575077A19258D97001D97E6 /* Job.m */; };
+		B5759490192C89D700303786 /* FrankieResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B575948F192C89D700303786 /* FrankieResetPasswordViewController.m */; };
 		B58554611919B0CE00CA987C /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B58554601919B0CE00CA987C /* Accounts.framework */; };
 		B58554631919B36B00CA987C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B58554621919B36B00CA987C /* AdSupport.framework */; };
 		B58554651919B39400CA987C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B58554641919B39400CA987C /* AudioToolbox.framework */; };
@@ -81,6 +82,8 @@
 		B55BB6B9187B647200BE3703 /* FrankieTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FrankieTests.m; sourceTree = "<group>"; };
 		B575077919258D97001D97E6 /* Job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Job.h; sourceTree = "<group>"; };
 		B575077A19258D97001D97E6 /* Job.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Job.m; sourceTree = "<group>"; };
+		B575948E192C89D700303786 /* FrankieResetPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieResetPasswordViewController.h; sourceTree = "<group>"; };
+		B575948F192C89D700303786 /* FrankieResetPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieResetPasswordViewController.m; sourceTree = "<group>"; };
 		B58554601919B0CE00CA987C /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		B58554621919B36B00CA987C /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		B58554641919B39400CA987C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -153,6 +156,8 @@
 			children = (
 				B55BB6A3187B647200BE3703 /* FrankieLoginViewController.h */,
 				B55BB6A4187B647200BE3703 /* FrankieLoginViewController.m */,
+				B575948E192C89D700303786 /* FrankieResetPasswordViewController.h */,
+				B575948F192C89D700303786 /* FrankieResetPasswordViewController.m */,
 				B51980491908673B00F3DF16 /* FrankieRegisterViewController.h */,
 				B519804A1908673B00F3DF16 /* FrankieRegisterViewController.m */,
 				B540A5D7187E087400C7BD7D /* FrankieMasterContractViewController.h */,
@@ -392,6 +397,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5759490192C89D700303786 /* FrankieResetPasswordViewController.m in Sources */,
 				B575077B19258D97001D97E6 /* Job.m in Sources */,
 				B59BD0CF192BE6210067234D /* SIAlertView.m in Sources */,
 				B555856D187F8A1C007608EB /* FrankieDetailContractViewController.m in Sources */,

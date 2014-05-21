@@ -298,7 +298,9 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if (textField == self.projectDate) {
         textField.textColor = [UIColor colorWithRed:150/255.f green:150/255.f blue:160/255.f alpha:1.0];
-        [self.keyboardScrollView setContentOffset:CGPointMake(0, textField.frame.origin.y - self.navigationController.navigationBar.frame.size.height*2) animated:YES];
+        [UIView animateWithDuration:0.25 animations:^{
+            [self.keyboardScrollView setContentOffset:CGPointMake(0, textField.frame.origin.y - self.navigationController.navigationBar.frame.size.height*2) animated:YES];
+        }];
         [self showDatePicker];
         return NO;
     }
@@ -307,7 +309,9 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    [self.keyboardScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.keyboardScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    }];
     
     if (textField == self.price) {
         if ([textField.text isEqualToString:@""]) {
@@ -331,7 +335,9 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    [self.keyboardScrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - self.navigationController.navigationBar.frame.size.height*2) animated:YES];
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.keyboardScrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - self.navigationController.navigationBar.frame.size.height*2)];
+    }];
     if ([textView.text isEqualToString:@"additional notes"]) {
         textView.text = @"";
         textView.textAlignment = NSTextAlignmentLeft;
@@ -342,7 +348,9 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
-    [self.keyboardScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.keyboardScrollView setContentOffset:CGPointMake(0, 0)];
+    }];
     if ([textView.text isEqualToString:@""]) {
         textView.text = @"additional notes";
         textView.textAlignment = NSTextAlignmentCenter;

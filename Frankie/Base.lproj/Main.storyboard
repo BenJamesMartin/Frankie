@@ -61,6 +61,21 @@
                                             <segue destination="1BV-0l-Ciw" kind="push" id="gqr-fv-1lJ"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ec4-Kq-bUw">
+                                        <rect key="frame" x="46" y="414" width="227" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.40000000000000002" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="4MO-Av-2LP"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="16"/>
+                                        <state key="normal" title="reset password">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="resetPassword:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="bOm-Bt-aXj"/>
+                                        </connections>
+                                    </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="email" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c5x-bZ-uaT">
                                         <rect key="frame" x="46" y="242" width="227" height="33"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -117,7 +132,10 @@
                                     <constraint firstItem="WaC-2b-BJH" firstAttribute="leading" secondItem="efB-2d-CjU" secondAttribute="leading" id="XWw-sh-7Nv"/>
                                     <constraint firstItem="c5x-bZ-uaT" firstAttribute="top" secondItem="FJp-mb-Dkx" secondAttribute="bottom" constant="13" id="fH5-oh-xUW"/>
                                     <constraint firstItem="WaC-2b-BJH" firstAttribute="top" secondItem="efB-2d-CjU" secondAttribute="bottom" constant="7" id="hiO-6K-hMo"/>
+                                    <constraint firstItem="ec4-Kq-bUw" firstAttribute="top" secondItem="WaC-2b-BJH" secondAttribute="bottom" constant="8" symbolic="YES" id="pBh-44-PfV"/>
                                     <constraint firstItem="Ua5-Dg-hlS" firstAttribute="leading" secondItem="c5x-bZ-uaT" secondAttribute="leading" id="q3y-v7-G87"/>
+                                    <constraint firstItem="ec4-Kq-bUw" firstAttribute="trailing" secondItem="WaC-2b-BJH" secondAttribute="trailing" id="vY8-9M-6oc"/>
+                                    <constraint firstItem="ec4-Kq-bUw" firstAttribute="leading" secondItem="WaC-2b-BJH" secondAttribute="leading" id="vi9-Oq-dyn"/>
                                     <constraint firstItem="WaC-2b-BJH" firstAttribute="trailing" secondItem="efB-2d-CjU" secondAttribute="trailing" id="xnd-DM-7sG"/>
                                 </constraints>
                                 <connections>
@@ -144,6 +162,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="587" y="99"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="S11-9T-u1J">
+            <objects>
+                <viewController id="5U6-BK-ybl" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="CN8-6X-GzJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="uGg-yD-8fu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="BdE-rI-B05">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rxT-GA-gCB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="587" y="-592"/>
         </scene>
         <!--Frankie Register View Controller-->
         <scene sceneID="2jC-DK-De0">
