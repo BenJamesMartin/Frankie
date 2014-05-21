@@ -154,7 +154,6 @@
     [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString]
               forKey:@"objectId"];
     
-    
     NSData *imageData;
     if (!([self.uploadButton imageForState:UIControlStateNormal] == [UIImage imageNamed:@"image-upload-icon"])) {
         UIImage *image = [self.uploadButton imageForState:UIControlStateNormal];
@@ -310,19 +309,6 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
-
-
-
-
-#pragma mark - text field dismissal
-
--(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self.activeField resignFirstResponder];
-    [self.notes resignFirstResponder];
-//    [self.projectTitle resignFirstResponder];
-//    [self.firstStep resignFirstResponder];
-}
-
 #pragma mark - UITextField delegate methods
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -345,8 +331,6 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
         return YES;
 }
 
-// Use this to add dollar sign to price field
-// Currently it's being dafuq and adding a dollar sign to the text field above it.
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     [self.keyboardScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     
@@ -366,7 +350,6 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
     [UIView animateWithDuration:0.25 animations:^{
         [self.keyboardScrollView setContentOffset:CGPointMake(0, textField.frame.origin.y - self.navigationController.navigationBar.frame.size.height*2)];
     }];
-    self.activeField = textField;
 }
 
 #pragma mark - UITextView delegate methods
