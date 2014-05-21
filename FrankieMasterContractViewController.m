@@ -256,7 +256,11 @@
                 [entity setValue:project[@"end"] forKeyPath:@"dueDate"];
                 [entity setValue:project[@"price"] forKeyPath:@"price"];
                 [entity setValue:project[@"notes"] forKeyPath:@"notes"];
-                [entity setValue:UIImagePNGRepresentation(project[@"photo"]) forKeyPath:@"picture"];
+                
+                PFFile *imageFile = project[@"picture"];
+                NSData *imageData = [imageFile getData];
+                [entity setValue:imageData forKeyPath:@"picture"];
+                
                 [entity setValue:[project objectId] forKeyPath:@"parseId"];
                 [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString] forKeyPath:@"objectId"];
                 [entity setValue:project[@"completed"] forKeyPath:@"completed"];

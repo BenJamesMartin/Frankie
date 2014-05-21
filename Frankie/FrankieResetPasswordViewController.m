@@ -47,8 +47,6 @@
 }
 
 - (IBAction)resetPassword:(id)sender {
-    NSLog(@"email text: %@", self.email.text);
-    
     [PFUser requestPasswordResetForEmailInBackground:self.email.text block:^(BOOL succeeded, NSError *error) {
         if (!error) {
             [self showAlert:nil withMessage:@"Please check your email to reset your password."];
