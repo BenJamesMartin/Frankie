@@ -45,15 +45,10 @@
     
     // If the user has already logged in, bring him/her to their list of contracts.
     if ([PFUser currentUser]) {
-//        self.email.text = [PFUser currentUser].email;
-        
-        [self showMasterContractViewController];
+        self.email.text = [PFUser currentUser].email;
+        self.password.text = [PFUser currentUser].password;
+//        [self showMasterContractViewController];
     }
-}
-
-- (IBAction)resetPassword:(id)sender {
-    
-    
 }
 
 - (void)showMasterContractViewController {
