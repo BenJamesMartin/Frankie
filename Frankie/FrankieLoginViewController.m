@@ -22,11 +22,20 @@
     self.navigationController.navigationBarHidden = NO;
     self.loginButton.userInteractionEnabled = YES;
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+//    [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:(255/255.f) green:(255/255.f) blue:(255/255.f) alpha:0.8]];
+
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+//    self.navigationController.navigationBar.shadowImage = [UIImage new];
+//    self.navigationController.navigationBar.translucent = YES;
+    
+//    self.navigationController.navigationBar.alpha = 0.5;
     self.navigationItem.title = @"Login";
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
 
 	// Do any additional setup after loading the view, typically from a nib.
     self.keyboardScrollView.alwaysBounceVertical = YES;
@@ -125,6 +134,8 @@
             }
             // Login failed
             else {
+                self.loginButton.userInteractionEnabled = YES;
+                
                 SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:@"Login failed."];
                 
                 [alertView addButtonWithTitle:@"OK"
