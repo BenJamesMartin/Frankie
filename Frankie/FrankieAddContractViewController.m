@@ -82,29 +82,28 @@
 }
 
 // Adds gesture recognizer to image upload button so can be tapped to dismiss keyboard
-- (void)keyboardShown
-{
-    if (self.touch == nil)
-    {
-        // When the tap occurs on the imageView, dismiss keyboard
-        self.touch = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismiss2)];
+- (void)keyboardShown {
+    // A single gesture recognizer can only be added to one view, so we need to make multiple gesture recognizers.
+    for (UIView *view in @[self.keyboardScrollView, self.uploadButton]) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismissTap)];
+        [view addGestureRecognizer:tap];
     }
-    
-    [self.view addGestureRecognizer:self.touch];
-    [self.keyboardScrollView addGestureRecognizer:self.touch];
-    [self.uploadButton addGestureRecognizer:self.touch];
 }
 
--(void) keyboardDismiss2
-{
-    [self.view endEditing:YES];
-}
-
-// When the keyboard dismisses, remove the tap gesture recognizer on the image upload button
+// When the keyboard dismisses, remove the tap gesture recognizer on the scrollView image upload button
 - (void)keyboardDismiss
 {
-    [self.view removeGestureRecognizer:self.touch];
-    [self.uploadButton removeGestureRecognizer:self.touch];
+    for (UIView *view in @[self.keyboardScrollView, self.uploadButton]) {
+        for (UIGestureRecognizer *gr in [view gestureRecognizers]) {
+            if ([gr class] == [UITapGestureRecognizer class]) {
+                [view removeGestureRecognizer:gr];
+            }
+        }
+    }
+}
+
+-(void) keyboardDismissTap {
+    [self.view endEditing:YES];
 }
 
 - (void)didReceiveMemoryWarning

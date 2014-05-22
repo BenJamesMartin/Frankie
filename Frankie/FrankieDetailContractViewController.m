@@ -97,25 +97,21 @@
 }
 
 - (void)keyboardShown {
-    if (self.touch == nil)
-    {
-        // When the tap occurs on the imageView, dismiss keyboard
-        self.touch = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismiss2)];
+    for (UIView *view in @[self.scrollView]) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismissTap)];
+        [view addGestureRecognizer:tap];
     }
-    
-    [self.view addGestureRecognizer:self.touch];
-    [self.scrollView addGestureRecognizer:self.touch];
-    [self.picture addGestureRecognizer:self.touch];
 }
-
 
 - (void)keyboardDismiss {
-    [self.view removeGestureRecognizer:self.touch];
-    [self.picture removeGestureRecognizer:self.touch];
+    for (UIGestureRecognizer *gr in [self.scrollView gestureRecognizers]) {
+        if ([gr class] == [UITapGestureRecognizer class]) {
+            [self.scrollView removeGestureRecognizer:gr];
+        }
+    }
 }
 
--(void) keyboardDismiss2
-{
+-(void) keyboardDismissTap {
     [self.view endEditing:YES];
 }
 
