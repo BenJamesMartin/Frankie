@@ -35,7 +35,6 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    
     if ([[self.project objectForKey:@"title"] isEqualToString:@""]) {
             self.titleField.text = @"[Title Not Set]";
     }

@@ -160,13 +160,6 @@
     }
     project.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
 
-    // Make sure this is imageForState or backgroundImageForState according to how it's set
-    // Grabbing default image here (not good)
-    // Check if it's named image-upload-icon
-    
-    // If it's that image name, set to nil?
-
-    
     if (imageData != nil) {
         project[@"photo"] = [PFFile fileWithData:imageData];
     }
