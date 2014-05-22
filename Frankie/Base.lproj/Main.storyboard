@@ -156,6 +156,7 @@
                         <outlet property="email" destination="c5x-bZ-uaT" id="Jlr-Hf-Q7W"/>
                         <outlet property="frankie" destination="FJp-mb-Dkx" id="aOR-vc-jSO"/>
                         <outlet property="keyboardScrollView" destination="COh-Zk-Tb2" id="eag-Ja-dsq"/>
+                        <outlet property="loginButton" destination="efB-2d-CjU" id="YCl-B2-wLa"/>
                         <outlet property="password" destination="Ua5-Dg-hlS" id="j8k-oQ-EHy"/>
                     </connections>
                 </viewController>

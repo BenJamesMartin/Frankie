@@ -16,5 +16,6 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *keyboardScrollView;
 
 - (IBAction)authenticateUser:(id)sender;
+@property (strong, nonatomic) IBOutlet UIButton *loginButton;
 
 @end
