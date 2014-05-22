@@ -114,7 +114,7 @@
 #pragma mark - createNewContract
 
 - (IBAction)createNewContract:(id)sender {
-    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
     NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Job class]) inManagedObjectContext:context];
     
@@ -167,7 +167,7 @@
     [project saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
             [entity setValue:[project objectId] forKeyPath:@"parseId"];
-            if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+            if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
                 [self.navigationController popViewControllerAnimated:YES];
             }

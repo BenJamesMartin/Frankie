@@ -1,5 +1,5 @@
 //
-//  SingleContractViewController.m
+//  FrankieDetailContractViewController.m
 //  Frankie
 //
 //  Created by Benjamin Martin on 1/9/14.
@@ -227,7 +227,7 @@
     }];
     
     NSError *error;
-    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
     
@@ -260,7 +260,7 @@
         job.picture = imageData;
     }
     
-    if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+    if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -293,7 +293,7 @@
         [object deleteEventually];
     }];
     
-    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
     
@@ -304,7 +304,7 @@
     Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
     
     [context deleteObject:job];
-    if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+    if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -363,7 +363,7 @@
         [object saveInBackground];
     }];
     
-    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
     
@@ -380,7 +380,7 @@
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-    [(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
+    [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
 }
 
 #pragma mark - UITextViewDelegate methods

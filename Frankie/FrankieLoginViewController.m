@@ -1,5 +1,5 @@
 //
-//  ViewController.m
+//  FrankieLoginViewController.m
 //  Frankie
 //
 //  Created by Benjamin Martin on 1/6/14.

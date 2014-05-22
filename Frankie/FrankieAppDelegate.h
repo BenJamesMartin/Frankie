@@ -1,5 +1,5 @@
 //
-//  AppDelegate.h
+//  FrankieAppDelegate.h
 //  Frankie
 //
 //  Created by Benjamin Martin on 1/6/14.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface FrankieAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

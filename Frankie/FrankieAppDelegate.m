@@ -11,11 +11,11 @@
 #import "FrankieAppDelegate.h"
 #import "Job.h"
 
-@interface AppDelegate ()
+@interface FrankieAppDelegate ()
 
 @end
 
-@implementation AppDelegate
+@implementation FrankieAppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;

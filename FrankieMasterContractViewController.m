@@ -98,7 +98,7 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     
     NSManagedObjectContext *context =
-    [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
     NSEntityDescription *entity =
     [NSEntityDescription entityForName:NSStringFromClass([Job class])
@@ -206,7 +206,7 @@
 
 - (void)syncParseCoreData {
     NSError *error;
-    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
     NSEntityDescription *entityDesc = [NSEntityDescription entityForName:NSStringFromClass([Job class])
                                                   inManagedObjectContext:context];
@@ -270,7 +270,7 @@
             for (Job *job in projectsToDelete) {
                 [context deleteObject:job];
             }
-            if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+            if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
             }
         }
@@ -291,35 +291,6 @@
 - (void)reloadTable {
     [self.tableView reloadData];
 }
-
-- (void)deleteDataFromModel {
-    NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    
-    NSEntityDescription *entityDesc =
-    [NSEntityDescription entityForName:NSStringFromClass([Job class])
-                inManagedObjectContext:context];
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
-    [request setEntity:entityDesc];
-    
-    NSError *error;
-    NSArray *fetchedObjects = [context executeFetchRequest:req error:&error];
-    
-    for (Job *job in fetchedObjects) {
-        [context deleteObject:job];
-    }
-    [context save:&error];
-}
-
-
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    if (section == 0)
-//        return @"Last Week";
-//    else
-//        return @"Before that";
-//}
 
 - (void)didReceiveMemoryWarning
 {
@@ -351,7 +322,7 @@
             }
         }];
         
-        NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", job.objectId];

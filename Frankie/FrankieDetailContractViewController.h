@@ -1,5 +1,5 @@
 //
-//  SingleContractViewController.h
+//  FrankieDetailContractViewController.h
 //  Frankie
 //
 //  Created by Benjamin Martin on 1/9/14.
