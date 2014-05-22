@@ -354,14 +354,6 @@
     [textView resignFirstResponder];
 }
 
--(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-
-{
-    if([text isEqualToString:@"\n"])
-        [textView resignFirstResponder];
-    return YES;
-}
-
 - (void)showDatePicker
 {
     UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:@"Date Picker"

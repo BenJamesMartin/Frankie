@@ -425,7 +425,7 @@
                                         </constraints>
                                         <color key="textColor" red="0.69411764710000001" green="0.69411764710000001" blue="0.69411764710000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         <connections>
                                             <outlet property="delegate" destination="zVc-VQ-w16" id="pV8-dQ-OFP"/>
                                         </connections>
@@ -681,7 +681,7 @@
                                         </constraints>
                                         <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         <connections>
                                             <outlet property="delegate" destination="vL1-ub-e7x" id="E5O-Ud-elu"/>
                                         </connections>
