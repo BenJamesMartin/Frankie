@@ -22,18 +22,12 @@
     self.navigationController.navigationBarHidden = NO;
     self.loginButton.userInteractionEnabled = YES;
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
-//    [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:(255/255.f) green:(255/255.f) blue:(255/255.f) alpha:0.8]];
-
-//    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-//    self.navigationController.navigationBar.shadowImage = [UIImage new];
-//    self.navigationController.navigationBar.translucent = YES;
-    
-//    self.navigationController.navigationBar.alpha = 0.5;
-    self.navigationItem.title = @"Login";
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+//    self.navigationController.navigationBar.translucent = YES;
     
     self.automaticallyAdjustsScrollViewInsets = NO;
 
@@ -57,7 +51,8 @@
         self.password.text = [PFUser currentUser].password;
     }
     
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(102/255.f) green:(204/255.f) blue:(255/255.f) alpha:1.0];
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(80/255.f) green:(165/255.f) blue:(240/255.f) alpha:1.0];
 }
 
 - (void)showMasterContractViewController {

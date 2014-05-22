@@ -65,9 +65,8 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     // Uncomment the following line to preserve selection between presentations.
-    self.clearsSelectionOnViewWillAppear = YES;
+//    self.clearsSelectionOnViewWillAppear = YES;
     
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(102/255.f) green:(204/255.f) blue:(255/255.f) alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     
@@ -489,6 +488,8 @@
         }
     }
     detailContractVC.project = keysAndValues;
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
    [self.navigationController pushViewController:detailContractVC animated:YES];
 }
