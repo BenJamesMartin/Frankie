@@ -90,9 +90,7 @@
             [self.navigationController pushViewController:masterVC animated:YES];
         }
         else {
-            NSLog(@"login error: %@", [error userInfo][@"error"]);
             NSString *errorMessage = [[NSString alloc] init];
-            
             switch ([[error userInfo][@"code"] integerValue]) {
                 case 203:
                     if ([self.email.text length] == 0) {
