@@ -19,15 +19,16 @@
 @implementation FrankieLoginViewController
 
 - (void)viewWillAppear:(BOOL)animated {
-    self.navigationController.navigationBarHidden = YES;
+    self.navigationController.navigationBarHidden = NO;
     self.loginButton.userInteractionEnabled = YES;
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.navigationItem.title = @"Login";
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
 	// Do any additional setup after loading the view, typically from a nib.
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
     self.keyboardScrollView.alwaysBounceVertical = YES;
     self.keyboardScrollView.alwaysBounceHorizontal = NO;
     

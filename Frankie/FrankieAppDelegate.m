@@ -27,6 +27,8 @@
 
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    
     // Override point for customization after application launch.
     return YES;
 }
