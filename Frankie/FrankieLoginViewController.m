@@ -46,6 +46,8 @@
         self.email.text = [PFUser currentUser].email;
         self.password.text = [PFUser currentUser].password;
     }
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(102/255.f) green:(204/255.f) blue:(255/255.f) alpha:1.0];
 }
 
 - (void)showMasterContractViewController {
