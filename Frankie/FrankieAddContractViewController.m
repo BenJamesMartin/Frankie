@@ -215,21 +215,13 @@
 
 // Action sheet titles are "Date Picker" and nil
 
--(void)actionSheet:(UIActionSheet *)actionSheet
-willDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if ([actionSheet.title isEqualToString:@"Date Picker"]) {
-        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-        [dateformatter setDateFormat:@"MM/dd/yyyy"];
-        [self.projectDate setText:[dateformatter stringFromDate:[self.pickerView date]]];
-        [UIView animateWithDuration:0.25 animations:^{
-            [self.keyboardScrollView setContentOffset:CGPointMake(0, 0)];
-        }];
-    }
-}
-
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if ([actionSheet.title isEqualToString:@"Date Picker"]) {
+        if (buttonIndex == 0) {
+            NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
+            [dateformatter setDateFormat:@"MM/dd/yyyy"];
+            [self.projectDate setText:[dateformatter stringFromDate:[self.pickerView date]]];
+        }
         return;
     }
     if (buttonIndex == 0) {
@@ -299,9 +291,6 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if (textField == self.projectDate) {
         textField.textColor = [UIColor colorWithRed:150/255.f green:150/255.f blue:160/255.f alpha:1.0];
-        [UIView animateWithDuration:0.25 animations:^{
-            [self.keyboardScrollView setContentOffset:CGPointMake(0, textField.frame.origin.y - self.navigationController.navigationBar.frame.size.height*2)];
-        }];
         [self showDatePicker];
         return NO;
     }
@@ -309,12 +298,20 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
         return YES;
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.keyboardScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-    }];
-    
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
     if (textField == self.price) {
+        [UIView animateWithDuration:0.25 animations:^{
+            [self.keyboardScrollView setContentOffset:CGPointMake(0, 25)];
+        }];
+    }
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    if (textField == self.price) {
+        [UIView animateWithDuration:0.50 animations:^{
+            [self.keyboardScrollView setContentOffset:CGPointMake(self.keyboardScrollView.contentOffset.x, -self.keyboardScrollView.contentInset.top)];
+        }];
+        
         if ([textField.text isEqualToString:@""]) {
             float price = textField.text.floatValue;
             textField.text = [NSString stringWithFormat:@"$%.02f", price];
@@ -326,19 +323,14 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
     }
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.keyboardScrollView setContentOffset:CGPointMake(0, textField.frame.origin.y - self.navigationController.navigationBar.frame.size.height*2)];
-    }];
-}
-
 #pragma mark - UITextView delegate methods
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     [UIView animateWithDuration:0.25 animations:^{
-        [self.keyboardScrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - self.navigationController.navigationBar.frame.size.height*2)];
+        [self.keyboardScrollView setContentOffset:CGPointMake(0, 120)];
     }];
+    
     if ([textView.text isEqualToString:@"additional notes"]) {
         textView.text = @"";
         textView.textAlignment = NSTextAlignmentLeft;
@@ -349,9 +341,11 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.keyboardScrollView setContentOffset:CGPointMake(0, 0)];
+    
+    [UIView animateWithDuration:0.50 animations:^{
+        [self.keyboardScrollView setContentOffset:CGPointMake(self.keyboardScrollView.contentOffset.x, -self.keyboardScrollView.contentInset.top)];
     }];
+    
     if ([textView.text isEqualToString:@""]) {
         textView.text = @"additional notes";
         textView.textAlignment = NSTextAlignmentCenter;
@@ -372,9 +366,9 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:@"Date Picker"
                                                       delegate:self
-                                             cancelButtonTitle:@"Set"
+                                             cancelButtonTitle:@""
                                         destructiveButtonTitle:nil
-                                             otherButtonTitles:nil];
+                                             otherButtonTitles:@"Set", nil];
     
     // Add the picker
     if (self.pickerView == nil) {
