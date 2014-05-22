@@ -97,16 +97,18 @@
 }
 
 - (void)keyboardShown {
-    for (UIView *view in @[self.scrollView]) {
+    for (UIView *view in @[self.scrollView, self.picture]) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismissTap)];
         [view addGestureRecognizer:tap];
     }
 }
 
 - (void)keyboardDismiss {
-    for (UIGestureRecognizer *gr in [self.scrollView gestureRecognizers]) {
-        if ([gr class] == [UITapGestureRecognizer class]) {
-            [self.scrollView removeGestureRecognizer:gr];
+    for (UIView *view in @[self.scrollView, self.picture]) {
+        for (UIGestureRecognizer *gr in [view gestureRecognizers]) {
+            if ([gr class] == [UITapGestureRecognizer class]) {
+                [view removeGestureRecognizer:gr];
+            }
         }
     }
 }
@@ -441,15 +443,15 @@
         textView.text = @"";
     }
     [UIView animateWithDuration:0.25 animations:^{
-        [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - self.navigationController.navigationBar.frame.size.height*4)];
+        [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 120)];
     }];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
     [textView setUserInteractionEnabled:NO];
     [self.editNotesButton setTitle:@"Edit" forState:UIControlStateNormal];
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.scrollView setContentOffset:CGPointMake(0, 0)];
+    [UIView animateWithDuration:0.50 animations:^{
+        [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, -self.scrollView.contentInset.top)];
     }];
 }
 
