@@ -38,7 +38,6 @@
 
 // This is to ask user if he wants to discard changes made on that VC
 - (void)backButtonPressed {
-    NSLog(@"back button pressed addContractVC");
 }
 
 #pragma mark - UIAlertView delegate methods
@@ -174,16 +173,11 @@
     
     [project saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
-            NSLog(@"Project successfully saved to Parse.");
-            NSLog(@"parse id in create: %@", [project objectId]);
             [entity setValue:[project objectId] forKeyPath:@"parseId"];
             if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
                 [self.navigationController popViewControllerAnimated:YES];
             }
-        }
-        else {
-            NSLog(@"Error saving project to Parse: %@ %@", error, [error userInfo]);
         }
     }];
 }

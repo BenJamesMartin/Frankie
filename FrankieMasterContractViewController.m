@@ -122,7 +122,6 @@
 	if (![self.fetchedResultsController performFetch:&error])
     {
 	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-	    abort();
 	}
     
     return _fetchedResultsController;
@@ -272,9 +271,6 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
             }
         }
-        else {
-            NSLog(@"Parse find all objects error: %@", error);
-        }
     }];
 }
 
@@ -306,8 +302,6 @@
     
     NSError *error;
     NSArray *fetchedObjects = [context executeFetchRequest:req error:&error];
-    if (fetchedObjects == nil)
-        NSLog(@"Error: %@", error);
     
     for (Job *job in fetchedObjects) {
         [context deleteObject:job];
@@ -352,9 +346,6 @@
             if (!error) {
                 [object deleteEventually];
             }
-            else {
-                NSLog(@"parse row delete error: %@", error);
-            }
         }];
         
         NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
@@ -365,8 +356,6 @@
         
         NSError *error;
         NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
-        if (fetchedObjects == nil)
-            NSLog(@"Error: %@", error);
         
         for (Job *job in fetchedObjects) {
             [context deleteObject:job];

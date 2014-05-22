@@ -267,62 +267,14 @@
     }
 }
 
-#pragma mark - UIAlertViewDelegate methods
+#pragma mark - deleteProjectButtonTapped
 
-- (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-//    if ([actionSheet.title isEqualToString:@"Complete Project"]) {
-//        if (buttonIndex == 1) {
-//            PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
-//            [postQuery whereKey:@"objectId" equalTo:self.project[@"parseId"]];
-//            
-//            [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-//                NSMutableDictionary *dict = [self.project mutableCopy];
-//                if ([self.projectCompleteButton.currentTitle isEqualToString:@"complete project"]) {
-//                    object[@"completed"] = [NSNumber numberWithBool:YES];
-//                    [self.projectCompleteButton setTitle:@"mark project as incomplete" forState:UIControlStateNormal];
-//                    [dict setObject:[NSNumber numberWithBool:YES] forKey:@"completed"];
-//                }
-//                else {
-//                    object[@"completed"] = [NSNumber numberWithBool:NO];
-//                    [self.projectCompleteButton setTitle:@"complete project" forState:UIControlStateNormal];
-//                    [dict setObject:[NSNumber numberWithBool:NO] forKey:@"completed"];
-//                }
-//                self.project = dict;
-//                [object saveInBackground];
-//            }];
-//            
-//            NSManagedObjectContext *context = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-//            
-//            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
-//            
-//            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", self.project[@"objectId"]];
-//            [request setPredicate:predicate];
-//            
-////            NSLog(@"current button title: %@", self.projectCompleteButton.currentTitle);
-//            
-//            NSError *error;
-//            Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
-//            if ([self.projectCompleteButton.currentTitle isEqualToString:@"complete project"]) {
-//                job.completed = [NSNumber numberWithBool:YES];
-//            }
-//            else {
-//                job.completed = [NSNumber numberWithBool:NO];
-//            }
-//
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-//            [(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
-//        }
-//    }
-}
-
-#pragma mark - delete project
 - (IBAction)deleteProjectButtonTapped:(id)sender {
     SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:@"Are you sure you want to delete this project?"];
     
     [alertView addButtonWithTitle:@"No"
                              type:SIAlertViewButtonTypeCancel
                           handler:^(SIAlertView *alert) {
-                              //                              NSLog(@"Button1 Clicked");
                           }];
     
     [alertView addButtonWithTitle:@"Yes"
@@ -351,10 +303,6 @@
     
     NSError *error;
     Job *job = [[context executeFetchRequest:request error:&error] objectAtIndex:0];
-    
-    if (job == nil) {
-        NSLog(@"Error: %@", error);
-    }
     
     [context deleteObject:job];
     if ([(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {

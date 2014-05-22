@@ -125,11 +125,6 @@
                                             }
                                             // Login failed
                                             else {
-                                                // Add option to retrieve password
-                                                // Add button to alertView that will bring up new view
-                                                // This new view has form for email to reset new password
-                                                // Parse should take care of doing this for you
-                                                
                                                 SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:@"Login failed."];
                                                 
                                                 [alertView addButtonWithTitle:@"OK"
@@ -139,11 +134,6 @@
                                                 alertView.transitionStyle = SIAlertViewTransitionStyleFade;
                                                 
                                                 [alertView show];
-                                                
-                                                // https://parse.com/docs/ios_guide#users-resetting/iOS
-//                                                NSLog(@"login error %@", [error userInfo][@"error"]);
-//                                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Login failed." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-//                                                [alert show];
                                             }
                                         }];
     }];
