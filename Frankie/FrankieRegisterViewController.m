@@ -31,6 +31,7 @@
 {
     [super viewDidLoad];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+//    self.navigationItem.title = @"Register";
 }
 
 - (void)didReceiveMemoryWarning

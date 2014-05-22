@@ -29,6 +29,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    self.navigationItem.title = @"Reset Password";
     [self.scrollView bounces];
     [self.scrollView alwaysBounceVertical];
     [self.navigationController setNavigationBarHidden:NO animated:YES];

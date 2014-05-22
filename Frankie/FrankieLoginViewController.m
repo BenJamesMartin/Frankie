@@ -42,11 +42,9 @@
                    name:UIKeyboardWillShowNotification
                  object:nil];
     
-    // If the user has already logged in, bring him/her to their list of contracts.
     if ([PFUser currentUser]) {
         self.email.text = [PFUser currentUser].email;
         self.password.text = [PFUser currentUser].password;
-//        [self showMasterContractViewController];
     }
 }
 
@@ -59,16 +57,24 @@
 
 -(void)keyboardShow
 {
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.keyboardScrollView setContentOffset:CGPointMake(0, 130)];
-    }];
+    for (UIView *view in @[self.keyboardScrollView]) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismissTap)];
+        [view addGestureRecognizer:tap];
+    }
 }
 
-- (void)keyboardDismiss
-{
-    [UIView animateWithDuration:0.50 animations:^{
-        [self.keyboardScrollView setContentOffset:CGPointMake(self.keyboardScrollView.contentOffset.x, -self.keyboardScrollView.contentInset.top)];
-    }];
+- (void)keyboardDismiss {
+    for (UIView *view in @[self.keyboardScrollView]) {
+        for (UIGestureRecognizer *gr in [view gestureRecognizers]) {
+            if ([gr class] == [UITapGestureRecognizer class]) {
+                [view removeGestureRecognizer:gr];
+            }
+        }
+    }
+}
+
+-(void) keyboardDismissTap {
+    [self.view endEditing:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -78,16 +84,24 @@
 
 #pragma mark - UITextField delegate methods
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self.email resignFirstResponder];
-    [self.password resignFirstResponder];
-}
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField) {
         [textField resignFirstResponder];
+        return YES;
     }
     return NO;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.keyboardScrollView setContentOffset:CGPointMake(0, 130)];
+    }];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [UIView animateWithDuration:0.50 animations:^{
+        [self.keyboardScrollView setContentOffset:CGPointMake(self.keyboardScrollView.contentOffset.x, -self.keyboardScrollView.contentInset.top)];
+    }];
 }
 
 #pragma mark - Login authentication
