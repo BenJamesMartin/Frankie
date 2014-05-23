@@ -27,11 +27,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    self.navigationController.navigationBar.translucent = YES;
-    
     self.automaticallyAdjustsScrollViewInsets = NO;
 
-	// Do any additional setup after loading the view, typically from a nib.
     self.keyboardScrollView.alwaysBounceVertical = YES;
     self.keyboardScrollView.alwaysBounceHorizontal = NO;
     
