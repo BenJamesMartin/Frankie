@@ -95,23 +95,15 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
-- (CGFloat)layoutManager:(NSLayoutManager *)layoutManager lineSpacingAfterGlyphAtIndex:(NSUInteger)glyphIndex withProposedLineFragmentRect:(CGRect)rect
-{
-    return 8; // For really wide spacing; pick your own value
-}
-
 - (void)addPaddingToTextField {
     for (id x in [self.scrollView subviews]) {
         if ([x isKindOfClass:[UITextField class]]) {
-            UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 47, 40)];
-            ((UITextField*)x).leftView = paddingView;
-            ((UITextField*)x).leftViewMode = UITextFieldViewModeAlways;
-        }
-        else if ([x isKindOfClass:[UILabel class]]) {
-            [((UILabel*)x) drawTextInRect:UIEdgeInsetsInsetRect(CGRectMake(0, 0, 47, 40), UIEdgeInsetsMake(0, 0, 0, 0))];
+//            UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 40)];
+//            ((UITextField*)x).leftView = paddingView;
+//            ((UITextField*)x).leftViewMode = UITextFieldViewModeAlways;
         }
         else if ([x isKindOfClass:[UITextView class]]) {
-            ((UITextView*)x).textContainerInset = UIEdgeInsetsMake(8, 47, 0, 0);
+            ((UITextView*)x).textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
         }
     }
 }
@@ -569,8 +561,23 @@ willDismissWithButtonIndex:(NSInteger)buttonIndex
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self.view endEditing:YES];
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+    
+    NSLog(@"index path %d", indexPath.row);
+    
+    //    if (indexPath.row != 0) {
+    //        NSLog(@"yup once");
+    //        UIView* separatorLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+    //        separatorLineView.backgroundColor = [UIColor colorWithRed:(150/255.f) green:(150/255.f) blue:(160/255.f) alpha:1.0];
+    //        [cell.contentView addSubview:separatorLineView];
+    //    }
+    //
+    cell.backgroundColor = [UIColor colorWithRed:(240/255.f) green:(240/255.f) blue:(240/255.f) alpha:1.0];
+    
+    return cell;
 }
 
 - (void)didReceiveMemoryWarning

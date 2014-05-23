@@ -46,6 +46,7 @@
     [super viewDidLoad];
     
     [self syncParseCoreData];
+    self.navigationController.navigationBar.translucent = YES;
     
     self.fetchedResultsController.delegate = self;
     
