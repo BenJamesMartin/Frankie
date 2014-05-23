@@ -349,33 +349,6 @@
     return [sectionInfo numberOfObjects];
 }
 
-
-
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 20, 20, 35)];
-//    headerLabel.text = @"    Test";
-//    headerLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
-//    headerLabel.backgroundColor = [UIColor colorWithRed:(128/255.f) green:(176/255.f) blue:(211/255.f) alpha:1.0];
-//    headerLabel.textColor = [UIColor colorWithRed:(255/255.f) green:(255/255.f) blue:(255/255.f) alpha:1.0];
-//    
-//    
-//    // I have heard that UINavigationController has parralax automatically applied to it, so you could hack a solution from that.
-//    // http://stackoverflow.com/questions/18972994/ios-7-parallax-effect-in-my-view-controller
-//    
-//    UINavigationController *test = [UINavigationController new];
-//    test.navigationBar.frame = CGRectMake(0, 0, 0, 0);
-//    
-//    return headerLabel;
-//}
-//
-//-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-//{
-//    
-//    return 30.0;
-//    
-//}
-
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }

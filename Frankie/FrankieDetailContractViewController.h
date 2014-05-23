@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FrankieDetailContractViewController : UIViewController <UITextFieldDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UITextViewDelegate>
+@interface FrankieDetailContractViewController : UIViewController <UITextFieldDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) NSDictionary *project;
 
@@ -20,7 +20,7 @@
 
 @property (strong, nonatomic) IBOutlet UITextField *titleField;
 @property (strong, nonatomic) IBOutlet UITextField *priceField;
-@property (strong, nonatomic) IBOutlet UILabel *dueDate;
+@property (strong, nonatomic) IBOutlet UITextField *dueDate;
 @property (strong, nonatomic) UIDatePicker *pickerView;
 @property (strong, nonatomic) IBOutlet UITextView *notesField;
 

@@ -46,9 +46,9 @@
                    name:UIKeyboardWillShowNotification
                  object:nil];
     
+    // Take the user to his contracts if he's already logged in
     if ([PFUser currentUser]) {
-        self.email.text = [PFUser currentUser].email;
-        self.password.text = [PFUser currentUser].password;
+        [self showMasterContractViewController];
     }
     
     self.navigationController.navigationBar.translucent = YES;
