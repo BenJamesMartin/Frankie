@@ -69,6 +69,8 @@
                selector:@selector(keyboardShown)
                    name:UIKeyboardWillShowNotification
                  object:nil];
+    
+    [self addPadding];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -78,6 +80,14 @@
     [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [center removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     // Added because app was crashing after making a new contract and returning to tableView
+}
+
+- (void)addPadding {
+    for (id x in [self.keyboardScrollView subviews]) {
+        if ([x isKindOfClass:[UITextView class]]) {
+            ((UITextView*)x).textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
+        }
+    }
 }
 
 // Adds gesture recognizer to image upload button so can be tapped to dismiss keyboard

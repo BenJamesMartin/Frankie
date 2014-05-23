@@ -89,20 +89,15 @@
                    name:UIKeyboardWillShowNotification
                  object:nil];
     
-    [self addPaddingToTextField];
+    [self addPadding];
     self.notesField.layoutManager.delegate = (id)self;
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
-- (void)addPaddingToTextField {
+- (void)addPadding {
     for (id x in [self.scrollView subviews]) {
-        if ([x isKindOfClass:[UITextField class]]) {
-//            UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 40)];
-//            ((UITextField*)x).leftView = paddingView;
-//            ((UITextField*)x).leftViewMode = UITextFieldViewModeAlways;
-        }
-        else if ([x isKindOfClass:[UITextView class]]) {
+        if ([x isKindOfClass:[UITextView class]]) {
             ((UITextView*)x).textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
         }
     }
