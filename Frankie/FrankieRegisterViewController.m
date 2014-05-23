@@ -160,7 +160,6 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
     if (textField == self.email) {
     
         if (string.length == 0) {
