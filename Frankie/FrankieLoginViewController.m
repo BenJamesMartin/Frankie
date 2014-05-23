@@ -65,6 +65,9 @@
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismissTap)];
         [view addGestureRecognizer:tap];
     }
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.keyboardScrollView setContentOffset:CGPointMake(0, 130)];
+    }];
 }
 
 - (void)keyboardDismiss {
@@ -75,6 +78,9 @@
             }
         }
     }
+    [UIView animateWithDuration:0.50 animations:^{
+        [self.keyboardScrollView setContentOffset:CGPointMake(self.keyboardScrollView.contentOffset.x, -self.keyboardScrollView.contentInset.top)];
+    }];
 }
 
 -(void) keyboardDismissTap {
@@ -94,18 +100,6 @@
         return YES;
     }
     return NO;
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.keyboardScrollView setContentOffset:CGPointMake(0, 130)];
-    }];
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    [UIView animateWithDuration:0.50 animations:^{
-        [self.keyboardScrollView setContentOffset:CGPointMake(self.keyboardScrollView.contentOffset.x, -self.keyboardScrollView.contentInset.top)];
-    }];
 }
 
 #pragma mark - Login authentication
