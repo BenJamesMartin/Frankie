@@ -32,8 +32,6 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     self.navigationItem.title = @"Reset Password";
-    [self.scrollView bounces];
-    [self.scrollView alwaysBounceVertical];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 

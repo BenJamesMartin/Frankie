@@ -170,10 +170,11 @@
             [entity setValue:[project objectId] forKeyPath:@"parseId"];
             if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-                [self.navigationController popViewControllerAnimated:YES];
             }
         }
     }];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)choosePhoto:(id)sender {
@@ -198,7 +199,7 @@
 #pragma mark - UIActionSheetDelegate methods
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([actionSheet.title isEqualToString:@"Date Picker"]) {
+    if ([actionSheet.title isEqualToString:@"Due Date"]) {
         if (buttonIndex == 0) {
             self.projectDate.textColor = [UIColor colorWithRed:150/255.f green:150/255.f blue:160/255.f alpha:1.0];
             NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
@@ -324,7 +325,7 @@
 
 - (void)showDatePicker
 {
-    UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:@"Date Picker"
+    UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:@"Due Date"
                                                       delegate:self
                                              cancelButtonTitle:@""
                                         destructiveButtonTitle:nil

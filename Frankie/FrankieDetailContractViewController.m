@@ -71,6 +71,7 @@
     }
     if ([self.project objectForKey:@"notes"] == nil || [self.project objectForKey:@"notes"] == [NSNull null] || [[self.project objectForKey:@"notes"] isEqualToString:@"additional notes"]) {
         self.notesField.text = @"[No Notes]";
+        self.notesField.textAlignment = NSTextAlignmentCenter;
     }
     else {
         self.notesField.text = [self.project objectForKey:@"notes"];
@@ -155,7 +156,7 @@
 }
 
 - (IBAction)editDueDate:(id)sender {
-    UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:@"Date Picker"
+    UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:@"Due Date"
                                                       delegate:self
                                              cancelButtonTitle:@""
                                         destructiveButtonTitle:nil
@@ -392,6 +393,7 @@
 #pragma mark - UITextViewDelegate methods
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+    textView.textAlignment = NSTextAlignmentLeft;
     if ([textView.text isEqualToString:@"[No Notes]"]) {
         textView.text = @"";
     }
@@ -472,7 +474,7 @@
 #pragma mark - UIActionSheetDelegate methods
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([actionSheet.title isEqualToString:@"Date Picker"]) {
+    if ([actionSheet.title isEqualToString:@"Due Date"]) {
         if (buttonIndex == 0) {
             NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
             [dateformatter setDateFormat:@"MM/dd/yyyy"];

@@ -370,7 +370,7 @@
         image.contentMode = UIViewContentModeScaleAspectFill;
     }
     
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(80, 10, 200, 30)];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(80, 5, 200, 30)];
     
     if ([job.title isEqualToString:@""]) {
         title.text = @"[No Title]";
@@ -381,7 +381,7 @@
     title.font = [UIFont fontWithName:@"Helvetica-Bold" size:14];
     title.textColor = [UIColor grayColor];
     
-    UILabel *price = [[UILabel alloc] initWithFrame:CGRectMake(80, 30, 200, 30)];
+    UILabel *price = [[UILabel alloc] initWithFrame:CGRectMake(80, 25, 200, 30)];
     if ([job.price floatValue] == 0) {
         price.text = @"Price: [Not Set]";
     }
@@ -392,7 +392,7 @@
     price.font = [UIFont fontWithName:@"Helvetica" size:12];
     price.textColor = [UIColor grayColor];
     
-    UILabel *dueDate = [[UILabel alloc] initWithFrame:CGRectMake(80, 45, 200, 30)];
+    UILabel *dueDate = [[UILabel alloc] initWithFrame:CGRectMake(80, 40, 200, 30)];
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     [format setDateFormat:@"MMM dd, yyyy"];
     
@@ -407,7 +407,7 @@
     dueDate.textColor = [UIColor grayColor];
     
     if (job.completed == [NSNumber numberWithInt:1]) {
-        UILabel *completed = [[UILabel alloc] initWithFrame:CGRectMake(80, 60, 200, 30)];
+        UILabel *completed = [[UILabel alloc] initWithFrame:CGRectMake(80, 56, 200, 30)];
         completed.font = [UIFont fontWithName:@"Helvetica" size:12];
         completed.textColor = [UIColor colorWithRed:77/255.f green:189/255.f blue:51/255.f alpha:1.0];
         completed.text = @"Project Complete";

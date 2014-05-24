@@ -631,7 +631,7 @@
                                             <action selector="editPhoto:" destination="vL1-ub-e7x" eventType="touchUpInside" id="jix-zx-Agp"/>
                                         </connections>
                                     </button>
-                                    <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OZ3-cs-hBx">
+                                    <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="OZ3-cs-hBx">
                                         <rect key="frame" x="50" y="345" width="220" height="88"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
