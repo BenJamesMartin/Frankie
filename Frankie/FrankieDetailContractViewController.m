@@ -29,6 +29,18 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self
+               selector:@selector(keyboardDismiss)
+                   name:UIKeyboardWillHideNotification
+                 object:nil];
+    [center addObserver:self
+               selector:@selector(keyboardShown)
+                   name:UIKeyboardWillShowNotification
+                 object:nil];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
@@ -77,16 +89,6 @@
         [self.picture setImage:[UIImage imageNamed:@"image-upload-icon"] forState:UIControlStateNormal];
     }
     
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:self
-               selector:@selector(keyboardDismiss)
-                   name:UIKeyboardWillHideNotification
-                 object:nil];
-    [center addObserver:self
-               selector:@selector(keyboardShown)
-                   name:UIKeyboardWillShowNotification
-                 object:nil];
-    
     [self addPadding];
     self.notesField.layoutManager.delegate = (id)self;
     
@@ -102,6 +104,9 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [center removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)keyboardShown {
@@ -114,7 +119,6 @@
 - (void)keyboardDismiss {
     for (UIView *view in @[self.scrollView, self.picture]) {
         for (UIGestureRecognizer *gr in [view gestureRecognizers]) {
-            NSLog(@"gr descrip %@", [gr description]);
             if ([gr class] == [UITapGestureRecognizer class]) {
                 [view removeGestureRecognizer:gr];
             }

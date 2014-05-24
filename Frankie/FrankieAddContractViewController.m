@@ -39,6 +39,18 @@
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self
+               selector:@selector(keyboardDismiss)
+                   name:UIKeyboardWillHideNotification
+                 object:nil];
+    [center addObserver:self
+               selector:@selector(keyboardShown)
+                   name:UIKeyboardWillShowNotification
+                 object:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -51,16 +63,6 @@
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:self
-               selector:@selector(keyboardDismiss)
-                   name:UIKeyboardWillHideNotification
-                 object:nil];
-    [center addObserver:self
-               selector:@selector(keyboardShown)
-                   name:UIKeyboardWillShowNotification
-                 object:nil];
-    
     [self addPadding];
 }
 
@@ -70,7 +72,6 @@
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [center removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    // Added because app was crashing after making a new contract and returning to tableView
 }
 
 - (void)addPadding {
@@ -94,7 +95,6 @@
 - (void)keyboardDismiss {
     for (UIView *view in @[self.keyboardScrollView, self.uploadButton]) {
         for (UIGestureRecognizer *gr in [view gestureRecognizers]) {
-            NSLog(@"gr descrip %@", [gr description]);
             if ([gr class] == [UITapGestureRecognizer class]) {
                 [view removeGestureRecognizer:gr];
             }
