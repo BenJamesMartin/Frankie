@@ -78,7 +78,6 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"yup");
     [self.view endEditing:YES];
 }
 

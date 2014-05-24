@@ -53,7 +53,6 @@
     NSError *error;
 	if (![[self fetchedResultsController] performFetch:&error]) {
 		// Update to handle the error appropriately.
-		NSLog(@"fetchedResults error %@, %@", error, [error userInfo]);
 	}
 
     self.defaultImage.frame = CGRectMake(10, 12, 60, 60);
@@ -122,9 +121,8 @@
     self.fetchedResultsController = aFetchedResultsController;
     
 	NSError *error = nil;
-	if (![self.fetchedResultsController performFetch:&error])
-    {
-	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+	if (![self.fetchedResultsController performFetch:&error]) {
+        // Error handling
 	}
     
     return _fetchedResultsController;

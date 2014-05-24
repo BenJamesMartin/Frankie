@@ -11,6 +11,5 @@
 @interface FrankieResetPasswordViewController : UIViewController <UITextFieldDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *email;
-@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @end

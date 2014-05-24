@@ -323,7 +323,7 @@
 ////    [alert show];
 //}
 
-#pragma mark - mark as complete
+#pragma mark - Mark as complete
 - (IBAction)completeProjectButtonTapped:(id)sender {
     NSString *alertMessage = [NSString new];
     if ([self.project objectForKey:@"completed"] == [NSNumber numberWithInt:1] || [self.project objectForKey:@"completed"] == [NSNumber numberWithBool:YES]) {
@@ -448,7 +448,7 @@
     return NO;
 }
 
-#pragma mark - edit photo
+#pragma mark - editPhoto
 
 - (IBAction)editPhoto:(id)sender {
     self.mediaPicker = [[UIImagePickerController alloc] init];
@@ -470,19 +470,6 @@
 }
 
 #pragma mark - UIActionSheetDelegate methods
-
-// Action sheet titles are "Date Picker" and nil
-
-//-(void)actionSheet:(UIActionSheet *)actionSheet
-//willDismissWithButtonIndex:(NSInteger)buttonIndex
-//{
-//    if ([actionSheet.title isEqualToString:@"Date Picker"]) {
-//        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-//        [dateformatter setDateFormat:@"MM/dd/yyyy"];
-//        
-//        [self.dueDate setText:[dateformatter stringFromDate:[self.pickerView date]]];
-//    }
-//}
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if ([actionSheet.title isEqualToString:@"Date Picker"]) {
@@ -510,14 +497,7 @@
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
--(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    
-//    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-//    //        [self.uploadButton setBackgroundImage:image forState:UIControlStateNormal];
-//    [self.uploadButton setImage:image  forState:UIControlStateNormal];
-//    self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    
+-(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     if (self.mediaPicker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
         //        [self.uploadButton setBackgroundImage:image forState:UIControlStateNormal];
@@ -526,21 +506,12 @@
         //                    image.contentMode = UIViewContentModeScaleAspectFill;
     }
     else {
-        
-        // In here we're setting image from picker
-        // We want to grab the fileName with asset.defaultRepresentation.fileName
-        // Then we want to add this to Core Data (and probably Parse as well)
-        // Can the filename change? Is this secure?
-        
         NSURL *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
         [library assetForURL:referenceURL resultBlock:^(ALAsset *asset) {
             UIImage  *copyOfOriginalImage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
             [self.picture setImage:copyOfOriginalImage forState:UIControlStateNormal];
-            //            [self.uploadButton setBackgroundImage:copyOfOriginalImage forState:UIControlStateNormal];
             self.picture.imageView.contentMode = UIViewContentModeScaleAspectFill;
-            //            UIViewContentModeScaleAspectFill;
-            //            UIViewContentModeCenter
         }
         failureBlock:^(NSError *error) {
                     // error handling
@@ -549,29 +520,9 @@
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-    
-    NSLog(@"index path %d", indexPath.row);
-    
-    //    if (indexPath.row != 0) {
-    //        NSLog(@"yup once");
-    //        UIView* separatorLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
-    //        separatorLineView.backgroundColor = [UIColor colorWithRed:(150/255.f) green:(150/255.f) blue:(160/255.f) alpha:1.0];
-    //        [cell.contentView addSubview:separatorLineView];
-    //    }
-    //
-    cell.backgroundColor = [UIColor colorWithRed:(240/255.f) green:(240/255.f) blue:(240/255.f) alpha:1.0];
-    
-    return cell;
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end
