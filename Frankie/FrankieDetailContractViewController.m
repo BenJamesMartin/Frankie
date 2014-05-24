@@ -21,8 +21,7 @@
 
 @implementation FrankieDetailContractViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -30,8 +29,7 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
@@ -116,6 +114,7 @@
 - (void)keyboardDismiss {
     for (UIView *view in @[self.scrollView, self.picture]) {
         for (UIGestureRecognizer *gr in [view gestureRecognizers]) {
+            NSLog(@"gr descrip %@", [gr description]);
             if ([gr class] == [UITapGestureRecognizer class]) {
                 [view removeGestureRecognizer:gr];
             }
@@ -151,20 +150,12 @@
     }
 }
 
-
-// Need to make call to update Core Data object from here
-// What this is doing:
-//  - Shows label by default
-//  - textField is hidden in storyboard
-//  - Make similar fields for
-//  - Add done buttons on each text field
 - (IBAction)editDueDate:(id)sender {
     UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:@"Date Picker"
                                                       delegate:self
-                                             cancelButtonTitle:@"Set"
+                                             cancelButtonTitle:@""
                                         destructiveButtonTitle:nil
-                                             otherButtonTitles:nil];
-    
+                                             otherButtonTitles:@"Set", nil];
     // Add the picker
     if (self.pickerView == nil) {
         self.pickerView = [[UIDatePicker alloc] init];
@@ -478,31 +469,29 @@
 
 // Action sheet titles are "Date Picker" and nil
 
--(void)actionSheet:(UIActionSheet *)actionSheet
-willDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if ([actionSheet.title isEqualToString:@"Date Picker"]) {
-        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-        [dateformatter setDateFormat:@"MM/dd/yyyy"];
-        
-        [self.dueDate setText:[dateformatter stringFromDate:[self.pickerView date]]];
-    }
-}
+//-(void)actionSheet:(UIActionSheet *)actionSheet
+//willDismissWithButtonIndex:(NSInteger)buttonIndex
+//{
+//    if ([actionSheet.title isEqualToString:@"Date Picker"]) {
+//        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
+//        [dateformatter setDateFormat:@"MM/dd/yyyy"];
+//        
+//        [self.dueDate setText:[dateformatter stringFromDate:[self.pickerView date]]];
+//    }
+//}
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if ([actionSheet.title isEqualToString:@"Date Picker"]) {
+        if (buttonIndex == 0) {
+            NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
+            [dateformatter setDateFormat:@"MM/dd/yyyy"];
+            [self.dueDate setText:[dateformatter stringFromDate:[self.pickerView date]]];
+        }
         return;
     }
     if (buttonIndex == 0) {
         self.mediaPicker.sourceType = UIImagePickerControllerSourceTypeCamera;
         [self presentViewController:self.mediaPicker animated:YES completion:NULL];
-        
-//        imagePicker = [[UIImagePickerController alloc] init];
-//        [imagePicker setDelegate:self];
-//        [imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
-//        [imagePicker setAllowsEditing:YES];
-//        
-//        [self presentModalViewController:imagePicker animated:YES];
     }
     else if (buttonIndex == 1) {
         self.mediaPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;

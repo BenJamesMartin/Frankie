@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FrankieDetailContractViewController : UIViewController <UITextFieldDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface FrankieDetailContractViewController : UIViewController <UITextFieldDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) NSDictionary *project;
 

@@ -18,15 +18,6 @@
 
 @implementation FrankieAddContractViewController
 
-
-
-// This delegate method called when back button is pressed
-// navigation controller's delegate is set in viewDidAppear (versus viewDidLoad) to avoid alert appearing when view first loads
-//- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-//    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Exit", @"") message:NSLocalizedString(@"Are you sure you want to leave? New project will be discarded", @"") delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", @"") otherButtonTitles:NSLocalizedString(@"Accept", @""), nil];
-//    [alertView show];
-//}
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -92,7 +83,7 @@
 
 // Adds gesture recognizer to image upload button so can be tapped to dismiss keyboard
 - (void)keyboardShown {
-    // A single gesture recognizer can only be added to one view, so we need to make multiple gesture recognizers.
+    // A single gesture recognizer can only be added to one view, so we need a gesture recognizer for each view.
     for (UIView *view in @[self.keyboardScrollView, self.uploadButton]) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismissTap)];
         [view addGestureRecognizer:tap];
@@ -100,10 +91,10 @@
 }
 
 // When the keyboard dismisses, remove the tap gesture recognizer on the scrollView image upload button
-- (void)keyboardDismiss
-{
+- (void)keyboardDismiss {
     for (UIView *view in @[self.keyboardScrollView, self.uploadButton]) {
         for (UIGestureRecognizer *gr in [view gestureRecognizers]) {
+            NSLog(@"gr descrip %@", [gr description]);
             if ([gr class] == [UITapGestureRecognizer class]) {
                 [view removeGestureRecognizer:gr];
             }
@@ -186,10 +177,6 @@
 }
 
 - (IBAction)choosePhoto:(id)sender {
-    
-    // Add camera capture mode here
-    // instead of presenting an image picker, present something that allows you to choose between picking and capturing?
-    
     self.mediaPicker = [[UIImagePickerController alloc] init];
     [self.mediaPicker setDelegate:self];
     self.mediaPicker.allowsEditing = YES;
@@ -210,11 +197,10 @@
 
 #pragma mark - UIActionSheetDelegate methods
 
-// Action sheet titles are "Date Picker" and nil
-
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if ([actionSheet.title isEqualToString:@"Date Picker"]) {
         if (buttonIndex == 0) {
+            self.projectDate.textColor = [UIColor colorWithRed:150/255.f green:150/255.f blue:160/255.f alpha:1.0];
             NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
             [dateformatter setDateFormat:@"MM/dd/yyyy"];
             [self.projectDate setText:[dateformatter stringFromDate:[self.pickerView date]]];
@@ -234,37 +220,23 @@
 
 # pragma mark - UIImagePickerController delegate methods
 
--(void) imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
+-(void) imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
--(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    
+-(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     if (self.mediaPicker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-//        [self.uploadButton setBackgroundImage:image forState:UIControlStateNormal];
         [self.uploadButton setImage:image forState:UIControlStateNormal];
         self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-//                    image.contentMode = UIViewContentModeScaleAspectFill;
     }
     else {
-    
-        // In here we're setting image from picker
-        // We want to grab the fileName with asset.defaultRepresentation.fileName
-        // Then we want to add this to Core Data (and probably Parse as well)
-        // Can the filename change? Is this secure?
-        
         NSURL *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
         [library assetForURL:referenceURL resultBlock:^(ALAsset *asset) {
             UIImage  *copyOfOriginalImage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
             [self.uploadButton setImage:copyOfOriginalImage forState:UIControlStateNormal];
-//            [self.uploadButton setBackgroundImage:copyOfOriginalImage forState:UIControlStateNormal];
             self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-//            UIViewContentModeScaleAspectFill;
-//            UIViewContentModeCenter
          }
         failureBlock:^(NSError *error) {
              // error handling
@@ -287,7 +259,6 @@
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     if (textField == self.projectDate) {
-        textField.textColor = [UIColor colorWithRed:150/255.f green:150/255.f blue:160/255.f alpha:1.0];
         [self showDatePicker];
         return NO;
     }
