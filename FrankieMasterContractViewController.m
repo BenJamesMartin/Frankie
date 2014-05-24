@@ -356,9 +356,22 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
+    NSUInteger startingYPos = 0;
+    
+    if (job.completed == [NSNumber numberWithInt:1]) {
+        startingYPos = 5;
+        UILabel *completed = [[UILabel alloc] initWithFrame:CGRectMake(80, startingYPos + 51, 200, 30)];
+        completed.font = [UIFont fontWithName:@"Helvetica" size:12];
+        completed.textColor = [UIColor colorWithRed:77/255.f green:189/255.f blue:51/255.f alpha:1.0];
+        completed.text = @"Project Complete";
+        [cell addSubview:completed];
+    }
+    else {
+        startingYPos = 10;
+    }
     
     UIImageView *image = [UIImageView new];
-    image.frame = CGRectMake(10, 12, 60, 60);
+    image.frame = CGRectMake(10, 14, 60, 60);
     if ([job.picture isEqual:[NSNull null]] || job.picture == NULL) {
         image.image = [UIImage imageNamed:@"image-upload-icon-small"];
     }
@@ -370,7 +383,7 @@
         image.contentMode = UIViewContentModeScaleAspectFill;
     }
     
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(80, 5, 200, 30)];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(80, startingYPos, 200, 30)];
     
     if ([job.title isEqualToString:@""]) {
         title.text = @"[No Title]";
@@ -381,7 +394,7 @@
     title.font = [UIFont fontWithName:@"Helvetica-Bold" size:14];
     title.textColor = [UIColor grayColor];
     
-    UILabel *price = [[UILabel alloc] initWithFrame:CGRectMake(80, 25, 200, 30)];
+    UILabel *price = [[UILabel alloc] initWithFrame:CGRectMake(80, startingYPos+20, 200, 30)];
     if ([job.price floatValue] == 0) {
         price.text = @"Price: [Not Set]";
     }
@@ -392,7 +405,7 @@
     price.font = [UIFont fontWithName:@"Helvetica" size:12];
     price.textColor = [UIColor grayColor];
     
-    UILabel *dueDate = [[UILabel alloc] initWithFrame:CGRectMake(80, 40, 200, 30)];
+    UILabel *dueDate = [[UILabel alloc] initWithFrame:CGRectMake(80, startingYPos+35, 200, 30)];
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     [format setDateFormat:@"MMM dd, yyyy"];
     
@@ -405,14 +418,6 @@
     
     dueDate.font = [UIFont fontWithName:@"Helvetica" size:12];
     dueDate.textColor = [UIColor grayColor];
-    
-    if (job.completed == [NSNumber numberWithInt:1]) {
-        UILabel *completed = [[UILabel alloc] initWithFrame:CGRectMake(80, 56, 200, 30)];
-        completed.font = [UIFont fontWithName:@"Helvetica" size:12];
-        completed.textColor = [UIColor colorWithRed:77/255.f green:189/255.f blue:51/255.f alpha:1.0];
-        completed.text = @"Project Complete";
-        [cell addSubview:completed];
-    }
     
     [cell addSubview:title];
     [cell addSubview:image];
