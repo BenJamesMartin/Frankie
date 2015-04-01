@@ -220,12 +220,26 @@
     [postQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             NSMutableArray *projectsToAdd = [NSMutableArray new];
+            NSSet *currentProjects = [NSSet new];
             NSMutableArray *projectsToDelete = [NSMutableArray new];
             BOOL found = NO;
             
             for (PFObject *project in objects) {
+                // Add project to set
+            }
+            for (Job *project in fetchedObjects) {
+                // Add project to set
+            }
+            
+            // User still can interact with app and store in Core Data when no connection
+            // Use Core Data as the true data source
+            // Add objects to Parse that exist in CD but not Parse
+            // Delete objects from Parse that don't exist in CD but do in Parse.
+            
+            for (PFObject *project in objects) {
                 for (Job *job in fetchedObjects)
                 {
+                    
                     if ([job.parseId isEqualToString:[project objectId]]) {
                         found = YES;
                         break;
@@ -442,6 +456,7 @@
     return cell;
 }
 
+#pragma mark - UITableViewDelegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Push view controller instead of performing segue

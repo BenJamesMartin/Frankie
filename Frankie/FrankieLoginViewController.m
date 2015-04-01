@@ -7,10 +7,12 @@
 //
 
 #import <Parse/Parse.h>
+#import <UITextField+Shake/UITextField+Shake.h>
 
 #import "FrankieLoginViewController.h"
 #import "FrankieMasterContractViewController.h"
 #import "SIAlertView.h"
+#import "RTNActivityView.h"
 
 @interface FrankieLoginViewController ()
 
@@ -48,8 +50,32 @@
         [self showMasterContractViewController];
     }
     
+    [self setSubviewProperties];
+    
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(80/255.f) green:(165/255.f) blue:(240/255.f) alpha:1.0];
+}
+
+- (void)setSubviewProperties {
+    // Font Sizes
+    CGFloat textFieldFontSize = 16.0;
+    
+    // Fonts
+    UIFont *textFieldFont = [UIFont flatFontOfSize:textFieldFontSize];
+    
+    // Colors
+    UIColor *textFieldBorderColor = [UIColor colorWithRed:235/255.f green:235/255.f blue:235/255.f alpha:1.0];
+    
+    self.email.delegate = self;
+    self.email.font = textFieldFont;
+    self.email.backgroundColor = [UIColor clearColor];
+    self.email.textFieldColor = [UIColor whiteColor];
+    self.email.edgeInsets = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
+    self.email.borderColor = textFieldBorderColor;
+    self.email.borderWidth = 2.0f;
+    self.email.cornerRadius = 3.0f;
+    self.email.placeholder = @"Email Address";
+    self.email.textColor = [UIColor darkGrayColor];
 }
 
 - (void)showMasterContractViewController {

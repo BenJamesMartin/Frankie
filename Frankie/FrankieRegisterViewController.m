@@ -188,14 +188,6 @@
             self.check.hidden = YES;
         }
    }
-
-    
-
-    
-    
-    
-
-    
     return YES;
 }
 

@@ -1,10 +1,25 @@
 PODS:
+  - Bolts (1.1.4)
+  - FlatUIKit (1.6)
+  - Parse (1.7.0):
+    - Bolts (~> 1.1)
+  - pop (1.0.7)
   - SIAlertView (1.3)
+  - UITextField+Shake (0.4)
 
 DEPENDENCIES:
+  - FlatUIKit (~> 1.6)
+  - Parse (~> 1.7.0)
+  - pop (~> 1.0.7)
   - SIAlertView (~> 1.3)
+  - UITextField+Shake (~> 0.4)
 
 SPEC CHECKSUMS:
-  SIAlertView: d00609a1faa9d82f17b9f0b4eede64e84a577b10
+  Bolts: f8e2f94edbf9fec7bb8de5ecaaa3aa6b7de6f64e
+  FlatUIKit: a59c93fe2fde5329dfb71dd9317b1b0386d6a178
+  Parse: 3c2d4e6ade7b59d31c0bc8106340c6b81b31bc0f
+  pop: 628ffc631644601567ee8bfaaaea493ebd7d0923
+  SIAlertView: 20c794b55eaf44d888773ea51647cf8907723919
+  UITextField+Shake: e38282f58bd783745b2a0e076d4714693f93b7f8
 
-COCOAPODS: 0.32.1
+COCOAPODS: 0.35.0

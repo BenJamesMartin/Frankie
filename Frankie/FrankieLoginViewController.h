@@ -7,15 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <FlatUIKit/FlatUIKit.h>
 
 @interface FrankieLoginViewController : UIViewController <UITextFieldDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UILabel *frankie;
-@property (strong, nonatomic) IBOutlet UITextField *email;
-@property (strong, nonatomic) IBOutlet UITextField *password;
+@property (strong, nonatomic) IBOutlet FUITextField *email;
+@property (strong, nonatomic) IBOutlet FUITextField *password;
 @property (strong, nonatomic) IBOutlet UIScrollView *keyboardScrollView;
 
 - (IBAction)authenticateUser:(id)sender;
-@property (strong, nonatomic) IBOutlet UIButton *loginButton;
+@property (strong, nonatomic) IBOutlet FUIButton *loginButton;
 
 @end
