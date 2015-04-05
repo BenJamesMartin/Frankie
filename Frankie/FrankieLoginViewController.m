@@ -45,9 +45,9 @@
                  object:nil];
     
     // Take the user to his contracts if he's already logged in
-    if ([PFUser currentUser]) {
-        [self showMasterContractViewController];
-    }
+//    if ([PFUser currentUser]) {
+//        [self navigateToMasterContractViewController];
+//    }
     
     [self setSubviewProperties];
 }
@@ -76,7 +76,7 @@
     self.password.textColor = [UIColor darkGrayColor];
 }
 
-- (void)showMasterContractViewController {
+- (void)navigateToMasterContractViewController {
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     FrankieMasterContractViewController *masterVC = [storyboard instantiateViewControllerWithIdentifier:@"Master"];
@@ -129,35 +129,139 @@
 #pragma mark - Login authentication
 
 - (IBAction)authenticateUser:(id)sender {
-    self.loginButton.userInteractionEnabled = NO;
-
+    // Check to make sure any text at all is present in email/password fields
+    BOOL shouldNotLogin = NO;
+    if (self.email.text.length < 1 || ![self NSStringIsValidEmail:self.email.text]) {
+        shouldNotLogin = YES;
+        [self invalidateTextField:self.email];
+    }
+    else if (self.password.text.length < 1) {
+        shouldNotLogin = YES;
+        [self invalidateTextField:self.password];
+        [self validateTextField:self.email];
+    }
+    else {
+        [self validateAllTextFields];
+    }
+    if (shouldNotLogin)
+        return;
+    
     PFQuery *query = [PFUser query];
     [query whereKey:@"email" equalTo:self.email.text];
+    [RTNActivityView show];
     [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
-        PFUser *user = [users firstObject];
+        [RTNActivityView hide];
+        BOOL shouldLogin = YES;
+        // Email incorrect
+        if (users.count == 0) {
+            shouldLogin = NO;
+            
+            [self validateAllTextFields];
+            [self invalidateTextField:self.email];
+        }
         
-        [PFUser logInWithUsernameInBackground:user.username password:self.password.text block:^(PFUser *user, NSError *error) {
-            // Login succeeded
-            if (user) {
-                // Move to new view controller
-                [self showMasterContractViewController];
-            }
-            // Login failed
-            else {
-                self.loginButton.userInteractionEnabled = YES;
-                
-                SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:@"Login failed."];
-                
-                [alertView addButtonWithTitle:@"OK"
-                                         type:SIAlertViewButtonTypeDestructive
-                                      handler:^(SIAlertView *alert) {
-                                      }];
-                alertView.transitionStyle = SIAlertViewTransitionStyleFade;
-                
-                [alertView show];
-            }
-        }];
+        if (shouldLogin) {
+            PFUser *user = [users firstObject];
+            [RTNActivityView show];
+            [PFUser logInWithUsernameInBackground:user.username password:self.password.text block:^(PFUser *user, NSError *error) {
+                [RTNActivityView hide];
+                // Password incorrect
+                if (error) {
+                    [self validateAllTextFields];
+                    [self invalidateTextField:self.password];
+                }
+                else {
+                    [self navigateToMasterContractViewController];
+                }
+            }];
+        }
     }];
+    
+//    self.loginButton.userInteractionEnabled = NO;
+//
+//    PFQuery *query = [PFUser query];
+//    [query whereKey:@"email" equalTo:self.email.text];
+//    [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
+//        PFUser *user = [users firstObject];
+//        
+//        [PFUser logInWithUsernameInBackground:user.username password:self.password.text block:^(PFUser *user, NSError *error) {
+//            // Login succeeded
+//            if (user) {
+//                // Move to new view controller
+//                [self showMasterContractViewController];
+//            }
+//            // Login failed
+//            else {
+//                self.loginButton.userInteractionEnabled = YES;
+//                
+//                SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:@"Login failed."];
+//                
+//                [alertView addButtonWithTitle:@"OK"
+//                                         type:SIAlertViewButtonTypeDestructive
+//                                      handler:^(SIAlertView *alert) {
+//                                      }];
+//                alertView.transitionStyle = SIAlertViewTransitionStyleFade;
+//                
+//                [alertView show];
+//            }
+//        }];
+//    }];
+}
+
+
+#pragma mark - valid email checker
+
+- (BOOL)NSStringIsValidEmail:(NSString *)checkString
+{
+    BOOL stricterFilter = YES; // Discussion http://blog.logichigh.com/2010/09/02/validating-an-e-mail-address/
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
+}
+
+
+#pragma mark - UITextFieldDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    textField.layer.borderColor = [UIColor clearColor].CGColor;
+    FUITextField *tf = (FUITextField *)textField;
+    [self validateTextField:tf];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    FUITextField *tf = (FUITextField *)textField;
+    [self validateTextField:tf];
+    return YES;
+}
+
+
+#pragma mark - Validate/Invalidate text fields
+
+- (void)validateAllTextFields
+{
+    self.email.borderColor = [UIColor colorWithRed:235/255.f green:235/255.f blue:235/255.f alpha:1.0];
+    self.password.borderColor = [UIColor colorWithRed:235/255.f green:235/255.f blue:235/255.f alpha:1.0];
+}
+
+- (void)validateTextField:(FUITextField *)textField
+{
+    textField.borderColor = [UIColor colorWithRed:235/255.f green:235/255.f blue:235/255.f alpha:1.0];
+}
+
+- (void)invalidateTextField:(FUITextField *)textField
+{
+    int numberOfShakes = 5;
+    CGFloat shakeDelta = 8.0;
+    NSTimeInterval shakeDuration = 0.03;
+
+    textField.layer.borderWidth = 2.0;
+    textField.layer.borderColor = [UIColor alizarinColor].CGColor;
+    textField.borderColor = [UIColor alizarinColor];
+    [textField shake:numberOfShakes withDelta:shakeDelta andSpeed:shakeDuration];
 }
 
 @end

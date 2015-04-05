@@ -7,6 +7,7 @@
 //
 
 #import <Parse/Parse.h>
+#import <UITextField+Shake/UITextField+Shake.h>
 
 #import "FrankieResetPasswordViewController.h"
 #import "SIAlertView.h"
@@ -61,7 +62,27 @@
     [alertView show];
 }
 
+
+#pragma mark - valid email checker
+
+- (BOOL)NSStringIsValidEmail:(NSString *)checkString
+{
+    BOOL stricterFilter = YES; // Discussion http://blog.logichigh.com/2010/09/02/validating-an-e-mail-address/
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
+}
+
+
 - (IBAction)resetPassword:(id)sender {
+    [self validateTextField:self.email];
+    if (![self NSStringIsValidEmail:self.email.text]) {
+        [self invalidateTextField:self.email];
+        return;
+    }
+    
     [PFUser requestPasswordResetForEmailInBackground:self.email.text block:^(BOOL succeeded, NSError *error) {
         if (!error) {
             [self showAlert:nil withMessage:@"Please check your email to reset your password."];
@@ -72,6 +93,45 @@
         }
     }];
 }
+
+
+#pragma mark - UITextFieldDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    textField.layer.borderColor = [UIColor clearColor].CGColor;
+    FUITextField *tf = (FUITextField *)textField;
+    [self validateTextField:tf];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    FUITextField *tf = (FUITextField *)textField;
+    [self validateTextField:tf];
+    return YES;
+}
+
+
+#pragma mark - Validate/Invalidate text fields
+
+- (void)validateTextField:(FUITextField *)textField
+{
+    textField.borderColor = [UIColor colorWithRed:235/255.f green:235/255.f blue:235/255.f alpha:1.0];
+}
+
+- (void)invalidateTextField:(FUITextField *)textField
+{
+    int numberOfShakes = 5;
+    CGFloat shakeDelta = 8.0;
+    NSTimeInterval shakeDuration = 0.03;
+    
+    textField.layer.borderWidth = 2.0;
+    textField.layer.borderColor = [UIColor alizarinColor].CGColor;
+    textField.borderColor = [UIColor alizarinColor];
+    [textField shake:numberOfShakes withDelta:shakeDelta andSpeed:shakeDuration];
+}
+
+
 
 - (void)didReceiveMemoryWarning
 {
