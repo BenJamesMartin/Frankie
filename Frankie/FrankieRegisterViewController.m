@@ -30,10 +30,40 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     self.navigationItem.title = @"Register";
+    
+    [self setSubviewProperties];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
+- (void)setSubviewProperties
+{
+    UIColor *textFieldBorderColor = [UIColor colorWithRed:235/255.f green:235/255.f blue:235/255.f alpha:1.0];
+    
+    self.email.backgroundColor = [UIColor clearColor];
+    self.email.textFieldColor = [UIColor whiteColor];
+    self.email.edgeInsets = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
+    self.email.borderColor = textFieldBorderColor;
+    self.email.borderWidth = 2.0f;
+    self.email.cornerRadius = 3.0f;
+    
+    self.password.backgroundColor = [UIColor clearColor];
+    self.password.textFieldColor = [UIColor whiteColor];
+    self.password.edgeInsets = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
+    self.password.borderColor = textFieldBorderColor;
+    self.password.borderWidth = 2.0f;
+    self.password.cornerRadius = 3.0f;
+    
+    self.verifyPassword.backgroundColor = [UIColor clearColor];
+    self.verifyPassword.textFieldColor = [UIColor whiteColor];
+    self.verifyPassword.edgeInsets = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
+    self.verifyPassword.borderColor = textFieldBorderColor;
+    self.verifyPassword.borderWidth = 2.0f;
+    self.verifyPassword.cornerRadius = 3.0f;
 }
 
 - (void)didReceiveMemoryWarning
@@ -144,7 +174,7 @@
     return [emailTest evaluateWithObject:checkString];
 }
 
-#pragma mark - dismiss text field
+#pragma mark - Dismiss text field
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];

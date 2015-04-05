@@ -21,9 +21,8 @@
 @implementation FrankieLoginViewController
 
 - (void)viewWillAppear:(BOOL)animated {
-    self.navigationController.navigationBarHidden = NO;
+    self.navigationController.navigationBarHidden = YES;
     self.loginButton.userInteractionEnabled = YES;
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
 }
 
 - (void)viewDidLoad {
@@ -51,23 +50,11 @@
     }
     
     [self setSubviewProperties];
-    
-    self.navigationController.navigationBar.translucent = YES;
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(80/255.f) green:(165/255.f) blue:(240/255.f) alpha:1.0];
 }
 
 - (void)setSubviewProperties {
-    // Font Sizes
-    CGFloat textFieldFontSize = 16.0;
-    
-    // Fonts
-    UIFont *textFieldFont = [UIFont flatFontOfSize:textFieldFontSize];
-    
-    // Colors
     UIColor *textFieldBorderColor = [UIColor colorWithRed:235/255.f green:235/255.f blue:235/255.f alpha:1.0];
     
-    self.email.delegate = self;
-    self.email.font = textFieldFont;
     self.email.backgroundColor = [UIColor clearColor];
     self.email.textFieldColor = [UIColor whiteColor];
     self.email.edgeInsets = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
@@ -76,6 +63,17 @@
     self.email.cornerRadius = 3.0f;
     self.email.placeholder = @"Email Address";
     self.email.textColor = [UIColor darkGrayColor];
+    
+    self.password.delegate = self;
+    self.password.secureTextEntry = YES;
+    self.password.backgroundColor = [UIColor clearColor];
+    self.password.textFieldColor = [UIColor whiteColor];
+    self.password.edgeInsets = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
+    self.password.borderColor = textFieldBorderColor;
+    self.password.borderWidth = 2.0f;
+    self.password.cornerRadius = 3.0f;
+    self.password.placeholder = @"Password";
+    self.password.textColor = [UIColor darkGrayColor];
 }
 
 - (void)showMasterContractViewController {

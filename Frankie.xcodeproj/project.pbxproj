@@ -20,8 +20,9 @@
 		B5759490192C89D700303786 /* FrankieResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B575948F192C89D700303786 /* FrankieResetPasswordViewController.m */; };
 		B5855483191E485200CA987C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5855482191E485200CA987C /* Images.xcassets */; };
 		B58AE09A1888AB6F0083A645 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B58AE0981888AB6F0083A645 /* Model.xcdatamodeld */; };
+		B5AA5D391AD0B5E900942153 /* BackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5AA5D381AD0B5E900942153 /* BackgroundView.m */; };
 		B5B99A3B1ACB937B001A2421 /* RTNActivityView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B99A3A1ACB937B001A2421 /* RTNActivityView.m */; };
-		B5B99A421ACB962F001A2421 /* FUITextFieldDrawFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B99A411ACB962F001A2421 /* FUITextFieldDrawFrame.m */; };
+		B5B99A4C1ACBA470001A2421 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B99A4B1ACBA470001A2421 /* libPods.a */; };
 		B5C12C77188DCAC80064986D /* FrankieAddContractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C12C76188DCAC80064986D /* FrankieAddContractViewController.m */; };
 		B5CDB55C190762D6001CB69F /* FrankieLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55BB6A4187B647200BE3703 /* FrankieLoginViewController.m */; };
 /* End PBXBuildFile section */
@@ -65,10 +66,11 @@
 		B5855482191E485200CA987C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Frankie/Images.xcassets; sourceTree = "<group>"; };
 		B5896F2C191096140051319A /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		B58AE0991888AB6F0083A645 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		B5AA5D371AD0B5E900942153 /* BackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundView.h; sourceTree = "<group>"; };
+		B5AA5D381AD0B5E900942153 /* BackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundView.m; sourceTree = "<group>"; };
 		B5B99A391ACB937B001A2421 /* RTNActivityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTNActivityView.h; sourceTree = "<group>"; };
 		B5B99A3A1ACB937B001A2421 /* RTNActivityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTNActivityView.m; sourceTree = "<group>"; };
-		B5B99A401ACB962F001A2421 /* FUITextFieldDrawFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUITextFieldDrawFrame.h; sourceTree = "<group>"; };
-		B5B99A411ACB962F001A2421 /* FUITextFieldDrawFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUITextFieldDrawFrame.m; sourceTree = "<group>"; };
+		B5B99A4B1ACBA470001A2421 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		B5C12C75188DCAC80064986D /* FrankieAddContractViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieAddContractViewController.h; sourceTree = "<group>"; };
 		B5C12C76188DCAC80064986D /* FrankieAddContractViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieAddContractViewController.m; sourceTree = "<group>"; };
 		E4DCE54E948B1D6B6006FC0D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5B99A4C1ACBA470001A2421 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +126,9 @@
 		B55BB682187B647200BE3703 = {
 			isa = PBXGroup;
 			children = (
+				B5AA5D371AD0B5E900942153 /* BackgroundView.h */,
+				B5AA5D381AD0B5E900942153 /* BackgroundView.m */,
+				B5B99A4B1ACBA470001A2421 /* libPods.a */,
 				B55BB694187B647200BE3703 /* Frankie */,
 				B5855482191E485200CA987C /* Images.xcassets */,
 				B55BB6B3187B647200BE3703 /* FrankieTests */,
@@ -156,8 +162,6 @@
 		B55BB695187B647200BE3703 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				B5B99A401ACB962F001A2421 /* FUITextFieldDrawFrame.h */,
-				B5B99A411ACB962F001A2421 /* FUITextFieldDrawFrame.m */,
 				B5B99A3C1ACB937F001A2421 /* RTNActivityView */,
 				B55BB696187B647200BE3703 /* Frankie-Info.plist */,
 				B55BB697187B647200BE3703 /* InfoPlist.strings */,
@@ -342,6 +346,7 @@
 			files = (
 				B5759490192C89D700303786 /* FrankieResetPasswordViewController.m in Sources */,
 				B575077B19258D97001D97E6 /* Job.m in Sources */,
+				B5AA5D391AD0B5E900942153 /* BackgroundView.m in Sources */,
 				B555856D187F8A1C007608EB /* FrankieDetailContractViewController.m in Sources */,
 				B540A5D9187E087400C7BD7D /* FrankieMasterContractViewController.m in Sources */,
 				B519804B1908673B00F3DF16 /* FrankieRegisterViewController.m in Sources */,
@@ -349,7 +354,6 @@
 				B58AE09A1888AB6F0083A645 /* Model.xcdatamodeld in Sources */,
 				B5B99A3B1ACB937B001A2421 /* RTNActivityView.m in Sources */,
 				B55BB69F187B647200BE3703 /* FrankieAppDelegate.m in Sources */,
-				B5B99A421ACB962F001A2421 /* FUITextFieldDrawFrame.m in Sources */,
 				B55BB69B187B647200BE3703 /* main.m in Sources */,
 				B5CDB55C190762D6001CB69F /* FrankieLoginViewController.m in Sources */,
 			);
@@ -479,6 +483,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/Ben/Dropbox/hack-reactor-materials/hir/Frankie",
@@ -488,7 +493,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Frankie/Frankie-Prefix.pch";
 				INFOPLIST_FILE = "Frankie/Frankie-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
@@ -505,6 +510,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/Ben/Dropbox/hack-reactor-materials/hir/Frankie",
@@ -514,7 +520,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Frankie/Frankie-Prefix.pch";
 				INFOPLIST_FILE = "Frankie/Frankie-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",

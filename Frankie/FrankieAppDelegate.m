@@ -24,12 +24,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [Parse setApplicationId:@"khSDDzBANcF6RXKWBojSeDOweONmVysgIjvs5ceW" clientKey:@"urVIj0DX37q8Vc79SBRrob5T4okhIusgu4qwt6Kq"];
-
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
-    // Override point for customization after application launch.
     return YES;
 }
 
