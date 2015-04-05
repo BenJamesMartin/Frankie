@@ -14,6 +14,7 @@
 #import "FrankieDetailContractViewController.h"
 #import "FrankieAddContractViewController.h"
 #import "FrankieLoginViewController.h"
+#import "FrankieSettingsViewController.h"
 #import "FrankieAppDelegate.h"
 #import "Job.h"
 #import "SIAlertView.h"
@@ -81,10 +82,22 @@
       initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
       target:self
       action:@selector(loadAddContractViewController)];
+    
+    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(loadSettingsViewController)];
+    self.navigationItem.leftBarButtonItem = settingsButton;
 
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadTable" object:nil];
     
     self.navigationController.navigationBar.alpha = 0.96;
+}
+
+- (void)loadSettingsViewController
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    FrankieSettingsViewController *settingsVC = [storyboard instantiateViewControllerWithIdentifier:@"FrankieSettingsViewController"];
+    [self.navigationController pushViewController:settingsVC animated:YES];
+    NSLog(@"loadSettingsViewController");
 }
 
 - (NSFetchedResultsController *)fetchedResultsController

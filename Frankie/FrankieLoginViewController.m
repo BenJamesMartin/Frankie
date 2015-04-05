@@ -28,11 +28,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.automaticallyAdjustsScrollViewInsets = NO;
-
-    self.keyboardScrollView.alwaysBounceVertical = YES;
-    self.keyboardScrollView.alwaysBounceHorizontal = NO;
-    
     // defaultCenter for hiding keyboard
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserver:self
@@ -45,9 +40,9 @@
                  object:nil];
     
     // Take the user to his contracts if he's already logged in
-//    if ([PFUser currentUser]) {
-//        [self navigateToMasterContractViewController];
-//    }
+    if ([PFUser currentUser]) {
+        [self navigateToMasterContractViewController];
+    }
     
     [self setSubviewProperties];
 }
@@ -176,36 +171,6 @@
             }];
         }
     }];
-    
-//    self.loginButton.userInteractionEnabled = NO;
-//
-//    PFQuery *query = [PFUser query];
-//    [query whereKey:@"email" equalTo:self.email.text];
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
-//        PFUser *user = [users firstObject];
-//        
-//        [PFUser logInWithUsernameInBackground:user.username password:self.password.text block:^(PFUser *user, NSError *error) {
-//            // Login succeeded
-//            if (user) {
-//                // Move to new view controller
-//                [self showMasterContractViewController];
-//            }
-//            // Login failed
-//            else {
-//                self.loginButton.userInteractionEnabled = YES;
-//                
-//                SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:nil andMessage:@"Login failed."];
-//                
-//                [alertView addButtonWithTitle:@"OK"
-//                                         type:SIAlertViewButtonTypeDestructive
-//                                      handler:^(SIAlertView *alert) {
-//                                      }];
-//                alertView.transitionStyle = SIAlertViewTransitionStyleFade;
-//                
-//                [alertView show];
-//            }
-//        }];
-//    }];
 }
 
 
