@@ -125,8 +125,7 @@
     [entity setValue:[NSNumber numberWithFloat:price] forKey:@"price"];
     [entity setValue:self.notes.text forKey:@"notes"];
     [entity setValue:[NSNumber numberWithBool:NO] forKeyPath:@"completed"];
-    [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString]
-              forKey:@"objectId"];
+    [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString] forKey:@"objectId"];
     
     NSData *imageData;
     if (!([self.uploadButton imageForState:UIControlStateNormal] == [UIImage imageNamed:@"image-upload-icon"])) {
@@ -139,7 +138,7 @@
     if (imageData != nil) {
         [entity setValue:imageData forKey:@"picture"];
     }
-    
+//    
     NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
     [dateformatter setDateFormat:@"MM/dd/yyyy"];
     NSDate *projectDate = [dateformatter dateFromString:self.projectDate.text];

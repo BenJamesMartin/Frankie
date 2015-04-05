@@ -16,6 +16,7 @@
 #import "FrankieLoginViewController.h"
 #import "FrankieSettingsViewController.h"
 #import "FrankieAppDelegate.h"
+#import "FrankieSideMenuViewController.h"
 #import "Job.h"
 #import "SIAlertView.h"
 
@@ -40,6 +41,25 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+//    NSShadow *shadow = [[NSShadow alloc] init];
+//    shadow.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8];
+//    shadow.shadowOffset = CGSizeMake(0, 1);
+//    [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
+//                                                           [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0], NSForegroundColorAttributeName,
+//                                                           shadow, NSShadowAttributeName,
+//                                                           [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:21.0], NSFontAttributeName, nil]];
+}
+
+- (void)revealLeftMenu
+{
+    NSLog(@"done");
+    [self.revealSideViewController pushOldViewControllerOnDirection:PPRevealSideDirectionLeft animated:YES];
+//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+//    FrankieSideMenuViewController *smvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieSideMenuViewController"];
+//    [self.revealSideViewController pushViewController:smvc onDirection:PPRevealSideDirectionLeft animated:YES completion:^{
+//        NSLog(@"completion");
+//    }];
 }
 
 - (void)viewDidLoad
@@ -48,6 +68,8 @@
     
     [self syncParseCoreData];
     self.navigationController.navigationBar.translucent = YES;
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger-icon"] landscapeImagePhone:nil style:UIBarButtonItemStylePlain target:self action:@selector(revealLeftMenu)];
     
     self.fetchedResultsController.delegate = self;
     
@@ -75,7 +97,7 @@
     // Get custom hamburger icon and use left-menu popover
     // For now just have simple "logout" button
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logOutUser)];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logOutUser)];
     
     self.navigationItem.rightBarButtonItem =
     [[UIBarButtonItem alloc]
@@ -83,8 +105,8 @@
       target:self
       action:@selector(loadAddContractViewController)];
     
-    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(loadSettingsViewController)];
-    self.navigationItem.leftBarButtonItem = settingsButton;
+//    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(loadSettingsViewController)];
+//    self.navigationItem.leftBarButtonItem = settingsButton;
 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadTable" object:nil];

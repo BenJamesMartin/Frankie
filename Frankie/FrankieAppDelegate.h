@@ -8,14 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <PPRevealSideViewController/PPRevealSideViewController.h>
 
-@interface FrankieAppDelegate : UIResponder <UIApplicationDelegate>
+@interface FrankieAppDelegate : UIResponder <UIApplicationDelegate, PPRevealSideViewControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+@property (strong, nonatomic) PPRevealSideViewController *rsvc;
 
 - (BOOL)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

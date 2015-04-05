@@ -14,6 +14,16 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-PPHelpMe.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-PPRevealSideViewController.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Parse.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,37 +52,47 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>08B1E9F0B3EC4D552755B314</key>
+		<key>1A8238E569BD57535B82F5B3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6516F84EC13A4C3E9336B031</key>
+		<key>3255C8FE8F1A2DEA4C988EA2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7086A91251B559568FF86D93</key>
+		<key>38E978FB453CC8756D9B51DD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>86FD42C2B61811E701F7DB0E</key>
+		<key>403B50C23DA9DF3A8976CDBF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AECE11F91E49546282C714FB</key>
+		<key>5F7B1DEA763C631CF8F0EA56</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CB5E5C530DC6511CDC133244</key>
+		<key>90DFD18A2DF108719065C0F1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F81E2ED806DE687BC34630F2</key>
+		<key>A2208E80C47D8F87757A63DC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C186D4795333A809B929FF2A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D0D8426649833CE9D5C27D4A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

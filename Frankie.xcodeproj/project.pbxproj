@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F2F8238F3B138D3730FFEAD /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A3E3462F5CC6D37CA4FD57 /* libPods.a */; };
 		B519804B1908673B00F3DF16 /* FrankieRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B519804A1908673B00F3DF16 /* FrankieRegisterViewController.m */; };
 		B540A5D9187E087400C7BD7D /* FrankieMasterContractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B540A5D8187E087400C7BD7D /* FrankieMasterContractViewController.m */; };
 		B555856D187F8A1C007608EB /* FrankieDetailContractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B555856C187F8A1C007608EB /* FrankieDetailContractViewController.m */; };
@@ -22,6 +23,7 @@
 		B58AE09A1888AB6F0083A645 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B58AE0981888AB6F0083A645 /* Model.xcdatamodeld */; };
 		B5AA5D3C1AD0EA8600942153 /* FrankieSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5AA5D3B1AD0EA8600942153 /* FrankieSettingsViewController.m */; };
 		B5AA5D461AD12B6900942153 /* Contractor.m in Sources */ = {isa = PBXBuildFile; fileRef = B5AA5D451AD12B6900942153 /* Contractor.m */; };
+		B5AA5D4A1AD14ADD00942153 /* FrankieSideMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5AA5D491AD14ADD00942153 /* FrankieSideMenuViewController.m */; };
 		B5B99A3B1ACB937B001A2421 /* RTNActivityView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B99A3A1ACB937B001A2421 /* RTNActivityView.m */; };
 		B5C12C77188DCAC80064986D /* FrankieAddContractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C12C76188DCAC80064986D /* FrankieAddContractViewController.m */; };
 		B5CDB55C190762D6001CB69F /* FrankieLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55BB6A4187B647200BE3703 /* FrankieLoginViewController.m */; };
@@ -39,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		3720F31545D88E57E05D0777 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		55A3E3462F5CC6D37CA4FD57 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B51980491908673B00F3DF16 /* FrankieRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieRegisterViewController.h; sourceTree = "<group>"; };
 		B519804A1908673B00F3DF16 /* FrankieRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieRegisterViewController.m; sourceTree = "<group>"; };
 		B540A5D7187E087400C7BD7D /* FrankieMasterContractViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieMasterContractViewController.h; sourceTree = SOURCE_ROOT; };
@@ -70,6 +73,8 @@
 		B5AA5D3B1AD0EA8600942153 /* FrankieSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieSettingsViewController.m; sourceTree = SOURCE_ROOT; };
 		B5AA5D441AD12B6900942153 /* Contractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Contractor.h; path = Frankie/Contractor.h; sourceTree = "<group>"; };
 		B5AA5D451AD12B6900942153 /* Contractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Contractor.m; path = Frankie/Contractor.m; sourceTree = "<group>"; };
+		B5AA5D481AD14ADD00942153 /* FrankieSideMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieSideMenuViewController.h; sourceTree = "<group>"; };
+		B5AA5D491AD14ADD00942153 /* FrankieSideMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieSideMenuViewController.m; sourceTree = "<group>"; };
 		B5B99A391ACB937B001A2421 /* RTNActivityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTNActivityView.h; sourceTree = "<group>"; };
 		B5B99A3A1ACB937B001A2421 /* RTNActivityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTNActivityView.m; sourceTree = "<group>"; };
 		B5C12C75188DCAC80064986D /* FrankieAddContractViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieAddContractViewController.h; sourceTree = "<group>"; };
@@ -82,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F2F8238F3B138D3730FFEAD /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,6 +113,7 @@
 		B508671218874699005BD41E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B5AA5D471AD14AC500942153 /* Side Menu */,
 				B5AA5D431AD125E300942153 /* New Contract */,
 				B5AA5D421AD125CE00942153 /* Master/Detail */,
 				B5AA5D411AD125AF00942153 /* Login/Signup */,
@@ -123,6 +130,7 @@
 				B55BB6B3187B647200BE3703 /* FrankieTests */,
 				B55BB68C187B647200BE3703 /* Products */,
 				7B4CC07D5295BB48D3B076FB /* Pods */,
+				ED8441B38BB89500D65A7812 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -233,6 +241,15 @@
 			name = "New Contract";
 			sourceTree = "<group>";
 		};
+		B5AA5D471AD14AC500942153 /* Side Menu */ = {
+			isa = PBXGroup;
+			children = (
+				B5AA5D481AD14ADD00942153 /* FrankieSideMenuViewController.h */,
+				B5AA5D491AD14ADD00942153 /* FrankieSideMenuViewController.m */,
+			);
+			name = "Side Menu";
+			sourceTree = "<group>";
+		};
 		B5B99A3C1ACB937F001A2421 /* RTNActivityView */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,6 +257,14 @@
 				B5B99A3A1ACB937B001A2421 /* RTNActivityView.m */,
 			);
 			name = RTNActivityView;
+			sourceTree = "<group>";
+		};
+		ED8441B38BB89500D65A7812 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				55A3E3462F5CC6D37CA4FD57 /* libPods.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -390,6 +415,7 @@
 				B55BB69B187B647200BE3703 /* main.m in Sources */,
 				B5AA5D3C1AD0EA8600942153 /* FrankieSettingsViewController.m in Sources */,
 				B5CDB55C190762D6001CB69F /* FrankieLoginViewController.m in Sources */,
+				B5AA5D4A1AD14ADD00942153 /* FrankieSideMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

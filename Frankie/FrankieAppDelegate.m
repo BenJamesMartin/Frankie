@@ -9,6 +9,8 @@
 #import <Parse/Parse.h>
 
 #import "FrankieAppDelegate.h"
+#import "FrankieLoginViewController.h"
+#import "FrankieSideMenuViewController.h"
 #import "Job.h"
 
 @interface FrankieAppDelegate ()
@@ -27,6 +29,23 @@
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    
+    // Initialize side menu with Storyboard's root navigation controller
+    UINavigationController *nc = [storyboard instantiateViewControllerWithIdentifier:@"NC"];
+    self.rsvc = [[PPRevealSideViewController alloc] initWithRootViewController:nc];
+    self.rsvc.view.backgroundColor = [UIColor colorWithRed:240/255.f green:240/255.f blue:240/255.f alpha:1.0];
+    self.rsvc.delegate = self;
+    self.rsvc.panInteractionsWhenClosed = PPRevealSideInteractionNavigationBar;
+    self.rsvc.options = PPRevealSideOptionsShowShadows;
+    [self.rsvc setDirectionsToShowBounce:PPRevealSideDirectionLeft];
+    self.window.rootViewController = self.rsvc;
+    
+    // Preload left hamburger menu
+    FrankieSideMenuViewController *smvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieSideMenuViewController"];
+    UINavigationController *n = [[UINavigationController alloc] initWithRootViewController:smvc];
+    [self.rsvc preloadViewController:n forSide:PPRevealSideDirectionLeft];
     
     return YES;
 }

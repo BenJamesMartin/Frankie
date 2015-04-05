@@ -18,6 +18,18 @@
 #define COCOAPODS_VERSION_MINOR_FlatUIKit 6
 #define COCOAPODS_VERSION_PATCH_FlatUIKit 0
 
+// PPHelpMe
+#define COCOAPODS_POD_AVAILABLE_PPHelpMe
+#define COCOAPODS_VERSION_MAJOR_PPHelpMe 1
+#define COCOAPODS_VERSION_MINOR_PPHelpMe 0
+#define COCOAPODS_VERSION_PATCH_PPHelpMe 2
+
+// PPRevealSideViewController
+#define COCOAPODS_POD_AVAILABLE_PPRevealSideViewController
+#define COCOAPODS_VERSION_MAJOR_PPRevealSideViewController 1
+#define COCOAPODS_VERSION_MINOR_PPRevealSideViewController 2
+#define COCOAPODS_VERSION_PATCH_PPRevealSideViewController 0
+
 // Parse
 #define COCOAPODS_POD_AVAILABLE_Parse
 #define COCOAPODS_VERSION_MAJOR_Parse 1
