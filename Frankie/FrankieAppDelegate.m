@@ -11,6 +11,7 @@
 #import "FrankieAppDelegate.h"
 #import "FrankieLoginViewController.h"
 #import "FrankieSideMenuViewController.h"
+#import "FrankieSettingsViewController.h"
 #import "Job.h"
 
 @interface FrankieAppDelegate ()
@@ -33,8 +34,8 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     
     // Initialize side menu with Storyboard's root navigation controller
-    UINavigationController *nc = [storyboard instantiateViewControllerWithIdentifier:@"NC"];
-    self.rsvc = [[PPRevealSideViewController alloc] initWithRootViewController:nc];
+    self.nc = [storyboard instantiateViewControllerWithIdentifier:@"NC"];
+    self.rsvc = [[PPRevealSideViewController alloc] initWithRootViewController:self.nc];
     self.rsvc.view.backgroundColor = [UIColor colorWithRed:240/255.f green:240/255.f blue:240/255.f alpha:1.0];
     self.rsvc.delegate = self;
     self.rsvc.panInteractionsWhenClosed = PPRevealSideInteractionNavigationBar;
@@ -47,7 +48,31 @@
     UINavigationController *n = [[UINavigationController alloc] initWithRootViewController:smvc];
     [self.rsvc preloadViewController:n forSide:PPRevealSideDirectionLeft];
     
+    [self initializeObservers];
+    
     return YES;
+}
+
+- (void)initializeObservers
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logout) name:@"logout" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(navigateToProfile) name:@"navigateToProfile" object:nil];
+}
+
+- (void)logout
+{
+    [PFUser logOutInBackground];
+    [self.rsvc popViewControllerAnimated:NO];
+    [self.nc popToRootViewControllerAnimated:YES];
+}
+
+- (void)navigateToProfile
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    FrankieSettingsViewController *settingsVC = [storyboard instantiateViewControllerWithIdentifier:@"FrankieSettingsViewController"];
+    [self.rsvc popViewControllerAnimated:YES];
+    [self.nc pushViewController:settingsVC animated:YES];
+
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

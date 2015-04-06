@@ -23,6 +23,13 @@
 - (void)viewWillAppear:(BOOL)animated {
     self.navigationController.navigationBarHidden = YES;
     self.loginButton.userInteractionEnabled = YES;
+    self.email.text = @"";
+    self.password.text = @"";
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.view endEditing:YES];
 }
 
 - (void)viewDidLoad {

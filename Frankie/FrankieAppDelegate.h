@@ -18,6 +18,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (strong, nonatomic) UINavigationController *nc;
 @property (strong, nonatomic) PPRevealSideViewController *rsvc;
 
 - (BOOL)saveContext;

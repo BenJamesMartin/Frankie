@@ -70,6 +70,16 @@
     }
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"navigateToProfile" object:nil];
+    }
+    else if (indexPath.row == 1) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"logout" object:nil];
+    }
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0;
