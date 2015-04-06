@@ -27,6 +27,11 @@
     self.navigationController.navigationBarHidden = YES;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.tableView.userInteractionEnabled = YES;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -72,6 +77,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    self.tableView.userInteractionEnabled = NO;
     if (indexPath.row == 0) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"navigateToProfile" object:nil];
     }
