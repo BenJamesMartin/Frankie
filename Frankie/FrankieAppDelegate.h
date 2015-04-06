@@ -10,6 +10,8 @@
 #import <CoreData/CoreData.h>
 #import <PPRevealSideViewController/PPRevealSideViewController.h>
 
+#import "FrankieSettingsViewController.h"
+
 @interface FrankieAppDelegate : UIResponder <UIApplicationDelegate, PPRevealSideViewControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -20,6 +22,7 @@
 
 @property (strong, nonatomic) UINavigationController *nc;
 @property (strong, nonatomic) PPRevealSideViewController *rsvc;
+@property (strong, nonatomic) FrankieSettingsViewController *settingsVC;
 
 - (BOOL)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

@@ -1,4 +1,5 @@
 //
+
 //  FrankieAddContractViewController.m
 //  Frankie
 //
@@ -40,15 +41,12 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:self
-               selector:@selector(keyboardDismiss)
-                   name:UIKeyboardWillHideNotification
-                 object:nil];
-    [center addObserver:self
-               selector:@selector(keyboardShown)
-                   name:UIKeyboardWillShowNotification
-                 object:nil];
+    
+    [super viewWillAppear:animated];
+    
+    // this UIViewController is about to re-appear, make sure we remove the current selection in our table view
+    NSIndexPath *tableSelection = [self.tableView indexPathForSelectedRow];
+    [self.tableView deselectRowAtIndexPath:tableSelection animated:NO];
 }
 
 - (void)viewDidLoad
@@ -62,6 +60,16 @@
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self
+               selector:@selector(keyboardDismiss)
+                   name:UIKeyboardWillHideNotification
+                 object:nil];
+    [center addObserver:self
+               selector:@selector(keyboardShown)
+                   name:UIKeyboardWillShowNotification
+                 object:nil];
     
     [self addPadding];
 }
@@ -222,6 +230,7 @@
 
 -(void) imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [picker dismissViewControllerAnimated:YES completion:NULL];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 -(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
@@ -241,7 +250,6 @@
         failureBlock:^(NSError *error) {
              // error handling
          }];
-        
     }
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
@@ -343,6 +351,68 @@
     CGRect pickerRect = self.pickerView.bounds;
     pickerRect.origin.y = -100;
     self.pickerView.bounds = pickerRect;
+}
+
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 5;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *cellIdentifier = [NSString stringWithFormat:@"Cell%lu", indexPath.row];
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+    }
+    
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+// Manually perform navigation controller push to keep reference to each VC
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    // Steps
+    if (indexPath.row == 2) {
+        if (self.svc == nil) {
+            self.svc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsViewController"];
+        }
+        [self.svc.view endEditing:YES];
+        [self.navigationController pushViewController:self.svc animated:YES];
+    }
+    // Client information
+    else if (indexPath.row == 3) {
+        if (self.civc == nil) {
+            self.civc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieClientInformationViewController"];
+        }
+        [self.navigationController pushViewController:self.civc animated:YES];
+    }
+    // Location (map view)
+    else if (indexPath.row == 4) {
+        if (self.lvc == nil) {
+            self.lvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieLocationViewController"];
+        }
+        [self.navigationController pushViewController:self.lvc animated:YES];
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44; // Default height
 }
 
 

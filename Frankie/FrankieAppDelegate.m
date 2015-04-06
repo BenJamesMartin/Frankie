@@ -11,7 +11,6 @@
 #import "FrankieAppDelegate.h"
 #import "FrankieLoginViewController.h"
 #import "FrankieSideMenuViewController.h"
-#import "FrankieSettingsViewController.h"
 #import "Job.h"
 
 @interface FrankieAppDelegate ()
@@ -69,9 +68,11 @@
 - (void)navigateToProfile
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    FrankieSettingsViewController *settingsVC = [storyboard instantiateViewControllerWithIdentifier:@"FrankieSettingsViewController"];
+    if (self.settingsVC == nil) {
+        self.settingsVC = [storyboard instantiateViewControllerWithIdentifier:@"FrankieSettingsViewController"];   
+    }
     [self.rsvc popViewControllerAnimated:YES];
-    [self.nc pushViewController:settingsVC animated:YES];
+    [self.nc pushViewController:self.settingsVC animated:YES];
 
 }
 
