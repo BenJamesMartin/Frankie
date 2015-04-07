@@ -275,6 +275,15 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (textField.tag == 1 && textField.text.length > 0) {
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+        formatter.numberStyle = NSNumberFormatterCurrencyStyle;
+        formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+        NSString *replacedText = [textField.text stringByReplacingOccurrencesOfString:formatter.internationalCurrencySymbol withString:@""];
+        float fval = [formatter numberFromString:replacedText].floatValue;
+        textField.text = [NSString stringWithFormat:@"%.0f", fval];
+    }
+    
     if (textField == self.price) {
         [UIView animateWithDuration:0.25 animations:^{
             [self.keyboardScrollView setContentOffset:CGPointMake(0, 25)];
@@ -283,6 +292,17 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
+    if (textField.tag == 1) {
+        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+        f.numberStyle = NSNumberFormatterDecimalStyle;
+        NSNumber *currency = [f numberFromString:textField.text];
+        
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+        NSString *currencyString = [numberFormatter stringFromNumber:currency];
+        textField.text = currencyString;
+    }
+    
     if (textField == self.price) {
         [UIView animateWithDuration:0.50 animations:^{
             [self.keyboardScrollView setContentOffset:CGPointMake(self.keyboardScrollView.contentOffset.x, -self.keyboardScrollView.contentInset.top)];
@@ -297,6 +317,20 @@
             textField.text = [NSString stringWithFormat:@"$%.02f", price];
         }
     }
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    // If the textField is the price textField, don't let the length of the price textField exceed six numbers
+    if (textField.tag == 1) {
+        if (range.length + range.location > textField.text.length) {
+            return NO;
+        }
+        
+        NSUInteger newLength = textField.text.length + string.length - range.length;
+        return (newLength > 6) ? NO : YES;
+    }
+    return YES;
 }
 
 #pragma mark - UITextView delegate methods
