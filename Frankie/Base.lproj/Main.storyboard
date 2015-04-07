@@ -593,8 +593,8 @@
                         <outlet property="notes" destination="GMG-2t-2M6" id="ex7-Li-gqE"/>
                         <outlet property="tableView" destination="api-8o-Rjq" id="D87-vX-ALv"/>
                         <outlet property="uploadButton" destination="TC5-Tc-cJM" id="h1C-w5-LPY"/>
-                        <segue destination="Wcs-aY-GzZ" kind="custom" id="DS3-aY-QMs"/>
                         <segue destination="qBv-If-0Nh" kind="custom" id="aWu-j0-gBV"/>
+                        <segue destination="WfJ-jZ-SHQ" kind="custom" id="dOz-rj-mbY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vkh-R7-nvt" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -602,21 +602,28 @@
             <point key="canvasLocation" x="1044" y="779"/>
         </scene>
         <!--Frankie Steps View Controller-->
-        <scene sceneID="v5W-Mt-xGS">
+        <scene sceneID="n3O-yg-mrq">
             <objects>
-                <viewController storyboardIdentifier="FrankieStepsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Wcs-aY-GzZ" customClass="FrankieStepsViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="43t-XG-J9H"/>
-                        <viewControllerLayoutGuide type="bottom" id="mba-me-qq2"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="aaT-FX-qba">
+                <tableViewController storyboardIdentifier="FrankieStepsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="WfJ-jZ-SHQ" customClass="FrankieStepsViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="x12-D9-Tbb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="kck-vv-Vku"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="FfX-ML-36R" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="9kF-YZ-g0h">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9kF-YZ-g0h" id="MfM-uJ-IaL">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="WfJ-jZ-SHQ" id="nw6-l5-ghE"/>
+                            <outlet property="delegate" destination="WfJ-jZ-SHQ" id="WLa-yY-RqC"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F1d-VP-Arv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1525" y="779"/>
         </scene>

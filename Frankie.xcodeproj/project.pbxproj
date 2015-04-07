@@ -10,6 +10,7 @@
 		2F2F8238F3B138D3730FFEAD /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A3E3462F5CC6D37CA4FD57 /* libPods.a */; };
 		B519804B1908673B00F3DF16 /* FrankieRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B519804A1908673B00F3DF16 /* FrankieRegisterViewController.m */; };
 		B536D7E21AD3861A00181B23 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B536D7E11AD3861A00181B23 /* MapKit.framework */; };
+		B536D7E51AD397DA00181B23 /* FrankieStepsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B536D7E41AD397DA00181B23 /* FrankieStepsViewController.m */; };
 		B540A5D9187E087400C7BD7D /* FrankieMasterContractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B540A5D8187E087400C7BD7D /* FrankieMasterContractViewController.m */; };
 		B555856D187F8A1C007608EB /* FrankieDetailContractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B555856C187F8A1C007608EB /* FrankieDetailContractViewController.m */; };
 		B55BB699187B647200BE3703 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B55BB697187B647200BE3703 /* InfoPlist.strings */; };
@@ -26,7 +27,6 @@
 		B5AA5D461AD12B6900942153 /* Contractor.m in Sources */ = {isa = PBXBuildFile; fileRef = B5AA5D451AD12B6900942153 /* Contractor.m */; };
 		B5AA5D4A1AD14ADD00942153 /* FrankieSideMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5AA5D491AD14ADD00942153 /* FrankieSideMenuViewController.m */; };
 		B5AA5D4D1AD20ECE00942153 /* FrankieClientInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5AA5D4C1AD20ECE00942153 /* FrankieClientInformationViewController.m */; };
-		B5AA5D501AD21B5F00942153 /* FrankieStepsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5AA5D4F1AD21B5F00942153 /* FrankieStepsViewController.m */; };
 		B5AA5D531AD21BFF00942153 /* FrankieLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5AA5D521AD21BFF00942153 /* FrankieLocationViewController.m */; };
 		B5B99A3B1ACB937B001A2421 /* RTNActivityView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B99A3A1ACB937B001A2421 /* RTNActivityView.m */; };
 		B5C12C77188DCAC80064986D /* FrankieAddContractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C12C76188DCAC80064986D /* FrankieAddContractViewController.m */; };
@@ -49,6 +49,8 @@
 		B51980491908673B00F3DF16 /* FrankieRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieRegisterViewController.h; sourceTree = "<group>"; };
 		B519804A1908673B00F3DF16 /* FrankieRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieRegisterViewController.m; sourceTree = "<group>"; };
 		B536D7E11AD3861A00181B23 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		B536D7E31AD397DA00181B23 /* FrankieStepsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieStepsViewController.h; sourceTree = "<group>"; };
+		B536D7E41AD397DA00181B23 /* FrankieStepsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieStepsViewController.m; sourceTree = "<group>"; };
 		B540A5D7187E087400C7BD7D /* FrankieMasterContractViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieMasterContractViewController.h; sourceTree = SOURCE_ROOT; };
 		B540A5D8187E087400C7BD7D /* FrankieMasterContractViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieMasterContractViewController.m; sourceTree = SOURCE_ROOT; };
 		B555856B187F8A1C007608EB /* FrankieDetailContractViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieDetailContractViewController.h; sourceTree = "<group>"; };
@@ -82,8 +84,6 @@
 		B5AA5D491AD14ADD00942153 /* FrankieSideMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieSideMenuViewController.m; sourceTree = "<group>"; };
 		B5AA5D4B1AD20ECE00942153 /* FrankieClientInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieClientInformationViewController.h; sourceTree = "<group>"; };
 		B5AA5D4C1AD20ECE00942153 /* FrankieClientInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieClientInformationViewController.m; sourceTree = "<group>"; };
-		B5AA5D4E1AD21B5F00942153 /* FrankieStepsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieStepsViewController.h; sourceTree = "<group>"; };
-		B5AA5D4F1AD21B5F00942153 /* FrankieStepsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieStepsViewController.m; sourceTree = "<group>"; };
 		B5AA5D511AD21BFF00942153 /* FrankieLocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieLocationViewController.h; sourceTree = "<group>"; };
 		B5AA5D521AD21BFF00942153 /* FrankieLocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieLocationViewController.m; sourceTree = "<group>"; };
 		B5B99A391ACB937B001A2421 /* RTNActivityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTNActivityView.h; sourceTree = "<group>"; };
@@ -137,10 +137,10 @@
 		B536D7DD1AD29F6A00181B23 /* Supplementary Views */ = {
 			isa = PBXGroup;
 			children = (
+				B536D7E31AD397DA00181B23 /* FrankieStepsViewController.h */,
+				B536D7E41AD397DA00181B23 /* FrankieStepsViewController.m */,
 				B5AA5D4B1AD20ECE00942153 /* FrankieClientInformationViewController.h */,
 				B5AA5D4C1AD20ECE00942153 /* FrankieClientInformationViewController.m */,
-				B5AA5D4E1AD21B5F00942153 /* FrankieStepsViewController.h */,
-				B5AA5D4F1AD21B5F00942153 /* FrankieStepsViewController.m */,
 				B5AA5D511AD21BFF00942153 /* FrankieLocationViewController.h */,
 				B5AA5D521AD21BFF00942153 /* FrankieLocationViewController.m */,
 			);
@@ -435,8 +435,8 @@
 				B5AA5D531AD21BFF00942153 /* FrankieLocationViewController.m in Sources */,
 				B555856D187F8A1C007608EB /* FrankieDetailContractViewController.m in Sources */,
 				B540A5D9187E087400C7BD7D /* FrankieMasterContractViewController.m in Sources */,
-				B5AA5D501AD21B5F00942153 /* FrankieStepsViewController.m in Sources */,
 				B519804B1908673B00F3DF16 /* FrankieRegisterViewController.m in Sources */,
+				B536D7E51AD397DA00181B23 /* FrankieStepsViewController.m in Sources */,
 				B5C12C77188DCAC80064986D /* FrankieAddContractViewController.m in Sources */,
 				B58AE09A1888AB6F0083A645 /* Model.xcdatamodeld in Sources */,
 				B5AA5D461AD12B6900942153 /* Contractor.m in Sources */,
