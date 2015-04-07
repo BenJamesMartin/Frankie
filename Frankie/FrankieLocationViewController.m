@@ -17,6 +17,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    
+    
+//    NSString *addressString = @"http://maps.apple.com/?q=1+Infinite+Loop,+Cupertino,+CA";
+//    NSURL *url = [NSURL URLWithString:addressString];
+//    [[UIApplication sharedApplication] openURL:url];
 }
 
 - (void)didReceiveMemoryWarning {

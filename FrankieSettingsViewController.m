@@ -34,7 +34,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    
+    [self.view endEditing:YES];
 }
 
 - (void)didReceiveMemoryWarning {

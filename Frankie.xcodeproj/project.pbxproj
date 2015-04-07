@@ -131,6 +131,19 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		B536D7DD1AD29F6A00181B23 /* Supplementary Views */ = {
+			isa = PBXGroup;
+			children = (
+				B5AA5D4B1AD20ECE00942153 /* FrankieClientInformationViewController.h */,
+				B5AA5D4C1AD20ECE00942153 /* FrankieClientInformationViewController.m */,
+				B5AA5D4E1AD21B5F00942153 /* FrankieStepsViewController.h */,
+				B5AA5D4F1AD21B5F00942153 /* FrankieStepsViewController.m */,
+				B5AA5D511AD21BFF00942153 /* FrankieLocationViewController.h */,
+				B5AA5D521AD21BFF00942153 /* FrankieLocationViewController.m */,
+			);
+			name = "Supplementary Views";
+			sourceTree = "<group>";
+		};
 		B55BB682187B647200BE3703 = {
 			isa = PBXGroup;
 			children = (
@@ -246,12 +259,7 @@
 			children = (
 				B5C12C75188DCAC80064986D /* FrankieAddContractViewController.h */,
 				B5C12C76188DCAC80064986D /* FrankieAddContractViewController.m */,
-				B5AA5D4B1AD20ECE00942153 /* FrankieClientInformationViewController.h */,
-				B5AA5D4C1AD20ECE00942153 /* FrankieClientInformationViewController.m */,
-				B5AA5D4E1AD21B5F00942153 /* FrankieStepsViewController.h */,
-				B5AA5D4F1AD21B5F00942153 /* FrankieStepsViewController.m */,
-				B5AA5D511AD21BFF00942153 /* FrankieLocationViewController.h */,
-				B5AA5D521AD21BFF00942153 /* FrankieLocationViewController.m */,
+				B536D7DD1AD29F6A00181B23 /* Supplementary Views */,
 			);
 			name = "New Contract";
 			sourceTree = "<group>";

@@ -7,6 +7,7 @@
 //
 
 #import "FrankieClientInformationViewController.h"
+#import "FrankieAddContractViewController.h"
 
 @interface FrankieClientInformationViewController ()
 
@@ -16,7 +17,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    self.clientInformation = [NSMutableDictionary new];
+    self.infoField = @[@"name", @"phone", @"email"];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -27,6 +30,9 @@
 // Save info
 - (void)viewWillDisappear:(BOOL)animated
 {
+    FrankieAddContractViewController *avc = [self.navigationController.viewControllers lastObject];
+    avc.clientInformation = self.clientInformation;
+    NSLog(@"self.clientInfo %@", self.clientInformation);
     [self.view endEditing:YES];
 }
 
@@ -68,9 +74,20 @@
 }
 
 
+#pragma mark - UITextFieldDelegate
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    self.clientInformation[self.infoField[textField.tag]] = textField.text;
+}
+
+
 #pragma mark - Format phone number
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    
+    if (textField.tag != 1)
+        return YES;
     
     int length = [self getLength:textField.text];
     

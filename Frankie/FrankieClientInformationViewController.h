@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FrankieClientInformationViewController : UIViewController
+@interface FrankieClientInformationViewController : UIViewController <UITextFieldDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+
+@property (strong, nonatomic) NSArray *infoField;
+@property (strong, nonatomic) NSMutableDictionary *clientInformation;
 
 @end

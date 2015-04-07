@@ -32,6 +32,8 @@
 @property (strong, nonatomic) FrankieClientInformationViewController *civc;
 @property (strong, nonatomic) FrankieLocationViewController *lvc;
 
+@property (strong, nonatomic) NSDictionary *clientInformation;
+
 - (IBAction)createNewContract:(id)sender;
 
 @end
