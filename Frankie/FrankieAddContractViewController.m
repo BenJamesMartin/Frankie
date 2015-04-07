@@ -44,29 +44,9 @@
     
     [super viewWillAppear:animated];
     
-    // this UIViewController is about to re-appear, make sure we remove the current selection in our table view
+    // Remove the current selection in our table view
     NSIndexPath *tableSelection = [self.tableView indexPathForSelectedRow];
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:tableSelection];
     [self.tableView deselectRowAtIndexPath:tableSelection animated:YES];
-    
-    // If client information has been filled out, replace accessory view with name of client
-    if (self.clientInformation[@"name"] != nil) {
-        UILabel *label = [UILabel new];
-        label.text = [NSString stringWithFormat:@"%@    ", self.clientInformation[@"name"]];
-        label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
-        label.textColor = [UIColor darkGrayColor];
-        [label sizeToFit];
-        cell.accessoryView = label;
-    }
-    
-    if (self.locationPlacemark != nil) {
-        UILabel *label = [UILabel new];
-        label.text = [NSString stringWithFormat:@"%@ %@   ", self.locationPlacemark.subThoroughfare, self.locationPlacemark.thoroughfare];
-        label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
-        label.textColor = [UIColor darkGrayColor];
-        [label sizeToFit];
-        cell.accessoryView = label;
-    }
 }
 
 - (void)viewDidLoad

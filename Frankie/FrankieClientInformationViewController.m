@@ -30,9 +30,21 @@
 // Save info
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [self.view endEditing:YES];
+    
     FrankieAddContractViewController *avc = [self.navigationController.viewControllers lastObject];
     avc.clientInformation = self.clientInformation;
-    [self.view endEditing:YES];
+    
+    // Modify table view cell in add contract VC associated with location VC
+    NSIndexPath *tableSelection = [avc.tableView indexPathForSelectedRow];
+    UITableViewCell *cell = [avc.tableView cellForRowAtIndexPath:tableSelection];
+    
+    UILabel *label = [UILabel new];
+    label.text = [NSString stringWithFormat:@"%@   ", self.clientInformation[@"name"]];
+    label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
+    label.textColor = [UIColor darkGrayColor];
+    [label sizeToFit];
+    cell.accessoryView = label;
 }
 
 - (void)didReceiveMemoryWarning {
