@@ -42,6 +42,12 @@
 #define COCOAPODS_VERSION_MINOR_SIAlertView 3
 #define COCOAPODS_VERSION_PATCH_SIAlertView 0
 
+// SVGeocoder
+#define COCOAPODS_POD_AVAILABLE_SVGeocoder
+#define COCOAPODS_VERSION_MAJOR_SVGeocoder 0
+#define COCOAPODS_VERSION_MINOR_SVGeocoder 1
+#define COCOAPODS_VERSION_PATCH_SVGeocoder 0
+
 // UITextField+Shake
 #define COCOAPODS_POD_AVAILABLE_UITextField_Shake
 #define COCOAPODS_VERSION_MAJOR_UITextField_Shake 0

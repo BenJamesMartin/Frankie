@@ -33,6 +33,7 @@
 @property (strong, nonatomic) FrankieLocationViewController *lvc;
 
 @property (strong, nonatomic) NSDictionary *clientInformation;
+@property (strong, nonatomic) SVPlacemark *locationPlacemark;
 
 - (IBAction)createNewContract:(id)sender;
 

@@ -7,6 +7,7 @@
 //
 
 #import "FrankieLocationViewController.h"
+#import "FrankieAddContractViewController.h"
 
 @interface FrankieLocationViewController ()
 
@@ -18,6 +19,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 200, 30)];
+    searchBar.delegate = self;
+    self.navigationItem.titleView = searchBar;
+    
+    [searchBar setTintColor:[UIColor whiteColor]];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:[UIColor colorFromHexCode:@"007AFF"]];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor darkGrayColor]}];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setDefaultTextAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"Avenir-Light" size:14.0]}];
     
     
 //    NSString *addressString = @"http://maps.apple.com/?q=1+Infinite+Loop,+Cupertino,+CA";
@@ -28,6 +37,40 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    FrankieAddContractViewController *avc = [self.navigationController.viewControllers lastObject];
+    avc.locationPlacemark = self.placemark;
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+//    CLGeocoder *geocoder = [CLGeocoder new];
+//    [geocoder geocodeAddressString:searchBar.text completionHandler:^(NSArray *placemarks, NSError *error) {
+//        
+//    }];
+    
+    [SVGeocoder geocode:searchBar.text
+        completion:^(NSArray *placemarks, NSHTTPURLResponse *urlResponse, NSError *error) {
+            SVPlacemark *placemark = [placemarks firstObject];
+            CLLocationCoordinate2D coordinate = placemark.coordinate;
+            
+            MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
+            [annotation setCoordinate:coordinate];
+            [annotation setTitle:searchBar.text];
+            [self.mapView addAnnotation:annotation];
+            
+            MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(coordinate, 1000, 1000);
+            [self.mapView setRegion:region animated:YES];
+            
+            self.placemark = placemark;
+            
+            [searchBar resignFirstResponder];
+        }];
 }
 
 /*

@@ -32,7 +32,6 @@
 {
     FrankieAddContractViewController *avc = [self.navigationController.viewControllers lastObject];
     avc.clientInformation = self.clientInformation;
-    NSLog(@"self.clientInfo %@", self.clientInformation);
     [self.view endEditing:YES];
 }
 

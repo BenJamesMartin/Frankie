@@ -50,9 +50,18 @@
     [self.tableView deselectRowAtIndexPath:tableSelection animated:YES];
     
     // If client information has been filled out, replace accessory view with name of client
-    if (self.clientInformation != nil) {
+    if (self.clientInformation[@"name"] != nil) {
         UILabel *label = [UILabel new];
         label.text = [NSString stringWithFormat:@"%@    ", self.clientInformation[@"name"]];
+        label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
+        label.textColor = [UIColor darkGrayColor];
+        [label sizeToFit];
+        cell.accessoryView = label;
+    }
+    
+    if (self.locationPlacemark != nil) {
+        UILabel *label = [UILabel new];
+        label.text = [NSString stringWithFormat:@"%@ %@   ", self.locationPlacemark.subThoroughfare, self.locationPlacemark.thoroughfare];
         label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
         label.textColor = [UIColor darkGrayColor];
         [label sizeToFit];

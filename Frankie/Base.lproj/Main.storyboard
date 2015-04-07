@@ -729,6 +729,7 @@
         <!--Frankie Location View Controller-->
         <scene sceneID="Rjd-9S-pXD">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dKR-3C-8dr" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="FrankieLocationViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="qBv-If-0Nh" customClass="FrankieLocationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MPn-00-STD"/>
@@ -737,11 +738,35 @@
                     <view key="view" contentMode="scaleToFill" id="AtH-32-ZCo">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="WhI-qr-nMg">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </mapView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="73n-6q-eIU"/>
+                    <connections>
+                        <outlet property="mapView" destination="WhI-qr-nMg" id="3WF-cG-OMf"/>
+                        <outlet property="searchDisplayController" destination="fTe-fb-9WZ" id="iNJ-4a-DB7"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dKR-3C-8dr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="zLa-SC-4SU">
+                    <connections>
+                        <outlet property="delegate" destination="qBv-If-0Nh" id="8Ne-GF-zVz"/>
+                        <outlet property="searchContentsController" destination="qBv-If-0Nh" id="9Kn-gH-wOR"/>
+                        <outlet property="searchResultsDataSource" destination="qBv-If-0Nh" id="BeQ-Y1-NkS"/>
+                        <outlet property="searchResultsDelegate" destination="qBv-If-0Nh" id="Q6H-oF-iab"/>
+                    </connections>
+                </searchDisplayController>
+                <searchDisplayController id="fTe-fb-9WZ">
+                    <connections>
+                        <outlet property="delegate" destination="qBv-If-0Nh" id="Yfy-yG-FRi"/>
+                        <outlet property="searchContentsController" destination="qBv-If-0Nh" id="vxg-Fh-dbF"/>
+                        <outlet property="searchResultsDataSource" destination="qBv-If-0Nh" id="R3U-lB-nyY"/>
+                        <outlet property="searchResultsDelegate" destination="qBv-If-0Nh" id="A3t-4X-9jY"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1525" y="2178"/>
         </scene>
