@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 @interface FrankieStepsDetailViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate>
 
@@ -16,8 +17,8 @@
 @property (strong, nonatomic) UITextField *nameField;
 @property (strong, nonatomic) UITextField *dueDateField;
 
-@property (strong, nonatomic) UIDatePicker *pickerView;
 @property (strong, nonatomic) UIImagePickerController *mediaPicker;
+@property (assign, nonatomic) BOOL hasSelectedImage;
 
 
 

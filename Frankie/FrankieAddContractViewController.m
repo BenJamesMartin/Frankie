@@ -299,6 +299,7 @@
         
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
         [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+        numberFormatter.maximumFractionDigits = 0;
         NSString *currencyString = [numberFormatter stringFromNumber:currency];
         textField.text = currencyString;
     }
@@ -328,7 +329,7 @@
         }
         
         NSUInteger newLength = textField.text.length + string.length - range.length;
-        return (newLength > 6) ? NO : YES;
+        return (newLength > 7) ? NO : YES;
     }
     return YES;
 }

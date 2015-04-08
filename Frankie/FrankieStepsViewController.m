@@ -42,18 +42,16 @@
 {
     FrankieAddContractViewController *avc = [self.navigationController.viewControllers lastObject];
     
-    if (self.stepCount > 0) {
-        NSIndexPath *tableSelection = [avc.tableView indexPathForSelectedRow];
-        UITableViewCell *cell = [avc.tableView cellForRowAtIndexPath:tableSelection];
-        
-        UILabel *label = [UILabel new];
-        NSString *labelText = (self.stepCount == 1 ? @"Step" : @"Steps");
-        label.text = [NSString stringWithFormat:@"%d %@    ", self.stepCount, labelText];
-        label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
-        label.textColor = [UIColor darkGrayColor];
-        [label sizeToFit];
-        cell.accessoryView = label;
-    }
+    NSIndexPath *tableSelection = [avc.tableView indexPathForSelectedRow];
+    UITableViewCell *cell = [avc.tableView cellForRowAtIndexPath:tableSelection];
+    
+    UILabel *label = [UILabel new];
+    NSString *labelText = (self.stepCount == 1 ? @"Step" : @"Steps");
+    label.text = [NSString stringWithFormat:@"%d %@    ", self.stepCount, labelText];
+    label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
+    label.textColor = [UIColor darkGrayColor];
+    [label sizeToFit];
+    cell.accessoryView = label;
 }
 
 - (void)addStep
@@ -121,6 +119,7 @@
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
+
 
 /*
 // Override to support conditional editing of the table view.

@@ -45,6 +45,9 @@
         label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
         label.textColor = [UIColor darkGrayColor];
         [label sizeToFit];
+        if (label.frame.size.width > 135) {
+            label.frame = CGRectMake(label.frame.origin.x, label.frame.origin.y, 135, label.frame.size.height);
+        }
         cell.accessoryView = label;
     }
 }

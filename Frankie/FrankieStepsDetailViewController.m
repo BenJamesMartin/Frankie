@@ -43,6 +43,9 @@
     if (self.dueDateField != nil) {
         cell.dueDate.text = self.dueDateField.text;
     }
+    if (self.hasSelectedImage) {
+        cell.picture.image = self.uploadButton.imageView.image;
+    }
 }
 
 
@@ -117,8 +120,68 @@
 }
 
 - (IBAction)choosePhoto:(id)sender {
+    self.mediaPicker = [[UIImagePickerController alloc] init];
+    [self.mediaPicker setDelegate:self];
+    self.mediaPicker.allowsEditing = YES;
+    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+//        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+//        UIAlertAction *actionTakePhoto = [UIAlertAction actionWithTitle:@"Take photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//            
+//        }];
+//        UIAlertAction *actionChooseExisting = [UIAlertAction actionWithTitle:@"Choose Existing" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//            
+//        }];
+//        
+//        [alertController addAction:actionTakePhoto];
+//        [alertController addAction:actionChooseExisting];
+//        
+//        [self presentViewController:alertController animated:YES completion:^{
+//        
+//        }];
+        
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                 delegate:self
+                                                        cancelButtonTitle:@"Cancel"
+                                                   destructiveButtonTitle:nil
+                                                        otherButtonTitles:@"Take photo", @"Choose Existing", nil];
+        
+        [actionSheet showInView:self.view];
+    } else {
+        self.mediaPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self presentViewController:self.mediaPicker animated:YES completion:NULL];
+    }
 }
 
+
+# pragma mark - UIImagePickerController delegate methods
+
+-(void) imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    [self.navigationController popViewControllerAnimated:NO];
+}
+
+-(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    self.hasSelectedImage = YES;
+    if (self.mediaPicker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        [self.uploadButton setImage:image forState:UIControlStateNormal];
+        self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    }
+    else {
+        NSURL *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        [library assetForURL:referenceURL resultBlock:^(ALAsset *asset) {
+            UIImage  *copyOfOriginalImage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
+            [self.uploadButton setImage:copyOfOriginalImage forState:UIControlStateNormal];
+            self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        }
+                failureBlock:^(NSError *error) {
+                    // error handling
+                }];
+    }
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
 
 
 /*
