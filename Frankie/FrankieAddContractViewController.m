@@ -254,7 +254,7 @@
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
-#pragma mark - UITextField delegate methods
+#pragma mark - UITextField delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField) {

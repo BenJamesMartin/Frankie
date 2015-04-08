@@ -34,6 +34,7 @@
 
 @property (strong, nonatomic) NSDictionary *clientInformation;
 @property (strong, nonatomic) SVPlacemark *locationPlacemark;
+@property (assign, nonatomic) int stepCount;
 
 - (IBAction)createNewContract:(id)sender;
 

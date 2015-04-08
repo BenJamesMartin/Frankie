@@ -7,6 +7,10 @@
 //
 
 #import "FrankieStepsViewController.h"
+#import "FrankieStepsTableViewCell.h"
+#import "FrankieStepsDetailViewController.h"
+
+#import "FrankieAddContractViewController.h"
 
 @interface FrankieStepsViewController ()
 
@@ -21,12 +25,35 @@
     
     self.steps = [NSMutableArray new];
     self.stepCount = 0;
+    self.cellForDetailView = [NSMutableDictionary new];
+    
+//    [self.tableView registerClass:[FrankieStepsTableViewCell class] forCellReuseIdentifier:@"Cell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"StepsCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
+    self.tableView.allowsMultipleSelectionDuringEditing = NO;
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    FrankieAddContractViewController *avc = [self.navigationController.viewControllers lastObject];
+    
+    if (self.stepCount > 0) {
+        NSIndexPath *tableSelection = [avc.tableView indexPathForSelectedRow];
+        UITableViewCell *cell = [avc.tableView cellForRowAtIndexPath:tableSelection];
+        
+        UILabel *label = [UILabel new];
+        NSString *labelText = (self.stepCount == 1 ? @"Step" : @"Steps");
+        label.text = [NSString stringWithFormat:@"%d %@    ", self.stepCount, labelText];
+        label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
+        label.textColor = [UIColor darkGrayColor];
+        [label sizeToFit];
+        cell.accessoryView = label;
+    }
 }
 
 - (void)addStep
@@ -57,15 +84,42 @@
 {
     NSString *cellIdentifier = [NSString stringWithFormat:@"Cell"];
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    FrankieStepsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[FrankieStepsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    cell.textLabel.text = @"New Step";
+    cell.picture.image = [UIImage imageNamed:@"profile-default"];
+
+    
+//    cell.textLabel.text = @"New Step";
     
     return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+    FrankieStepsDetailViewController *dvc = self.cellForDetailView[cell.description];
+    
+    if (dvc == nil) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        dvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsDetailViewController"];
+        self.cellForDetailView[cell.description] = dvc;
+    }
+
+    [self.navigationController pushViewController:dvc animated:YES];
+}
+
+// Allow deletion of steps by side swipe
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        self.stepCount--;
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 /*

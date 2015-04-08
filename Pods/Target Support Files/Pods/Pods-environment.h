@@ -36,6 +36,12 @@
 #define COCOAPODS_VERSION_MINOR_Parse 7
 #define COCOAPODS_VERSION_PATCH_Parse 0
 
+// RMDateSelectionViewController
+#define COCOAPODS_POD_AVAILABLE_RMDateSelectionViewController
+#define COCOAPODS_VERSION_MAJOR_RMDateSelectionViewController 1
+#define COCOAPODS_VERSION_MINOR_RMDateSelectionViewController 5
+#define COCOAPODS_VERSION_PATCH_RMDateSelectionViewController 0
+
 // SIAlertView
 #define COCOAPODS_POD_AVAILABLE_SIAlertView
 #define COCOAPODS_VERSION_MAJOR_SIAlertView 1

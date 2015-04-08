@@ -11,7 +11,10 @@
 		B519804B1908673B00F3DF16 /* FrankieRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B519804A1908673B00F3DF16 /* FrankieRegisterViewController.m */; };
 		B536D7E21AD3861A00181B23 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B536D7E11AD3861A00181B23 /* MapKit.framework */; };
 		B536D7E51AD397DA00181B23 /* FrankieStepsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B536D7E41AD397DA00181B23 /* FrankieStepsViewController.m */; };
+		B536D7E81AD3EDCC00181B23 /* FrankieStepsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B536D7E71AD3EDCC00181B23 /* FrankieStepsTableViewCell.m */; };
 		B540A5D9187E087400C7BD7D /* FrankieMasterContractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B540A5D8187E087400C7BD7D /* FrankieMasterContractViewController.m */; };
+		B548A03A1AD4AECB00C74DF5 /* StepsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B548A0391AD4AECB00C74DF5 /* StepsCell.xib */; };
+		B548A0401AD4BDDB00C74DF5 /* FrankieStepsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B548A03F1AD4BDDB00C74DF5 /* FrankieStepsDetailViewController.m */; };
 		B555856D187F8A1C007608EB /* FrankieDetailContractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B555856C187F8A1C007608EB /* FrankieDetailContractViewController.m */; };
 		B55BB699187B647200BE3703 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B55BB697187B647200BE3703 /* InfoPlist.strings */; };
 		B55BB69B187B647200BE3703 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B55BB69A187B647200BE3703 /* main.m */; };
@@ -51,8 +54,13 @@
 		B536D7E11AD3861A00181B23 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		B536D7E31AD397DA00181B23 /* FrankieStepsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieStepsViewController.h; sourceTree = "<group>"; };
 		B536D7E41AD397DA00181B23 /* FrankieStepsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieStepsViewController.m; sourceTree = "<group>"; };
+		B536D7E61AD3EDCC00181B23 /* FrankieStepsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieStepsTableViewCell.h; sourceTree = "<group>"; };
+		B536D7E71AD3EDCC00181B23 /* FrankieStepsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieStepsTableViewCell.m; sourceTree = "<group>"; };
 		B540A5D7187E087400C7BD7D /* FrankieMasterContractViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieMasterContractViewController.h; sourceTree = SOURCE_ROOT; };
 		B540A5D8187E087400C7BD7D /* FrankieMasterContractViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieMasterContractViewController.m; sourceTree = SOURCE_ROOT; };
+		B548A0391AD4AECB00C74DF5 /* StepsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StepsCell.xib; sourceTree = "<group>"; };
+		B548A03E1AD4BDDB00C74DF5 /* FrankieStepsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieStepsDetailViewController.h; sourceTree = "<group>"; };
+		B548A03F1AD4BDDB00C74DF5 /* FrankieStepsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieStepsDetailViewController.m; sourceTree = "<group>"; };
 		B555856B187F8A1C007608EB /* FrankieDetailContractViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieDetailContractViewController.h; sourceTree = "<group>"; };
 		B555856C187F8A1C007608EB /* FrankieDetailContractViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieDetailContractViewController.m; sourceTree = "<group>"; };
 		B55BB68B187B647200BE3703 /* Frankie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Frankie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,14 +145,27 @@
 		B536D7DD1AD29F6A00181B23 /* Supplementary Views */ = {
 			isa = PBXGroup;
 			children = (
-				B536D7E31AD397DA00181B23 /* FrankieStepsViewController.h */,
-				B536D7E41AD397DA00181B23 /* FrankieStepsViewController.m */,
+				B536D7E91AD3EDD000181B23 /* Steps */,
 				B5AA5D4B1AD20ECE00942153 /* FrankieClientInformationViewController.h */,
 				B5AA5D4C1AD20ECE00942153 /* FrankieClientInformationViewController.m */,
 				B5AA5D511AD21BFF00942153 /* FrankieLocationViewController.h */,
 				B5AA5D521AD21BFF00942153 /* FrankieLocationViewController.m */,
 			);
 			name = "Supplementary Views";
+			sourceTree = "<group>";
+		};
+		B536D7E91AD3EDD000181B23 /* Steps */ = {
+			isa = PBXGroup;
+			children = (
+				B536D7E31AD397DA00181B23 /* FrankieStepsViewController.h */,
+				B536D7E41AD397DA00181B23 /* FrankieStepsViewController.m */,
+				B536D7E61AD3EDCC00181B23 /* FrankieStepsTableViewCell.h */,
+				B536D7E71AD3EDCC00181B23 /* FrankieStepsTableViewCell.m */,
+				B548A0391AD4AECB00C74DF5 /* StepsCell.xib */,
+				B548A03E1AD4BDDB00C74DF5 /* FrankieStepsDetailViewController.h */,
+				B548A03F1AD4BDDB00C74DF5 /* FrankieStepsDetailViewController.m */,
+			);
+			name = Steps;
 			sourceTree = "<group>";
 		};
 		B55BB682187B647200BE3703 = {
@@ -376,6 +397,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B55BB699187B647200BE3703 /* InfoPlist.strings in Resources */,
+				B548A03A1AD4AECB00C74DF5 /* StepsCell.xib in Resources */,
 				B5855483191E485200CA987C /* Images.xcassets in Resources */,
 				B55BB6A2187B647200BE3703 /* Main.storyboard in Resources */,
 			);
@@ -431,6 +453,7 @@
 			files = (
 				B5759490192C89D700303786 /* FrankieResetPasswordViewController.m in Sources */,
 				B575077B19258D97001D97E6 /* Job.m in Sources */,
+				B548A0401AD4BDDB00C74DF5 /* FrankieStepsDetailViewController.m in Sources */,
 				B5AA5D4D1AD20ECE00942153 /* FrankieClientInformationViewController.m in Sources */,
 				B5AA5D531AD21BFF00942153 /* FrankieLocationViewController.m in Sources */,
 				B555856D187F8A1C007608EB /* FrankieDetailContractViewController.m in Sources */,
@@ -439,6 +462,7 @@
 				B536D7E51AD397DA00181B23 /* FrankieStepsViewController.m in Sources */,
 				B5C12C77188DCAC80064986D /* FrankieAddContractViewController.m in Sources */,
 				B58AE09A1888AB6F0083A645 /* Model.xcdatamodeld in Sources */,
+				B536D7E81AD3EDCC00181B23 /* FrankieStepsTableViewCell.m in Sources */,
 				B5AA5D461AD12B6900942153 /* Contractor.m in Sources */,
 				B5B99A3B1ACB937B001A2421 /* RTNActivityView.m in Sources */,
 				B55BB69F187B647200BE3703 /* FrankieAppDelegate.m in Sources */,

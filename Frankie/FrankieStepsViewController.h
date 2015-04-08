@@ -13,4 +13,6 @@
 @property (strong, nonatomic) NSMutableArray *steps;
 @property (assign, nonatomic) int stepCount;
 
+@property (strong, nonatomic) NSMutableDictionary *cellForDetailView;
+
 @end

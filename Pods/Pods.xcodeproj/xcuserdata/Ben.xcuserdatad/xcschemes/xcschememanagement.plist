@@ -29,6 +29,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-RMDateSelectionViewController.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-SIAlertView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -57,52 +62,57 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0ED4F8EF6BEA50674948BC42</key>
+		<key>21523445D9C857F2F809BF7B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>16C3ECED7D43BC6B3032AB50</key>
+		<key>457FC0377973098F0B1694E5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>29AB0E3E26AC76E1E2921DE6</key>
+		<key>967E295985DBE6B90ED153AE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>38F8AFB8FC9B7297217CAE99</key>
+		<key>9A6EBD367281D52B6F08860D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>509406551C3D197678EDA46C</key>
+		<key>AE267AA3A2260D614E0D3BC1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>555BC50C0F8B6AE6B141625E</key>
+		<key>B7EBBDC56ECDA4D5F54676D6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>65CD16E2E1CD71F32FB0AC9F</key>
+		<key>BFCB19E30552CABEF65BA245</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D08BB8E1391441E223833684</key>
+		<key>C12048E1AD8C2A433EBDF88A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DBD50F5A0AF822D0DB2EE00E</key>
+		<key>C668E335DCCDE6E1729EA209</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E8179830C5C36C4D9C738A55</key>
+		<key>DE40D3FA5FC70CF3ED96C270</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DE988EBDDB6483590DAF8C99</key>
 		<dict>
 			<key>primary</key>
 			<true/>
