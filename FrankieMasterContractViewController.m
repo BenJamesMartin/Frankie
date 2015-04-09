@@ -54,7 +54,8 @@
 - (void)revealLeftMenu
 {
     NSLog(@"done");
-    [self.revealSideViewController pushOldViewControllerOnDirection:PPRevealSideDirectionLeft animated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"revealSideMenu" object:nil];
+//    [self.revealSideViewController pushOldViewControllerOnDirection:PPRevealSideDirectionLeft animated:YES];
 //    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 //    FrankieSideMenuViewController *smvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieSideMenuViewController"];
 //    [self.revealSideViewController pushViewController:smvc onDirection:PPRevealSideDirectionLeft animated:YES completion:^{

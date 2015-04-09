@@ -12,6 +12,7 @@
 #import "RTNActivityView.h"
 #import "FrankieRegisterViewController.h"
 #import "FrankieMasterContractViewController.h"
+#import "FrankieAppDelegate.h"
 #import "SIAlertView.h"
 
 @interface FrankieRegisterViewController ()
@@ -117,7 +118,9 @@
                 alertView.transitionStyle = SIAlertViewTransitionStyleFade;
                 [alertView show];
                 
-                FrankieMasterContractViewController * masterVC = [[FrankieMasterContractViewController alloc] init];
+                FrankieAppDelegate *delegate = (FrankieAppDelegate *)[[UIApplication sharedApplication] delegate];
+                FrankieMasterContractViewController *masterVC = [[FrankieMasterContractViewController alloc] init];
+                delegate.masterVC = masterVC;
                 [self.navigationController pushViewController:masterVC animated:YES];
                 [RTNActivityView hide];
             }

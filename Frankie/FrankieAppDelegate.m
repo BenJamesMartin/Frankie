@@ -54,8 +54,16 @@
 
 - (void)initializeObservers
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logout) name:@"logout" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(revealSideMenu) name:@"revealSideMenu" object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(navigateToProfile) name:@"navigateToProfile" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(navigateToProjects) name:@"navigateToProjects" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logout) name:@"logout" object:nil];
+}
+
+- (void)revealSideMenu
+{
+    [self.rsvc pushOldViewControllerOnDirection:PPRevealSideDirectionLeft animated:YES];
 }
 
 - (void)logout
@@ -72,8 +80,19 @@
         self.settingsVC = [storyboard instantiateViewControllerWithIdentifier:@"FrankieSettingsViewController"];   
     }
     [self.rsvc popViewControllerAnimated:YES];
-    [self.nc pushViewController:self.settingsVC animated:YES];
+    if ([self.nc.viewControllers indexOfObject:self] == NSNotFound) {
+        [self.nc popViewControllerAnimated:NO];
+        [self.nc pushViewController:self.settingsVC animated:NO];
+    }
+}
 
+- (void)navigateToProjects
+{
+    [self.rsvc popViewControllerAnimated:YES];
+    if ([self.nc.viewControllers indexOfObject:self.masterVC] == NSNotFound) {
+        [self.nc popViewControllerAnimated:NO];
+        [self.nc pushViewController:self.masterVC animated:NO];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

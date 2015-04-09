@@ -12,6 +12,8 @@
 #import "FrankieStepsViewController.h"
 #import "FrankieStepsTableViewCell.h"
 
+#import "ProjectStep.h"
+
 @interface FrankieStepsDetailViewController ()
 
 @end
@@ -20,7 +22,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    self.step = [ProjectStep new];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -32,20 +35,23 @@
 {
     [self.view endEditing:YES];
     
-    FrankieStepsDetailViewController *svc = (FrankieStepsDetailViewController *)[self.navigationController.viewControllers lastObject];
+    FrankieStepsViewController *svc = (FrankieStepsViewController *)[self.navigationController.viewControllers lastObject];
     
     NSIndexPath *tableSelection = [svc.tableView indexPathForSelectedRow];
     FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[svc.tableView cellForRowAtIndexPath:tableSelection];
     
-    if (self.nameField != nil) {
+    if (self.nameField.text.length > 0) {
         cell.name.text = self.nameField.text;
+        self.step.name = self.nameField.text;
     }
-    if (self.dueDateField != nil) {
+    if (self.dueDateField.text.length > 0) {
         cell.dueDate.text = self.dueDateField.text;
     }
     if (self.hasSelectedImage) {
         cell.picture.image = self.uploadButton.imageView.image;
     }
+    
+    [svc.steps addObject:self.step];
 }
 
 
@@ -102,7 +108,6 @@
 
 #pragma mark - Date picker
 
-// Change this to UIAlertController
 - (void)showDatePicker
 {
     RMDateSelectionViewController *dateSelectionVC = [RMDateSelectionViewController dateSelectionController];
@@ -111,6 +116,7 @@
         NSDateFormatter *formatter = [NSDateFormatter new];
         formatter.dateFormat = @"MMMM dd, yyyy";
         self.dueDateField.text = [formatter stringFromDate:date];
+        self.step.dueDate = date;
     }];
     
     [dateSelectionVC setCancelButtonAction:^(RMDateSelectionViewController *controller) {
@@ -177,6 +183,20 @@
             }];
     }
     [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
+    view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
+    return view;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
+    view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
+    return view;
 }
 
 

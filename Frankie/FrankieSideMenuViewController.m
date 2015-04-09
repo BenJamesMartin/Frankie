@@ -46,7 +46,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return 2;
+    return 3;
 }
 
 
@@ -82,6 +82,9 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"navigateToProfile" object:nil];
     }
     else if (indexPath.row == 1) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"navigateToProjects" object:nil];
+    }
+    else if (indexPath.row == 2) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"logout" object:nil];
     }
 }

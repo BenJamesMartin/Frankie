@@ -27,6 +27,15 @@
                selector:@selector(keyboardShow)
                    name:UIKeyboardWillShowNotification
                  object:nil];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger-icon"] landscapeImagePhone:nil style:UIBarButtonItemStylePlain target:self action:@selector(revealLeftMenu)];
+
+    self.tableView.contentInset = UIEdgeInsetsMake(-35, 0, 0, 0);
+}
+
+- (void)revealLeftMenu
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"revealSideMenu" object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -247,6 +256,21 @@
         self.mediaPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentViewController:self.mediaPicker animated:YES completion:NULL];
     }
+}
+
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
+    view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
+    return view;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
+    view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
+    return view;
 }
 
 

@@ -27,7 +27,6 @@
     self.stepCount = 0;
     self.cellForDetailView = [NSMutableDictionary new];
     
-//    [self.tableView registerClass:[FrankieStepsTableViewCell class] forCellReuseIdentifier:@"Cell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"StepsCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     
@@ -38,27 +37,63 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+
+
+- (void)viewDidAppear:(BOOL)animated
 {
-    FrankieAddContractViewController *avc = [self.navigationController.viewControllers lastObject];
+    NSLog(@"what is this %lu", [self.navigationController.viewControllers indexOfObject:self]);
+}
+
+-(void)willMoveToParentViewController:(UIViewController *)parent
+{
+    [super willMoveToParentViewController:parent];
     
-    NSIndexPath *tableSelection = [avc.tableView indexPathForSelectedRow];
-    UITableViewCell *cell = [avc.tableView cellForRowAtIndexPath:tableSelection];
-    
-    UILabel *label = [UILabel new];
-    NSString *labelText = (self.stepCount == 1 ? @"Step" : @"Steps");
-    label.text = [NSString stringWithFormat:@"%d %@    ", self.stepCount, labelText];
-    label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
-    label.textColor = [UIColor darkGrayColor];
-    [label sizeToFit];
-    cell.accessoryView = label;
+    // Navigating back to add contract VC
+    if (!parent){
+        // Set text of steps cell and set steps property in add contract VC
+        FrankieAddContractViewController *avc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+        
+        NSIndexPath *tableSelection = [avc.tableView indexPathForSelectedRow];
+        UITableViewCell *cell = [avc.tableView cellForRowAtIndexPath:tableSelection];
+        
+        UILabel *label = [UILabel new];
+        NSString *labelText = (self.stepCount == 1 ? @"Step" : @"Steps");
+        label.text = [NSString stringWithFormat:@"%d %@    ", self.stepCount, labelText];
+        label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
+        label.textColor = [UIColor darkGrayColor];
+        [label sizeToFit];
+        cell.accessoryView = label;
+        
+        avc.steps = self.steps;
+    }
 }
 
 - (void)addStep
 {
-    NSIndexPath *path = [NSIndexPath indexPathForRow:self.stepCount inSection:0];
-    self.stepCount++;
-    [self.tableView insertRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationFade];
+    // Push new VC for step
+    // When returning, create new cell for that step and add to dictionary
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    FrankieStepsDetailViewController *dvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsDetailViewController"];
+    [self.navigationController pushViewController:dvc animated:YES];
+
+//    NSInteger rowCount = [self.tableView numberOfRowsInSection:0];
+//    NSIndexPath *path = [NSIndexPath indexPathForRow:rowCount - 1 inSection:0];
+    
+//    FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+//    FrankieStepsDetailViewController *dvc = self.cellForDetailView[cell.description];
+//    
+//    if (dvc == nil) {
+//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+//        dvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsDetailViewController"];
+//        self.cellForDetailView[cell.description] = dvc;
+//    }
+    
+//    [self.navigationController pushViewController:dvc animated:YES];
+//    
+//    NSIndexPath *path = [NSIndexPath indexPathForRow:self.stepCount inSection:0];
+//    self.stepCount++;
+//    [self.tableView insertRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)didReceiveMemoryWarning {

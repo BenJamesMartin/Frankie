@@ -56,6 +56,17 @@
     self.navigationItem.title = @"New Project";
     self.projectDate.text = @"due date";
     [self.uploadButton setImage:[UIImage imageNamed:@"image-upload-icon.png"] forState:UIControlStateNormal];
+    self.steps = @[];
+    
+    // Set left bar button item (Cancel button)
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(cancelCreation)];
+    
+    self.navigationItem.leftBarButtonItem = backItem;
+
+    self.projectHasBeenEdited = NO;
     
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     
@@ -70,8 +81,27 @@
                selector:@selector(keyboardShown)
                    name:UIKeyboardWillShowNotification
                  object:nil];
-    
-    [self addPadding];
+}
+
+- (void)cancelCreation
+{
+    if (self.projectHasBeenEdited) {
+        UIAlertController *cancelController = [UIAlertController alertControllerWithTitle:@"Cancel Upload?" message:@"Are you sure you wish to cancel the creation of this project?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        
+        [cancelController addAction:confirm];
+        [cancelController addAction:cancel];
+        
+        [self presentViewController:cancelController animated:YES completion:nil];
+    }
+    else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -80,14 +110,6 @@
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [center removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-}
-
-- (void)addPadding {
-    for (id x in [self.keyboardScrollView subviews]) {
-        if ([x isKindOfClass:[UITextView class]]) {
-            ((UITextView*)x).textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
-        }
-    }
 }
 
 // Adds gesture recognizer to image upload button so can be tapped to dismiss keyboard
@@ -122,7 +144,8 @@
 
 #pragma mark - createNewContract
 
-- (IBAction)createNewContract:(id)sender {
+- (IBAction)createNewContract:(id)sender
+{
     NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
     NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Job class]) inManagedObjectContext:context];
@@ -131,7 +154,7 @@
     [entity setValue:self.firstStep.text  forKey:@"nextStep"];
     float price = [[self.price.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]] floatValue];
     [entity setValue:[NSNumber numberWithFloat:price] forKey:@"price"];
-    [entity setValue:self.notes.text forKey:@"notes"];
+//    [entity setValue:self.notes.text forKey:@"notes"];
     [entity setValue:[NSNumber numberWithBool:NO] forKeyPath:@"completed"];
     [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString] forKey:@"objectId"];
     
@@ -163,9 +186,9 @@
     
     project[@"completed"] = [NSNumber numberWithBool:NO];
     project[@"price"] = [NSNumber numberWithInt:[self.price.text integerValue]];
-    if (![self.notes.text isEqualToString:@"additional notes"]) {
-        project[@"notes"] = self.notes.text;
-    }
+//    if (![self.notes.text isEqualToString:@"additional notes"]) {
+//        project[@"notes"] = self.notes.text;
+//    }
     project.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
 
     if (imageData != nil) {
@@ -184,7 +207,10 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)choosePhoto:(id)sender {
+- (IBAction)choosePhoto:(id)sender
+{
+    self.projectHasBeenEdited = YES;
+    
     self.mediaPicker = [UIImagePickerController new];
     [self.mediaPicker setDelegate:self];
     self.mediaPicker.allowsEditing = YES;
@@ -273,7 +299,8 @@
         return YES;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
     if (textField.tag == 1 && textField.text.length > 0) {
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         formatter.numberStyle = NSNumberFormatterCurrencyStyle;
@@ -321,6 +348,8 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    self.projectHasBeenEdited = YES;
+    
     // If the textField is the price textField, don't let the length of the price textField exceed six numbers
     if (textField.tag == 1) {
         if (range.length + range.location > textField.text.length) {
@@ -333,36 +362,8 @@
     return YES;
 }
 
-#pragma mark - UITextView delegate methods
 
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.keyboardScrollView setContentOffset:CGPointMake(0, 120)];
-    }];
-    
-    if ([textView.text isEqualToString:@"additional notes"]) {
-        textView.text = @"";
-        textView.textAlignment = NSTextAlignmentLeft;
-        textView.textColor = [UIColor colorWithRed:150/255.f green:150/255.f blue:160/255.f alpha:1.0];
-    }
-    [textView becomeFirstResponder];
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
-    
-    [UIView animateWithDuration:0.50 animations:^{
-        [self.keyboardScrollView setContentOffset:CGPointMake(self.keyboardScrollView.contentOffset.x, -self.keyboardScrollView.contentInset.top)];
-    }];
-    
-    if ([textView.text isEqualToString:@""]) {
-        textView.text = @"additional notes";
-        textView.textAlignment = NSTextAlignmentCenter;
-        textView.textColor = [UIColor colorWithRed:185/255.f green:185/255.f blue:185/255.f alpha:1.0];
-    }
-    [textView resignFirstResponder];
-}
+#pragma mark - Old date picker methods
 
 - (void)showDatePicker
 {
@@ -396,7 +397,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 5;
+    return 6;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -418,6 +419,8 @@
 // Manually perform navigation controller push to keep reference to each VC
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    self.projectHasBeenEdited = YES;
+    
     [self.view endEditing:YES];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     
@@ -443,6 +446,13 @@
         }
         [self.navigationController pushViewController:self.lvc animated:YES];
     }
+    // Notes
+    else if (indexPath.row == 5) {
+        if (self.nvc == nil) {
+            self.nvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieNotesViewController"];
+        }
+        [self.navigationController pushViewController:self.nvc animated:YES];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -453,21 +463,21 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
-    view.backgroundColor = [UIColor colorWithRed:220/255.f green:220/255.f blue:220/255.f alpha:1.0];
+    view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
     return view;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
-    view.backgroundColor = [UIColor colorWithRed:220/255.f green:220/255.f blue:220/255.f alpha:1.0];
+    view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
     return view;
 }
 
-//- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-//{
-//    return @" ";
-//}
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    return @" ";
+}
 
 
 

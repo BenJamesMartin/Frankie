@@ -11,6 +11,7 @@
 
 #import "FrankieLoginViewController.h"
 #import "FrankieMasterContractViewController.h"
+#import "FrankieAppDelegate.h"
 #import "SIAlertView.h"
 #import "RTNActivityView.h"
 
@@ -78,10 +79,12 @@
     self.password.textColor = [UIColor darkGrayColor];
 }
 
-- (void)navigateToMasterContractViewController {
-    
+- (void)navigateToMasterContractViewController
+{
+    FrankieAppDelegate *delegate = (FrankieAppDelegate *)[[UIApplication sharedApplication] delegate];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     FrankieMasterContractViewController *masterVC = [storyboard instantiateViewControllerWithIdentifier:@"Master"];
+    delegate.masterVC = masterVC;
     [self.navigationController pushViewController:masterVC animated:YES];
 }
 

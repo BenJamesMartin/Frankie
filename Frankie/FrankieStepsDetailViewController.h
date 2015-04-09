@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 
+#import "ProjectStep.h"
+
 @interface FrankieStepsDetailViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIButton *uploadButton;
@@ -20,6 +22,7 @@
 @property (strong, nonatomic) UIImagePickerController *mediaPicker;
 @property (assign, nonatomic) BOOL hasSelectedImage;
 
+@property (strong, nonatomic) ProjectStep *step;
 
 
 @end
