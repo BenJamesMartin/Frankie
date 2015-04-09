@@ -13,7 +13,7 @@
 #import "FrankieClientInformationViewController.h"
 #import "FrankieLocationViewController.h"
 
-@interface FrankieAddContractViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UINavigationControllerDelegate, UIScrollViewDelegate>
+@interface FrankieAddContractViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UINavigationControllerDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 
 @property (strong, nonatomic) IBOutlet UIScrollView *keyboardScrollView;

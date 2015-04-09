@@ -185,7 +185,7 @@
 }
 
 - (IBAction)choosePhoto:(id)sender {
-    self.mediaPicker = [[UIImagePickerController alloc] init];
+    self.mediaPicker = [UIImagePickerController new];
     [self.mediaPicker setDelegate:self];
     self.mediaPicker.allowsEditing = YES;
     
@@ -235,16 +235,16 @@
 -(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     if (self.mediaPicker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-        [self.uploadButton setImage:image forState:UIControlStateNormal];
         self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self.uploadButton setImage:image forState:UIControlStateNormal];
     }
     else {
         NSURL *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
         [library assetForURL:referenceURL resultBlock:^(ALAsset *asset) {
             UIImage  *copyOfOriginalImage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
-            [self.uploadButton setImage:copyOfOriginalImage forState:UIControlStateNormal];
             self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+            [self.uploadButton setImage:copyOfOriginalImage forState:UIControlStateNormal];
          }
         failureBlock:^(NSError *error) {
              // error handling
@@ -418,6 +418,7 @@
 // Manually perform navigation controller push to keep reference to each VC
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self.view endEditing:YES];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     
     // Steps
@@ -448,6 +449,25 @@
 {
     return 44; // Default height
 }
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
+    view.backgroundColor = [UIColor colorWithRed:220/255.f green:220/255.f blue:220/255.f alpha:1.0];
+    return view;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
+    view.backgroundColor = [UIColor colorWithRed:220/255.f green:220/255.f blue:220/255.f alpha:1.0];
+    return view;
+}
+
+//- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+//{
+//    return @" ";
+//}
 
 
 

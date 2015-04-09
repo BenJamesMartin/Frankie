@@ -120,34 +120,31 @@
 }
 
 - (IBAction)choosePhoto:(id)sender {
-    self.mediaPicker = [[UIImagePickerController alloc] init];
-    [self.mediaPicker setDelegate:self];
+    self.mediaPicker = [UIImagePickerController new];
+    self.mediaPicker.delegate = self;
     self.mediaPicker.allowsEditing = YES;
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-//        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-//        UIAlertAction *actionTakePhoto = [UIAlertAction actionWithTitle:@"Take photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-//            
-//        }];
-//        UIAlertAction *actionChooseExisting = [UIAlertAction actionWithTitle:@"Choose Existing" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-//            
-//        }];
-//        
-//        [alertController addAction:actionTakePhoto];
-//        [alertController addAction:actionChooseExisting];
-//        
-//        [self presentViewController:alertController animated:YES completion:^{
-//        
-//        }];
+        UIAlertController *uploadPhotoController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                 delegate:self
-                                                        cancelButtonTitle:@"Cancel"
-                                                   destructiveButtonTitle:nil
-                                                        otherButtonTitles:@"Take photo", @"Choose Existing", nil];
+        UIAlertAction *takePhoto = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            self.mediaPicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self presentViewController:self.mediaPicker animated:YES completion:NULL];
+        }];
+        UIAlertAction *chooseExisting = [UIAlertAction actionWithTitle:@"Choose Existing" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            self.mediaPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            [self presentViewController:self.mediaPicker animated:YES completion:NULL];
+        }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        [uploadPhotoController addAction:takePhoto];
+        [uploadPhotoController addAction:chooseExisting];
+        [uploadPhotoController addAction:cancel];
         
-        [actionSheet showInView:self.view];
-    } else {
+        [self presentViewController:uploadPhotoController animated:YES completion:nil];
+    }
+    else {
         self.mediaPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentViewController:self.mediaPicker animated:YES completion:NULL];
     }
@@ -164,16 +161,16 @@
     self.hasSelectedImage = YES;
     if (self.mediaPicker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-        [self.uploadButton setImage:image forState:UIControlStateNormal];
         self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self.uploadButton setImage:image forState:UIControlStateNormal];
     }
     else {
         NSURL *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
         [library assetForURL:referenceURL resultBlock:^(ALAsset *asset) {
             UIImage  *copyOfOriginalImage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
-            [self.uploadButton setImage:copyOfOriginalImage forState:UIControlStateNormal];
             self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+            [self.uploadButton setImage:copyOfOriginalImage forState:UIControlStateNormal];
         }
             failureBlock:^(NSError *error) {
                 // error handling
