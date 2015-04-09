@@ -175,9 +175,9 @@
             [self.uploadButton setImage:copyOfOriginalImage forState:UIControlStateNormal];
             self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
         }
-                failureBlock:^(NSError *error) {
-                    // error handling
-                }];
+            failureBlock:^(NSError *error) {
+                // error handling
+            }];
     }
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
