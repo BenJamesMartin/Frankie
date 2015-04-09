@@ -197,8 +197,12 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    // For updating profile image in side menu
+    NSMutableDictionary* userInfo = [NSMutableDictionary new];
+    
     if (self.mediaPicker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        userInfo[@"image"] = image;
         self.profileImage.imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.profileImage setImage:image forState:UIControlStateNormal];
     }
@@ -206,14 +210,18 @@
         NSURL *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
         [library assetForURL:referenceURL resultBlock:^(ALAsset *asset) {
-            UIImage  *copyOfOriginalImage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
+            UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
+            userInfo[@"image"] = image;
             self.profileImage.imageView.contentMode = UIViewContentModeScaleAspectFill;
-            [self.profileImage setImage:copyOfOriginalImage forState:UIControlStateNormal];
+            [self.profileImage setImage:image forState:UIControlStateNormal];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"changeProfilePicture" object:nil userInfo:userInfo];
         }
         failureBlock:^(NSError *error) {
             // error handling
         }];
     }
+    
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 

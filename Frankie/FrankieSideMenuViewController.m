@@ -25,6 +25,23 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.navigationController.navigationBarHidden = YES;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeProfilePicture:) name:@"changeProfilePicture" object:nil];
+}
+
+- (void)changeProfilePicture:(NSNotification *)notification
+{
+    UIImage *image = notification.userInfo[@"image"];
+    
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    
+    for (UIView *subview in cell.contentView.subviews) {
+        if ([subview isKindOfClass:[UIImageView class]]) {
+            UIImageView *profileImageView = (UIImageView *)subview;
+            profileImageView.contentMode = UIViewContentModeScaleAspectFill;
+            profileImageView.image = image;
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -74,6 +91,8 @@
             break;
     }
 }
+
+
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
