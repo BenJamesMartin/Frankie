@@ -33,25 +33,37 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [self.view endEditing:YES];
-    
-    FrankieStepsViewController *svc = (FrankieStepsViewController *)[self.navigationController.viewControllers lastObject];
-    
-    NSIndexPath *tableSelection = [svc.tableView indexPathForSelectedRow];
-    FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[svc.tableView cellForRowAtIndexPath:tableSelection];
-    
-    if (self.nameField.text.length > 0) {
-        cell.name.text = self.nameField.text;
+    // Make sure this is happening when dismissing detail view and not when presenting image picker
+    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
+        [self.view endEditing:YES];
+        
+        FrankieStepsViewController *svc = (FrankieStepsViewController *)[self.navigationController.viewControllers lastObject];
+        
         self.step.name = self.nameField.text;
+        
+        NSIndexPath *path = [svc.tableView indexPathForSelectedRow];
+        FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[svc.tableView cellForRowAtIndexPath:path];
+        
+        if (cell != nil) {
+            if (self.nameField.text.length > 0) {
+                cell.name.text = self.nameField.text;
+                self.step.name = self.nameField.text;
+            }
+            if (self.dueDateField.text.length > 0) {
+                cell.dueDate.text = self.dueDateField.text;
+            }
+            if (self.hasSelectedImage) {
+                cell.picture.image = self.uploadButton.imageView.image;
+            }
+        }
+        
+        NSDateFormatter *formatter = [NSDateFormatter new];
+        formatter.dateFormat = @"MMMM dd, yyyy";
+        self.dueDateField.text = [formatter stringFromDate:self.step.dueDate];
+        
+        [svc.steps addObject:self.step];
+        svc.isNavigatingFromDetailView = YES;
     }
-    if (self.dueDateField.text.length > 0) {
-        cell.dueDate.text = self.dueDateField.text;
-    }
-    if (self.hasSelectedImage) {
-        cell.picture.image = self.uploadButton.imageView.image;
-    }
-    
-    [svc.steps addObject:self.step];
 }
 
 
@@ -125,6 +137,11 @@
     [self presentViewController:dateSelectionVC animated:YES completion:nil];
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.view endEditing:YES];
+}
+
 - (IBAction)choosePhoto:(id)sender {
     self.mediaPicker = [UIImagePickerController new];
     self.mediaPicker.delegate = self;
@@ -169,12 +186,14 @@
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
         self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.uploadButton setImage:image forState:UIControlStateNormal];
+        self.step.picture = image;
     }
     else {
         NSURL *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
         [library assetForURL:referenceURL resultBlock:^(ALAsset *asset) {
             UIImage  *copyOfOriginalImage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
+            self.step.picture = copyOfOriginalImage;
             self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
             [self.uploadButton setImage:copyOfOriginalImage forState:UIControlStateNormal];
         }

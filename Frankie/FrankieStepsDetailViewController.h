@@ -17,12 +17,14 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @property (strong, nonatomic) UITextField *nameField;
-@property (strong, nonatomic) UITextField *dueDateField;
+//@property (strong, nonatomic) UITextField *dueDateField;
 
 @property (strong, nonatomic) UIImagePickerController *mediaPicker;
 @property (assign, nonatomic) BOOL hasSelectedImage;
 
 @property (strong, nonatomic) ProjectStep *step;
+
+@property (strong, nonatomic) IBOutlet UITextField *dueDateField;
 
 
 @end

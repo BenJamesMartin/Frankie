@@ -8,9 +8,9 @@
 
 #import "FrankieStepsViewController.h"
 #import "FrankieStepsTableViewCell.h"
-#import "FrankieStepsDetailViewController.h"
 
 #import "FrankieAddContractViewController.h"
+#import "ProjectStep.h"
 
 @interface FrankieStepsViewController ()
 
@@ -26,6 +26,7 @@
     self.steps = [NSMutableArray new];
     self.stepCount = 0;
     self.cellForDetailView = [NSMutableDictionary new];
+    self.isNavigatingFromDetailView = NO;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"StepsCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
@@ -35,13 +36,6 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    NSLog(@"what is this %lu", [self.navigationController.viewControllers indexOfObject:self]);
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent
@@ -68,32 +62,30 @@
     }
 }
 
+// If navigating from creating a new step, add new table cell entry and associate that VC with correct index path
+- (void)viewDidAppear:(BOOL)animated
+{
+    if (self.isNavigatingFromDetailView && !self.wasEditingStep) {
+        NSInteger rowCount = [self.tableView numberOfRowsInSection:0];
+        int pathCount = (int)(rowCount == 0 ? 0 : rowCount);
+        NSIndexPath *path = [NSIndexPath indexPathForRow:pathCount inSection:0];
+        self.cellForDetailView[path.description] = self.currentDVC;
+    
+        self.stepCount++;
+        [self.tableView insertRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationFade];
+    }
+    self.wasEditingStep = NO;
+    self.isNavigatingFromDetailView = NO;
+}
+
+// Nav bar top-right add button
 - (void)addStep
 {
-    // Push new VC for step
-    // When returning, create new cell for that step and add to dictionary
-    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     FrankieStepsDetailViewController *dvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsDetailViewController"];
     [self.navigationController pushViewController:dvc animated:YES];
-
-//    NSInteger rowCount = [self.tableView numberOfRowsInSection:0];
-//    NSIndexPath *path = [NSIndexPath indexPathForRow:rowCount - 1 inSection:0];
-    
-//    FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-//    FrankieStepsDetailViewController *dvc = self.cellForDetailView[cell.description];
-//    
-//    if (dvc == nil) {
-//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-//        dvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsDetailViewController"];
-//        self.cellForDetailView[cell.description] = dvc;
-//    }
-    
-//    [self.navigationController pushViewController:dvc animated:YES];
-//    
-//    NSIndexPath *path = [NSIndexPath indexPathForRow:self.stepCount inSection:0];
-//    self.stepCount++;
-//    [self.tableView insertRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationFade];
+    self.currentDVC = dvc;
+    self.wasEditingStep = NO;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -123,11 +115,15 @@
         cell = [[FrankieStepsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    cell.picture.image = [UIImage imageNamed:@"profile-default"];
-
+    ProjectStep *step = [self.steps lastObject];
     
-//    cell.textLabel.text = @"New Step";
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateFormat = @"MMMM dd, yyyy";
     
+    cell.picture.image = step.picture;
+    cell.name.text = step.name;
+    cell.dueDate.text = [formatter stringFromDate:step.dueDate];
+        
     return cell;
 }
 
@@ -136,7 +132,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-    FrankieStepsDetailViewController *dvc = self.cellForDetailView[cell.description];
+    FrankieStepsDetailViewController *dvc = self.cellForDetailView[indexPath.description];
     
     if (dvc == nil) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -144,6 +140,7 @@
         self.cellForDetailView[cell.description] = dvc;
     }
 
+    self.wasEditingStep = YES;
     [self.navigationController pushViewController:dvc animated:YES];
 }
 

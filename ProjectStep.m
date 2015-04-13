@@ -15,14 +15,14 @@
     
     // Initialize step name to to empty string, project date to one month from now, and image to new image
     if (self) {
-        self.name = @"";
+        self.name = @"[Step Name]";
         
         NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
         [dateComponents setMonth:1];
         NSCalendar *calendar = [NSCalendar currentCalendar];
         self.dueDate = [calendar dateByAddingComponents:dateComponents toDate:[NSDate date] options:0];
         
-        self.picture = [UIImage new];
+        self.picture = [UIImage imageNamed:@"image-upload-icon-small"];
     }
     
     return self;
