@@ -41,8 +41,6 @@
         
         FrankieStepsViewController *svc = (FrankieStepsViewController *)[self.navigationController.viewControllers lastObject];
         
-        self.step.name = self.nameField.text;
-        
         NSIndexPath *path = [svc.tableView indexPathForSelectedRow];
         FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[svc.tableView cellForRowAtIndexPath:path];
         
