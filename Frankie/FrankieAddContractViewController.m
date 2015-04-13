@@ -11,6 +11,7 @@
 
 #import "FrankieAddContractViewController.h"
 #import "FrankieAppDelegate.h"
+#import "ProjectStep.h"
 #import "Job.h"
 
 @interface FrankieAddContractViewController ()
@@ -26,10 +27,6 @@
         // Custom init
     }
     return self;
-}
-
-// This is to ask user if he wants to discard changes made on that VC
-- (void)backButtonPressed {
 }
 
 #pragma mark - UIAlertView delegate methods
@@ -54,7 +51,6 @@
     [super viewDidLoad];
 
     self.navigationItem.title = @"New Project";
-    self.projectDate.text = @"due date";
     [self.uploadButton setImage:[UIImage imageNamed:@"image-upload-icon.png"] forState:UIControlStateNormal];
     self.steps = @[];
     
@@ -78,7 +74,7 @@
                    name:UIKeyboardWillHideNotification
                  object:nil];
     [center addObserver:self
-               selector:@selector(keyboardShown)
+               selector:@selector(keyboardShown:)
                    name:UIKeyboardWillShowNotification
                  object:nil];
 }
@@ -104,7 +100,7 @@
     }
 }
 
-- (void) viewWillDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
     // This was an attempt to get rid of weird error occurring on masterVC
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
@@ -113,9 +109,18 @@
 }
 
 // Adds gesture recognizer to image upload button so can be tapped to dismiss keyboard
-- (void)keyboardShown {
+- (void)keyboardShown:(NSNotification *)notification {
+    // Get the keyboard height and adjust the view to accomodate the keyboard
+    NSDictionary *info = [notification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    CGFloat kbHeight = kbSize.height;
+    
+    [UIView animateWithDuration:0.50 animations:^{
+        self.view.frame = CGRectMake(0, -kbHeight, self.view.frame.size.width, self.view.frame.size.height);
+    }];
+    
     // A single gesture recognizer can only be added to one view, so we need a gesture recognizer for each view.
-    for (UIView *view in @[self.keyboardScrollView, self.uploadButton]) {
+    for (UIView *view in @[self.view, self.uploadButton]) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismissTap)];
         [view addGestureRecognizer:tap];
     }
@@ -123,7 +128,12 @@
 
 // When the keyboard dismisses, remove the tap gesture recognizer on the scrollView image upload button
 - (void)keyboardDismiss {
-    for (UIView *view in @[self.keyboardScrollView, self.uploadButton]) {
+    // Adjust the view back to its origin when hiding the keyboard
+    [UIView animateWithDuration:0.25 animations:^{
+        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    }];
+    
+    for (UIView *view in @[self.view, self.uploadButton]) {
         for (UIGestureRecognizer *gr in [view gestureRecognizers]) {
             if ([gr class] == [UITapGestureRecognizer class]) {
                 [view removeGestureRecognizer:gr];
@@ -146,15 +156,17 @@
 
 - (IBAction)createNewContract:(id)sender
 {
+    // Store new contract in Core Data
     NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    
     NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Job class]) inManagedObjectContext:context];
     
     [entity setValue:self.projectTitle.text forKey:@"title"];
-    [entity setValue:self.firstStep.text  forKey:@"nextStep"];
     float price = [[self.price.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]] floatValue];
     [entity setValue:[NSNumber numberWithFloat:price] forKey:@"price"];
-//    [entity setValue:self.notes.text forKey:@"notes"];
+    [entity setValue:self.steps forKey:@"steps"];
+    [entity setValue:self.clientInformation forKey:@"clientInformation"];
+    [entity setValue:self.locationPlacemark forKey:@"location"];
+    [entity setValue:self.notes forKey:@"notes"];
     [entity setValue:[NSNumber numberWithBool:NO] forKeyPath:@"completed"];
     [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString] forKey:@"objectId"];
     
@@ -162,50 +174,41 @@
     if (!([self.uploadButton imageForState:UIControlStateNormal] == [UIImage imageNamed:@"image-upload-icon"])) {
         UIImage *image = [self.uploadButton imageForState:UIControlStateNormal];
         imageData = UIImageJPEGRepresentation(image, 0.9f);
+        [entity setValue:imageData forKey:@"picture"];
     }
     else {
         imageData = nil;
     }
-    if (imageData != nil) {
-        [entity setValue:imageData forKey:@"picture"];
-    }
-//    
-    NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-    [dateformatter setDateFormat:@"MM/dd/yyyy"];
-    NSDate *projectDate = [dateformatter dateFromString:self.projectDate.text];
-    [entity setValue:projectDate forKey:@"dueDate"];
     
-    PFObject *project = [PFObject objectWithClassName:@"Project"];
-    project[@"user"] = [PFUser currentUser];
-    project[@"title"] = self.projectTitle.text;
-    
-    project[@"start"] = [NSDate date];
-    if (![self.projectDate.text isEqualToString:@"due date"]) {
-        project[@"end"] = [dateformatter dateFromString:self.projectDate.text];
-    }
-    
-    project[@"completed"] = [NSNumber numberWithBool:NO];
-    project[@"price"] = [NSNumber numberWithInt:[self.price.text integerValue]];
-//    if (![self.notes.text isEqualToString:@"additional notes"]) {
-//        project[@"notes"] = self.notes.text;
+//    PFObject *project = [PFObject objectWithClassName:@"Project"];
+//    project[@"user"] = [PFUser currentUser];
+//    if (imageData != nil) {
+//        project[@"photo"] = [PFFile fileWithData:imageData];
 //    }
-    project.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-
-    if (imageData != nil) {
-        project[@"photo"] = [PFFile fileWithData:imageData];
-    }
-    
-    [project saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (!error) {
-            [entity setValue:[project objectId] forKeyPath:@"parseId"];
-            if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-            }
-        }
-    }];
+//    project[@"title"] = self.projectTitle.text;
+//    project[@"price"] = [NSNumber numberWithInt:[self.price.text integerValue]];
+//    project[@"steps"] = self.steps;
+//    project[@"clientInformation"] = self.clientInformation;
+//    project[@"location"] = self.locationPlacemark;
+//    project[@"completed"] = [NSNumber numberWithBool:NO];
+//    project[@"notes"] = self.notes;
+//    
+//    project.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+//    
+//    [project saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//        if (!error) {
+//            [entity setValue:[project objectId] forKeyPath:@"parseId"];
+//            if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+//                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+//            }
+//        }
+//    }];
     
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
+#pragma mark - Select image button tapped
 
 - (IBAction)choosePhoto:(id)sender
 {
@@ -224,28 +227,6 @@
 
         [actionSheet showInView:self.view];
     } else {
-        self.mediaPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        [self presentViewController:self.mediaPicker animated:YES completion:NULL];
-    }
-}
-
-#pragma mark - UIActionSheetDelegate methods
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([actionSheet.title isEqualToString:@"Due Date"]) {
-        if (buttonIndex == 0) {
-            self.projectDate.textColor = [UIColor colorWithRed:150/255.f green:150/255.f blue:160/255.f alpha:1.0];
-            NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-            [dateformatter setDateFormat:@"MM/dd/yyyy"];
-            [self.projectDate setText:[dateformatter stringFromDate:[self.pickerView date]]];
-        }
-        return;
-    }
-    if (buttonIndex == 0) {
-        self.mediaPicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        [self presentViewController:self.mediaPicker animated:YES completion:NULL];
-    }
-    else if (buttonIndex == 1) {
         self.mediaPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentViewController:self.mediaPicker animated:YES completion:NULL];
     }
@@ -289,18 +270,17 @@
     return NO;
 }
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    if (textField == self.projectDate) {
-        [self showDatePicker];
-        return NO;
-    }
-    else
-        return YES;
-}
-
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
+    // Set text fields as properties
+    if (textField.tag == 0) {
+        self.projectTitle = textField;
+    }
+    if (textField.tag == 1) {
+        self.price = textField;
+    }
+    
+    // Remove currency formatting from number
     if (textField.tag == 1 && textField.text.length > 0) {
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         formatter.numberStyle = NSNumberFormatterCurrencyStyle;
@@ -309,15 +289,10 @@
         float fval = [formatter numberFromString:replacedText].floatValue;
         textField.text = [NSString stringWithFormat:@"%.0f", fval];
     }
-    
-    if (textField == self.price) {
-        [UIView animateWithDuration:0.25 animations:^{
-            [self.keyboardScrollView setContentOffset:CGPointMake(0, 25)];
-        }];
-    }
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
+    // Add currency formatting to price field
     if (textField.tag == 1) {
         NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
         f.numberStyle = NSNumberFormatterDecimalStyle;
@@ -328,21 +303,6 @@
         numberFormatter.maximumFractionDigits = 0;
         NSString *currencyString = [numberFormatter stringFromNumber:currency];
         textField.text = currencyString;
-    }
-    
-    if (textField == self.price) {
-        [UIView animateWithDuration:0.50 animations:^{
-            [self.keyboardScrollView setContentOffset:CGPointMake(self.keyboardScrollView.contentOffset.x, -self.keyboardScrollView.contentInset.top)];
-        }];
-        
-        if ([textField.text isEqualToString:@""]) {
-            float price = textField.text.floatValue;
-            textField.text = [NSString stringWithFormat:@"$%.02f", price];
-        }
-        else {
-            float price = [[textField.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]] floatValue];
-            textField.text = [NSString stringWithFormat:@"$%.02f", price];
-        }
     }
 }
 
@@ -360,32 +320,6 @@
         return (newLength > 7) ? NO : YES;
     }
     return YES;
-}
-
-
-#pragma mark - Old date picker methods
-
-- (void)showDatePicker
-{
-    UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:@"Due Date"
-                                                      delegate:self
-                                             cancelButtonTitle:@""
-                                        destructiveButtonTitle:nil
-                                             otherButtonTitles:@"Set", nil];
-    
-    // Add the picker
-    if (self.pickerView == nil) {
-        self.pickerView = [[UIDatePicker alloc] init];
-    }
-    
-    self.pickerView.datePickerMode = UIDatePickerModeDate;
-    [menu addSubview:self.pickerView];
-    [menu showInView:self.view];
-    [menu setBounds:CGRectMake(0,0,320, 500)];
-    
-    CGRect pickerRect = self.pickerView.bounds;
-    pickerRect.origin.y = -100;
-    self.pickerView.bounds = pickerRect;
 }
 
 
@@ -413,6 +347,7 @@
     
     return cell;
 }
+
 
 #pragma mark - UITableViewDelegate
 

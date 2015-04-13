@@ -455,24 +455,24 @@
     price.font = [UIFont fontWithName:@"Helvetica" size:12];
     price.textColor = [UIColor grayColor];
     
-    UILabel *dueDate = [[UILabel alloc] initWithFrame:CGRectMake(80, startingYPos+35, 200, 30)];
-    NSDateFormatter *format = [[NSDateFormatter alloc] init];
-    [format setDateFormat:@"MMM dd, yyyy"];
-    
-    if (job.dueDate == nil || job.dueDate == NULL) {
-        dueDate.text = @"Due Date: [Not Set]";
-    }
-    else {
-        dueDate.text = [NSString stringWithFormat:@"Due Date: %@",[NSString stringWithFormat:@"%@", [format stringFromDate:job.dueDate]]];
-    }
-    
-    dueDate.font = [UIFont fontWithName:@"Helvetica" size:12];
-    dueDate.textColor = [UIColor grayColor];
+//    UILabel *dueDate = [[UILabel alloc] initWithFrame:CGRectMake(80, startingYPos+35, 200, 30)];
+//    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+//    [format setDateFormat:@"MMM dd, yyyy"];
+//    
+//    if (job.dueDate == nil || job.dueDate == NULL) {
+//        dueDate.text = @"Due Date: [Not Set]";
+//    }
+//    else {
+//        dueDate.text = [NSString stringWithFormat:@"Due Date: %@",[NSString stringWithFormat:@"%@", [format stringFromDate:job.dueDate]]];
+//    }
+//    
+//    dueDate.font = [UIFont fontWithName:@"Helvetica" size:12];
+//    dueDate.textColor = [UIColor grayColor];
     
     [cell addSubview:title];
     [cell addSubview:image];
     [cell addSubview:price];
-    [cell addSubview:dueDate];
+//    [cell addSubview:dueDate];
     
     UIButton *myAccessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 8, 14)];
     [myAccessoryButton setImage:[UIImage imageNamed:@"custom-detail-disclosure.png"] forState:UIControlStateNormal];

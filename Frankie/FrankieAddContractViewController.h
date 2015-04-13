@@ -20,10 +20,8 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *keyboardScrollView;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIDatePicker *pickerView;
-@property (strong, nonatomic) IBOutlet UITextField *projectDate;
 @property (strong, nonatomic) UIGestureRecognizer *touch;
 @property (strong, nonatomic) IBOutlet UITextField *projectTitle;
-@property (strong, nonatomic) IBOutlet UITextField *firstStep;
 @property (strong, nonatomic) IBOutlet UIButton *uploadButton;
 @property (strong, nonatomic) IBOutlet UITextField *price;
 @property (strong, nonatomic) UIImagePickerController *mediaPicker;
