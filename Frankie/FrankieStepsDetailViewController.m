@@ -24,7 +24,6 @@
     [super viewDidLoad];
 
     self.step = [ProjectStep new];
-    
     self.stepHasBeenEdited = NO;
 }
 
@@ -35,6 +34,9 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    // Change cell when editing
+    // When not editing, simply change step and it will
+    
     // Make sure this is happening when dismissing detail view and not when presenting image picker
     if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound && self.stepHasBeenEdited) {
         [self.view endEditing:YES];
@@ -44,26 +46,28 @@
         NSIndexPath *path = [svc.tableView indexPathForSelectedRow];
         FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[svc.tableView cellForRowAtIndexPath:path];
         
+        // If editing an already existing step, change the cell's contents corresponding to the step
         if (cell != nil) {
-            if (self.nameField.text.length > 0) {
-                cell.name.text = self.nameField.text;
-                self.step.name = self.nameField.text;
-            }
-            if (self.dueDateField.text.length > 0) {
-                cell.dueDate.text = self.dueDateField.text;
-            }
-            if (self.hasSelectedImage) {
-                cell.picture.image = self.uploadButton.imageView.image;
-            }
+            cell.name.text = self.nameField.text;
+            cell.dueDate.text = self.dueDateField.text;
+            cell.picture.image = self.uploadButton.imageView.image;
         }
         
+        // Regardless of whether editing or creating new step, set Step model properties (name, dueDate, picture)
+        // In order to prevent creating an extra property:
+            // dueDate set in date picker callback
+            // picture set in image picker callback
+        self.step.name = self.nameField.text;
+        
+        // If a date was not set, add the default date (one month from current date as specified in ProjectStep init method) to the date text field
         NSDateFormatter *formatter = [NSDateFormatter new];
         formatter.dateFormat = @"MMMM dd, yyyy";
         self.dueDateField.text = [formatter stringFromDate:self.step.dueDate];
         
+        // Reset shouldAddStep flag and verify that we are navigating back to master view from this view (step detail) versus its parent view (add project VC)
         svc.shouldAddStep = YES;
-        [svc.steps addObject:self.step];
         svc.isNavigatingFromDetailView = YES;
+        [svc.steps addObject:self.step];
     }
 }
 
@@ -121,7 +125,6 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     self.stepHasBeenEdited = YES;
-    
     return YES;
 }
 
@@ -203,9 +206,9 @@
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
         [library assetForURL:referenceURL resultBlock:^(ALAsset *asset) {
             UIImage  *copyOfOriginalImage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
-            self.step.picture = copyOfOriginalImage;
             self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
             [self.uploadButton setImage:copyOfOriginalImage forState:UIControlStateNormal];
+            self.step.picture = copyOfOriginalImage;
         }
             failureBlock:^(NSError *error) {
                 // error handling
