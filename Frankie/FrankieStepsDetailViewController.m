@@ -41,23 +41,23 @@
     if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound && self.stepHasBeenEdited) {
         [self.view endEditing:YES];
         
-        FrankieStepsViewController *svc = (FrankieStepsViewController *)[self.navigationController.viewControllers lastObject];
+        // Regardless of whether editing or creating new step, set Step model properties (name, dueDate, picture)
+        // In order to prevent creating an extra property:
+        // dueDate set in date picker callback
+        // picture set in image picker callback
+        if (self.nameField.text.length > 0)
+            self.step.name = self.nameField.text;
         
+        FrankieStepsViewController *svc = (FrankieStepsViewController *)[self.navigationController.viewControllers lastObject];
         NSIndexPath *path = [svc.tableView indexPathForSelectedRow];
         FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[svc.tableView cellForRowAtIndexPath:path];
         
         // If editing an already existing step, change the cell's contents corresponding to the step
         if (cell != nil) {
-            cell.name.text = self.nameField.text;
+            cell.name.text = self.step.name;
             cell.dueDate.text = self.dueDateField.text;
-            cell.picture.image = self.uploadButton.imageView.image;
+            cell.picture.image = self.step.picture;
         }
-        
-        // Regardless of whether editing or creating new step, set Step model properties (name, dueDate, picture)
-        // In order to prevent creating an extra property:
-            // dueDate set in date picker callback
-            // picture set in image picker callback
-        self.step.name = self.nameField.text;
         
         // If a date was not set, add the default date (one month from current date as specified in ProjectStep init method) to the date text field
         NSDateFormatter *formatter = [NSDateFormatter new];
