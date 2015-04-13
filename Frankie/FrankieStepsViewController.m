@@ -27,6 +27,7 @@
     self.stepCount = 0;
     self.cellForDetailView = [NSMutableDictionary new];
     self.isNavigatingFromDetailView = NO;
+    self.shouldAddStep = NO;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"StepsCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
@@ -44,21 +45,24 @@
     
     // Navigating back to add contract VC
     if (!parent){
-        // Set text of steps cell and set steps property in add contract VC
-        FrankieAddContractViewController *avc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
-        
-        NSIndexPath *tableSelection = [avc.tableView indexPathForSelectedRow];
-        UITableViewCell *cell = [avc.tableView cellForRowAtIndexPath:tableSelection];
-        
-        UILabel *label = [UILabel new];
-        NSString *labelText = (self.stepCount == 1 ? @"Step" : @"Steps");
-        label.text = [NSString stringWithFormat:@"%d %@    ", self.stepCount, labelText];
-        label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
-        label.textColor = [UIColor darkGrayColor];
-        [label sizeToFit];
-        cell.accessoryView = label;
-        
-        avc.steps = self.steps;
+        // Set text of steps cell and set steps property in add contract VC only if a step had been created
+        if (self.shouldAddStep) {
+            FrankieAddContractViewController *avc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+            
+            NSIndexPath *tableSelection = [avc.tableView indexPathForSelectedRow];
+            UITableViewCell *cell = [avc.tableView cellForRowAtIndexPath:tableSelection];
+            
+            UILabel *label = [UILabel new];
+            NSString *labelText = (self.stepCount == 1 ? @"Step" : @"Steps");
+            label.text = [NSString stringWithFormat:@"%d %@    ", self.stepCount, labelText];
+            label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
+            label.textColor = [UIColor darkGrayColor];
+            [label sizeToFit];
+            cell.accessoryView = label;
+            
+            avc.steps = self.steps;
+            self.shouldAddStep = NO;
+        }
     }
 }
 

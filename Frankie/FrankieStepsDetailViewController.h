@@ -11,7 +11,7 @@
 
 #import "ProjectStep.h"
 
-@interface FrankieStepsDetailViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate>
+@interface FrankieStepsDetailViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) IBOutlet UIButton *uploadButton;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
@@ -25,6 +25,8 @@
 @property (strong, nonatomic) ProjectStep *step;
 
 @property (strong, nonatomic) IBOutlet UITextField *dueDateField;
+
+@property (assign, nonatomic) BOOL stepHasBeenEdited;
 
 
 @end

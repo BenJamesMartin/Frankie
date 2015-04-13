@@ -18,5 +18,6 @@
 @property (strong, nonatomic) NSMutableDictionary *cellForDetailView;
 @property (assign, nonatomic) BOOL isNavigatingFromDetailView;
 @property (assign, nonatomic) BOOL wasEditingStep;
+@property (assign, nonatomic) BOOL shouldAddStep;
 
 @end

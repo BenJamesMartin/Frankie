@@ -24,6 +24,8 @@
     [super viewDidLoad];
 
     self.step = [ProjectStep new];
+    
+    self.stepHasBeenEdited = NO;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -34,7 +36,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     // Make sure this is happening when dismissing detail view and not when presenting image picker
-    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
+    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound && self.stepHasBeenEdited) {
         [self.view endEditing:YES];
         
         FrankieStepsViewController *svc = (FrankieStepsViewController *)[self.navigationController.viewControllers lastObject];
@@ -61,6 +63,7 @@
         formatter.dateFormat = @"MMMM dd, yyyy";
         self.dueDateField.text = [formatter stringFromDate:self.step.dueDate];
         
+        svc.shouldAddStep = YES;
         [svc.steps addObject:self.step];
         svc.isNavigatingFromDetailView = YES;
     }
@@ -117,6 +120,13 @@
     }
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    self.stepHasBeenEdited = YES;
+    
+    return YES;
+}
+
 
 #pragma mark - Date picker
 
@@ -143,6 +153,8 @@
 }
 
 - (IBAction)choosePhoto:(id)sender {
+    self.stepHasBeenEdited = YES;
+    
     self.mediaPicker = [UIImagePickerController new];
     self.mediaPicker.delegate = self;
     self.mediaPicker.allowsEditing = YES;
