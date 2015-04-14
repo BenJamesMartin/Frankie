@@ -37,6 +37,41 @@
     return self;
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self setNavigationBarAttributes];
+    [self syncParseWithCoreData];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"FrankieMasterContractTableViewCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
+    
+    // Error handling when loading from fetched results controller
+    NSError *error;
+    if (![[self fetchedResultsController] performFetch:&error]) {
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadTable" object:nil];
+}
+
+- (void)setNavigationBarAttributes
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.alpha = 0.96;
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger-icon"] landscapeImagePhone:nil style:UIBarButtonItemStylePlain target:self action:@selector(revealLeftMenu)];
+    self.fetchedResultsController.delegate = self;
+    
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.navigationItem.rightBarButtonItem =
+    [[UIBarButtonItem alloc]
+     initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+     target:self
+     action:@selector(loadAddContractViewController)];
+}
+
 - (void)viewDidUnload {
     self.fetchedResultsController = nil;
 }
@@ -63,60 +98,6 @@
 //    [self.revealSideViewController pushViewController:smvc onDirection:PPRevealSideDirectionLeft animated:YES completion:^{
 //        NSLog(@"completion");
 //    }];
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    [self syncParseCoreData];
-    self.navigationController.navigationBar.translucent = YES;
-    
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger-icon"] landscapeImagePhone:nil style:UIBarButtonItemStylePlain target:self action:@selector(revealLeftMenu)];
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"FrankieMasterContractTableViewCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
-    
-    self.fetchedResultsController.delegate = self;
-    
-    NSError *error;
-	if (![[self fetchedResultsController] performFetch:&error]) {
-		// Update to handle the error appropriately.
-	}
-
-    self.defaultImage.frame = CGRectMake(10, 12, 60, 60);
-    self.defaultImage.backgroundColor = [UIColor colorWithRed:(240/255.f) green:(240/255.f) blue:(240/255.f) alpha:1.0];
-    
-    CALayer *layer = [self.defaultImage layer];
-    [layer setMasksToBounds:YES];
-    [layer setCornerRadius:30.0];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
-    // Uncomment the following line to preserve selection between presentations.
-//    self.clearsSelectionOnViewWillAppear = YES;
-    
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
-    
-    // \u2630 hamburger unicode
-    // Get custom hamburger icon and use left-menu popover
-    // For now just have simple "logout" button
-    
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logOutUser)];
-    
-    self.navigationItem.rightBarButtonItem =
-    [[UIBarButtonItem alloc]
-      initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
-      target:self
-      action:@selector(loadAddContractViewController)];
-    
-//    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(loadSettingsViewController)];
-//    self.navigationItem.leftBarButtonItem = settingsButton;
-
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadTable" object:nil];
-    
-    self.navigationController.navigationBar.alpha = 0.96;
 }
 
 - (void)loadSettingsViewController
@@ -189,7 +170,7 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:(UITableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            [self.tableView cellForRowAtIndexPath:indexPath];
             break;
             
         case NSFetchedResultsChangeMove:
@@ -242,7 +223,7 @@
     [project saveInBackground];
 }
 
-- (void)syncParseCoreData {
+- (void)syncParseWithCoreData {
     NSError *error;
     NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
@@ -407,7 +388,7 @@
 }
 
 
-#pragma mark - cellForRow
+#pragma mark - cellForRowAtIndexPath
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -419,15 +400,57 @@
         cell = [[FrankieMasterContractTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
+    return [self configureCell:cell atIndexPath:indexPath];
+}
+
+- (FrankieMasterContractTableViewCell *)configureCell:(FrankieMasterContractTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
     Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
-    cell.title.text = job.title;
+    
+    if (job.title != nil)
+        cell.title.text = job.title;
     
     NSArray *steps = job.steps;
     ProjectStep *nextStep = steps.firstObject;
-    cell.nextStep.text = nextStep.name;
+    if (nextStep.name != nil) {
+        cell.nextStepName.text = [NSString stringWithFormat:@"Next step: %@", nextStep.name];
+    }
+    if (nextStep.dueDate != nil) {
+        double timeSinceDueDateInSeconds = [nextStep.dueDate timeIntervalSinceNow];
+        int numberOfDays;
+        if (timeSinceDueDateInSeconds / 86400 >= 0) {
+            numberOfDays = floor(timeSinceDueDateInSeconds / 86400);
+        }
+        else {
+            numberOfDays = ceil(timeSinceDueDateInSeconds / 86400);
+        }
+        
+        if (numberOfDays > 0) {
+            if (numberOfDays == 1)
+                cell.nextStepDueDate.text = @"Due tomorrow";
+            else
+                cell.nextStepDueDate.text = [NSString stringWithFormat:@"Due in %d days", numberOfDays];
+        }
+        else if (numberOfDays == 0) {
+            cell.nextStepDueDate.text = @"Due Today";
+        }
+        else {
+            numberOfDays = abs(numberOfDays);
+            if (numberOfDays == 1)
+                cell.nextStepDueDate.text = @"Due yesterday";
+            else
+                cell.nextStepDueDate.text = [NSString stringWithFormat:@"Due %d days ago", numberOfDays];
+        }
+    }
     
-    UIImage *image = [UIImage imageWithData:job.picture];
-    cell.picture.image = image;
+    
+    if (job.picture != nil) {
+        UIImage *image = [UIImage imageWithData:job.picture];
+        cell.picture.image = image;
+    }
+    else {
+        cell.picture.image = [UIImage imageNamed:@"image-upload-icon-small"];
+    }
     
     return cell;
 }

@@ -24,7 +24,7 @@
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="image-upload-icon-small" translatesAutoresizingMaskIntoConstraints="NO" id="XW0-vp-esH">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XW0-vp-esH">
                         <rect key="frame" x="41" y="17" width="50" height="50"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -43,7 +43,4 @@
             <point key="canvasLocation" x="423" y="397.5"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="image-upload-icon-small" width="60" height="60"/>
-    </resources>
 </document>

@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface FrankieMasterContractTableViewCell : UITableViewCell
+
 @property (strong, nonatomic) IBOutlet UIImageView *picture;
 @property (strong, nonatomic) IBOutlet UILabel *title;
-
-@property (strong, nonatomic) IBOutlet UILabel *nextStep;
+@property (strong, nonatomic) IBOutlet UILabel *nextStepName;
+@property (strong, nonatomic) IBOutlet UILabel *nextStepDueDate;
 
 @end

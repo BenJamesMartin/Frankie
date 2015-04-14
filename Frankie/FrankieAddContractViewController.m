@@ -171,7 +171,7 @@
     [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString] forKey:@"objectId"];
     
     NSData *imageData;
-    if (!([self.uploadButton imageForState:UIControlStateNormal] == [UIImage imageNamed:@"image-upload-icon"])) {
+    if (!([[self.uploadButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"image-upload-icon"]])) {
         UIImage *image = [self.uploadButton imageForState:UIControlStateNormal];
         imageData = UIImageJPEGRepresentation(image, 0.9f);
         [entity setValue:imageData forKey:@"picture"];
