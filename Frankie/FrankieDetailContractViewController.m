@@ -12,6 +12,7 @@
 #import "FrankieAppDelegate.h"
 #import "Job.h"
 #import "FrankieDetailContractViewController.h"
+#import "FrankieDetailStaticTableViewController.h"
 #import "SIAlertView.h"
 
 
@@ -69,13 +70,13 @@
 //        [dateformatter setDateFormat:@"MM/dd/yyyy"];
 //        self.dueDate.text  = [dateformatter stringFromDate:[self.project objectForKey:@"dueDate"]];
 //    }
-    if ([self.project objectForKey:@"notes"] == nil || [self.project objectForKey:@"notes"] == [NSNull null] || [[self.project objectForKey:@"notes"] isEqualToString:@"additional notes"]) {
-        self.notesField.text = @"[No Notes]";
-        self.notesField.textAlignment = NSTextAlignmentCenter;
-    }
-    else {
-        self.notesField.text = [self.project objectForKey:@"notes"];
-    }
+//    if ([self.project objectForKey:@"notes"] == nil || [self.project objectForKey:@"notes"] == [NSNull null] || [[self.project objectForKey:@"notes"] isEqualToString:@"additional notes"]) {
+//        self.notesField.text = @"[No Notes]";
+//        self.notesField.textAlignment = NSTextAlignmentCenter;
+//    }
+//    else {
+//        self.notesField.text = [self.project objectForKey:@"notes"];
+//    }
     if ([self.project objectForKey:@"completed"] == nil || [self.project objectForKey:@"completed"] == [NSNull null] || [self.project objectForKey:@"completed"] == [NSNumber numberWithInt:YES]) {
         [self.projectCompleteButton setTitle:@"mark project as incomplete" forState:UIControlStateNormal];
     }
@@ -90,19 +91,18 @@
         [self.picture setImage:[UIImage imageNamed:@"image-upload-icon"] forState:UIControlStateNormal];
     }
     
-    [self addPadding];
-    self.notesField.layoutManager.delegate = (id)self;
+//    self.notesField.layoutManager.delegate = (id)self;
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
-- (void)addPadding {
-    for (id x in [self.scrollView subviews]) {
-        if ([x isKindOfClass:[UITextView class]]) {
-            ((UITextView*)x).textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
-        }
-    }
-}
+//- (void)addPadding {
+//    for (id x in [self.scrollView subviews]) {
+//        if ([x isKindOfClass:[UITextView class]]) {
+//            ((UITextView*)x).textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
+//        }
+//    }
+//}
 
 - (void)viewWillDisappear:(BOOL)animated {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
@@ -111,14 +111,14 @@
 }
 
 - (void)keyboardShown {
-    for (UIView *view in @[self.scrollView, self.picture]) {
+    for (UIView *view in @[self.view, self.picture]) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismissTap)];
         [view addGestureRecognizer:tap];
     }
 }
 
 - (void)keyboardDismiss {
-    for (UIView *view in @[self.scrollView, self.picture]) {
+    for (UIView *view in @[self.view, self.picture]) {
         for (UIGestureRecognizer *gr in [view gestureRecognizers]) {
             if ([gr class] == [UITapGestureRecognizer class]) {
                 [view removeGestureRecognizer:gr];
@@ -152,38 +152,6 @@
     }
     else {
         [self.priceField resignFirstResponder];
-    }
-}
-
-- (IBAction)editDueDate:(id)sender {
-    UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:@"Due Date"
-                                                      delegate:self
-                                             cancelButtonTitle:@""
-                                        destructiveButtonTitle:nil
-                                             otherButtonTitles:@"Set", nil];
-    // Add the picker
-    if (self.pickerView == nil) {
-        self.pickerView = [[UIDatePicker alloc] init];
-    }
-    
-    self.pickerView.datePickerMode = UIDatePickerModeDate;
-    [menu addSubview:self.pickerView];
-    [menu showInView:self.view];
-    [menu setBounds:CGRectMake(0,0,320, 500)];
-    
-    CGRect pickerRect = self.pickerView.bounds;
-    pickerRect.origin.y = -100;
-    self.pickerView.bounds = pickerRect;
-}
-
-- (IBAction)editNotes:(id)sender {
-    if (self.notesField.userInteractionEnabled == NO) {
-        [self.notesField setUserInteractionEnabled:YES];
-        [self.notesField becomeFirstResponder];
-        [sender setTitle:@"Done" forState:UIControlStateNormal];
-    }
-    else {
-        [self.notesField resignFirstResponder];
     }
 }
 
@@ -222,9 +190,6 @@
 //                [dateformatter setDateFormat:@"MM/dd/yyyy"];
 //                project[@"end"] = [dateformatter dateFromString:self.dueDate.text];
 //            }
-            if (![self.notesField.text isEqualToString:@"[No Notes"] || self.notesField.text != nil) {
-                project[@"notes"] = self.notesField.text;
-            }
             if (imageData != nil) {
                 project[@"photo"] = [PFFile fileWithData:imageData];
             }
@@ -259,9 +224,9 @@
 //        [dateformatter setDateFormat:@"MM/dd/yyyy"];
 //        job.dueDate = [dateformatter dateFromString:self.dueDate.text];
 //    }
-    if (![self.notesField.text isEqualToString:@"[No Notes"]) {
-        job.notes = self.notesField.text;
-    }
+//    if (![self.notesField.text isEqualToString:@"[No Notes"]) {
+//        job.notes = self.notesField.text;
+//    }
 
     if (imageData != nil) {
         job.picture = imageData;
@@ -397,17 +362,17 @@
     if ([textView.text isEqualToString:@"[No Notes]"]) {
         textView.text = @"";
     }
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 120)];
-    }];
+//    [UIView animateWithDuration:0.25 animations:^{
+//        [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 120)];
+//    }];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
     [textView setUserInteractionEnabled:NO];
-    [self.editNotesButton setTitle:@"Edit" forState:UIControlStateNormal];
-    [UIView animateWithDuration:0.50 animations:^{
-        [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, -self.scrollView.contentInset.top)];
-    }];
+//    [self.editNotesButton setTitle:@"Edit" forState:UIControlStateNormal];
+//    [UIView animateWithDuration:0.50 animations:^{
+//        [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, -self.scrollView.contentInset.top)];
+//    }];
 }
 
 #pragma mark - UITextFieldDelegate methods
@@ -427,15 +392,15 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     [textField setUserInteractionEnabled:NO];
-    if (textField == self.titleField) {
-        [self.editTitleButton setTitle:@"Edit" forState:UIControlStateNormal];
-        self.navigationItem.title = self.titleField.text;
-    }
-    else if (textField == self.priceField) {
-        float price = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]].floatValue;
-        textField.text = [NSString stringWithFormat:@"$%.02f", price];
-        [self.editPriceButton setTitle:@"Edit" forState:UIControlStateNormal];
-    }
+//    if (textField == self.titleField) {
+//        [self.editTitleButton setTitle:@"Edit" forState:UIControlStateNormal];
+//        self.navigationItem.title = self.titleField.text;
+//    }
+//    else if (textField == self.priceField) {
+//        float price = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]].floatValue;
+//        textField.text = [NSString stringWithFormat:@"$%.02f", price];
+//        [self.editPriceButton setTitle:@"Edit" forState:UIControlStateNormal];
+//    }
 }
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
@@ -470,6 +435,14 @@
         [self presentViewController:self.mediaPicker animated:YES completion:NULL];
     }
 }
+
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+//{
+//    if ([segue.identifier isEqualToString:@"tvc"]) {
+//        FrankieDetailStaticTableViewController *stvc = segue.destinationViewController;
+//        stvc.delegate = self;
+//    }
+//}
 
 #pragma mark - UIActionSheetDelegate methods
 

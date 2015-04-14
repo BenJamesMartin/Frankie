@@ -12,17 +12,9 @@
 
 @property (strong, nonatomic) NSDictionary *project;
 
-@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
-
-@property (strong, nonatomic) IBOutlet UIButton *editTitleButton;
-@property (strong, nonatomic) IBOutlet UIButton *editPriceButton;
-@property (strong, nonatomic) IBOutlet UIButton *editNotesButton;
-
 @property (strong, nonatomic) IBOutlet UITextField *titleField;
 @property (strong, nonatomic) IBOutlet UITextField *priceField;
 @property (strong, nonatomic) IBOutlet UITextField *dueDate;
-@property (strong, nonatomic) UIDatePicker *pickerView;
-@property (strong, nonatomic) IBOutlet UITextView *notesField;
 
 @property (strong, nonatomic) IBOutlet UIButton *picture;
 @property (strong, nonatomic) UIImagePickerController *mediaPicker;

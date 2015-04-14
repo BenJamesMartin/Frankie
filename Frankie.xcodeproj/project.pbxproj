@@ -24,6 +24,7 @@
 		B55BB6BA187B647200BE3703 /* FrankieTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B55BB6B9187B647200BE3703 /* FrankieTests.m */; };
 		B5759490192C89D700303786 /* FrankieResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B575948F192C89D700303786 /* FrankieResetPasswordViewController.m */; };
 		B5855483191E485200CA987C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5855482191E485200CA987C /* Images.xcassets */; };
+		B58703431ADCBCF400469FC2 /* FrankieDetailStaticTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B58703421ADCBCF400469FC2 /* FrankieDetailStaticTableViewController.m */; };
 		B58AE09A1888AB6F0083A645 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B58AE0981888AB6F0083A645 /* Model.xcdatamodeld */; };
 		B5AA5D3C1AD0EA8600942153 /* FrankieSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5AA5D3B1AD0EA8600942153 /* FrankieSettingsViewController.m */; };
 		B5AA5D4A1AD14ADD00942153 /* FrankieSideMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5AA5D491AD14ADD00942153 /* FrankieSideMenuViewController.m */; };
@@ -83,6 +84,8 @@
 		B575948E192C89D700303786 /* FrankieResetPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieResetPasswordViewController.h; sourceTree = "<group>"; };
 		B575948F192C89D700303786 /* FrankieResetPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieResetPasswordViewController.m; sourceTree = "<group>"; };
 		B5855482191E485200CA987C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Frankie/Images.xcassets; sourceTree = "<group>"; };
+		B58703411ADCBCF400469FC2 /* FrankieDetailStaticTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieDetailStaticTableViewController.h; sourceTree = "<group>"; };
+		B58703421ADCBCF400469FC2 /* FrankieDetailStaticTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieDetailStaticTableViewController.m; sourceTree = "<group>"; };
 		B5896F2C191096140051319A /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		B58AE0991888AB6F0083A645 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		B5AA5D3A1AD0EA8600942153 /* FrankieSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieSettingsViewController.h; sourceTree = SOURCE_ROOT; };
@@ -242,6 +245,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		B58703401ADCBCD100469FC2 /* Detail View */ = {
+			isa = PBXGroup;
+			children = (
+				B58703411ADCBCF400469FC2 /* FrankieDetailStaticTableViewController.h */,
+				B58703421ADCBCF400469FC2 /* FrankieDetailStaticTableViewController.m */,
+				B555856B187F8A1C007608EB /* FrankieDetailContractViewController.h */,
+				B555856C187F8A1C007608EB /* FrankieDetailContractViewController.m */,
+			);
+			name = "Detail View";
+			sourceTree = "<group>";
+		};
 		B58AE09B1888AB760083A645 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -280,10 +294,9 @@
 		B5AA5D421AD125CE00942153 /* Master/Detail */ = {
 			isa = PBXGroup;
 			children = (
+				B58703401ADCBCD100469FC2 /* Detail View */,
 				B540A5D7187E087400C7BD7D /* FrankieMasterContractViewController.h */,
 				B540A5D8187E087400C7BD7D /* FrankieMasterContractViewController.m */,
-				B555856B187F8A1C007608EB /* FrankieDetailContractViewController.h */,
-				B555856C187F8A1C007608EB /* FrankieDetailContractViewController.m */,
 				B5EE9CC61ADCA41E0000DFBD /* FrankieMasterContractTableViewCell.h */,
 				B5EE9CC71ADCA41E0000DFBD /* FrankieMasterContractTableViewCell.m */,
 				B5EE9CC41ADCA3190000DFBD /* FrankieMasterContractTableViewCell.xib */,
@@ -474,6 +487,7 @@
 				B5EE9CCB1ADCA78B0000DFBD /* Job.m in Sources */,
 				B519804B1908673B00F3DF16 /* FrankieRegisterViewController.m in Sources */,
 				B536D7E51AD397DA00181B23 /* FrankieStepsViewController.m in Sources */,
+				B58703431ADCBCF400469FC2 /* FrankieDetailStaticTableViewController.m in Sources */,
 				B5C12C77188DCAC80064986D /* FrankieAddContractViewController.m in Sources */,
 				B58AE09A1888AB6F0083A645 /* Model.xcdatamodeld in Sources */,
 				B5AB72D51AD61FF5002F7ED2 /* ProjectStep.m in Sources */,
