@@ -11,6 +11,7 @@
 #import <Parse/Parse.h>
 
 #import "FrankieMasterContractViewController.h"
+#import "FrankieMasterContractTableViewCell.h"
 #import "FrankieDetailContractViewController.h"
 #import "FrankieAddContractViewController.h"
 #import "FrankieLoginViewController.h"
@@ -18,6 +19,7 @@
 #import "FrankieAppDelegate.h"
 #import "FrankieSideMenuViewController.h"
 #import "Job.h"
+#import "ProjectStep.h"
 #import "SIAlertView.h"
 
 @interface FrankieMasterContractViewController ()
@@ -71,6 +73,8 @@
     self.navigationController.navigationBar.translucent = YES;
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger-icon"] landscapeImagePhone:nil style:UIBarButtonItemStylePlain target:self action:@selector(revealLeftMenu)];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"FrankieMasterContractTableViewCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     
     self.fetchedResultsController.delegate = self;
     
@@ -402,92 +406,28 @@
     
 }
 
-#pragma mark - cellForRow
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
-    NSUInteger startingYPos = 0;
-    
-    if (job.completed == [NSNumber numberWithInt:1]) {
-        startingYPos = 5;
-        UILabel *completed = [[UILabel alloc] initWithFrame:CGRectMake(80, startingYPos + 51, 200, 30)];
-        completed.font = [UIFont fontWithName:@"Helvetica" size:12];
-        completed.textColor = [UIColor colorWithRed:77/255.f green:189/255.f blue:51/255.f alpha:1.0];
-        completed.text = @"Project Complete";
-        [cell addSubview:completed];
-    }
-    else {
-        startingYPos = 10;
-    }
-    
-    UIImageView *image = [UIImageView new];
-    image.frame = CGRectMake(10, 14, 60, 60);
-    if ([job.picture isEqual:[NSNull null]] || job.picture == NULL) {
-        image.image = [UIImage imageNamed:@"image-upload-icon-small"];
-    }
-    else {
-        CALayer *layer = [image layer];
-        [layer setMasksToBounds:YES];
-        [layer setCornerRadius:30.0];
-        image.image = [UIImage imageWithData:job.picture];
-        image.contentMode = UIViewContentModeScaleAspectFill;
-    }
-    
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(80, startingYPos, 200, 30)];
-    
-    if ([job.title isEqualToString:@""]) {
-        title.text = @"[No Title]";
-    }
-    else {
-        title.text = job.title;
-    }
-    title.font = [UIFont fontWithName:@"Helvetica-Bold" size:14];
-    title.textColor = [UIColor grayColor];
-    
-    UILabel *price = [[UILabel alloc] initWithFrame:CGRectMake(80, startingYPos+20, 200, 30)];
-    if ([job.price floatValue] == 0) {
-        price.text = @"Price: [Not Set]";
-    }
-    else {
-        NSNumber *number = (NSNumber*)job.price;
-        [price setText:[NSString stringWithFormat:@"Price: $%.02f", number.floatValue]];
-    }
-    price.font = [UIFont fontWithName:@"Helvetica" size:12];
-    price.textColor = [UIColor grayColor];
-    
-//    UILabel *dueDate = [[UILabel alloc] initWithFrame:CGRectMake(80, startingYPos+35, 200, 30)];
-//    NSDateFormatter *format = [[NSDateFormatter alloc] init];
-//    [format setDateFormat:@"MMM dd, yyyy"];
-//    
-//    if (job.dueDate == nil || job.dueDate == NULL) {
-//        dueDate.text = @"Due Date: [Not Set]";
-//    }
-//    else {
-//        dueDate.text = [NSString stringWithFormat:@"Due Date: %@",[NSString stringWithFormat:@"%@", [format stringFromDate:job.dueDate]]];
-//    }
-//    
-//    dueDate.font = [UIFont fontWithName:@"Helvetica" size:12];
-//    dueDate.textColor = [UIColor grayColor];
-    
-    [cell addSubview:title];
-    [cell addSubview:image];
-    [cell addSubview:price];
-//    [cell addSubview:dueDate];
-    
-    UIButton *myAccessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 8, 14)];
-    [myAccessoryButton setImage:[UIImage imageNamed:@"custom-detail-disclosure.png"] forState:UIControlStateNormal];
-    [cell setAccessoryView:myAccessoryButton];
-}
+#pragma mark - cellForRow
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"Cell";
+    FrankieMasterContractTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Cell"];
     
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[FrankieMasterContractTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    }
     
-    // Set up the cell...
-    [self configureCell:cell atIndexPath:indexPath];
+    Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
+    cell.title.text = job.title;
+    
+    NSArray *steps = job.steps;
+    ProjectStep *nextStep = steps.firstObject;
+    cell.nextStep.text = nextStep.name;
+    
+    UIImage *image = [UIImage imageWithData:job.picture];
+    cell.picture.image = image;
     
     return cell;
 }

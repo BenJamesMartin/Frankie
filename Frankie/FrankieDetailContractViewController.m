@@ -61,14 +61,14 @@
         self.priceField.text = [NSString stringWithFormat:@"$%.02f", number.floatValue];
     }
     
-    if ([self.project objectForKey:@"dueDate"] == nil || [self.project objectForKey:@"dueDate"] == [NSNull null]) {
-        self.dueDate.text  = @"[Due Date Not Set]";
-    }
-    else {
-        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-        [dateformatter setDateFormat:@"MM/dd/yyyy"];
-        self.dueDate.text  = [dateformatter stringFromDate:[self.project objectForKey:@"dueDate"]];
-    }
+//    if ([self.project objectForKey:@"dueDate"] == nil || [self.project objectForKey:@"dueDate"] == [NSNull null]) {
+//        self.dueDate.text  = @"[Due Date Not Set]";
+//    }
+//    else {
+//        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
+//        [dateformatter setDateFormat:@"MM/dd/yyyy"];
+//        self.dueDate.text  = [dateformatter stringFromDate:[self.project objectForKey:@"dueDate"]];
+//    }
     if ([self.project objectForKey:@"notes"] == nil || [self.project objectForKey:@"notes"] == [NSNull null] || [[self.project objectForKey:@"notes"] isEqualToString:@"additional notes"]) {
         self.notesField.text = @"[No Notes]";
         self.notesField.textAlignment = NSTextAlignmentCenter;
@@ -217,11 +217,11 @@
                 float price = [self.priceField.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]].floatValue;
                 project[@"price"] = [NSNumber numberWithFloat:price];
             }
-            if (![self.dueDate.text isEqualToString:@"[Due Date Not Set]"]) {
-                NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-                [dateformatter setDateFormat:@"MM/dd/yyyy"];
-                project[@"end"] = [dateformatter dateFromString:self.dueDate.text];
-            }
+//            if (![self.dueDate.text isEqualToString:@"[Due Date Not Set]"]) {
+//                NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
+//                [dateformatter setDateFormat:@"MM/dd/yyyy"];
+//                project[@"end"] = [dateformatter dateFromString:self.dueDate.text];
+//            }
             if (![self.notesField.text isEqualToString:@"[No Notes"] || self.notesField.text != nil) {
                 project[@"notes"] = self.notesField.text;
             }
@@ -254,11 +254,11 @@
         float price = [self.priceField.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]].floatValue;
         job.price = [NSNumber numberWithFloat:price];
     }
-    if (![self.priceField.text isEqualToString:@"[Date Not Set"]) {
-        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-        [dateformatter setDateFormat:@"MM/dd/yyyy"];
-        job.dueDate = [dateformatter dateFromString:self.dueDate.text];
-    }
+//    if (![self.priceField.text isEqualToString:@"[Date Not Set"]) {
+//        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
+//        [dateformatter setDateFormat:@"MM/dd/yyyy"];
+//        job.dueDate = [dateformatter dateFromString:self.dueDate.text];
+//    }
     if (![self.notesField.text isEqualToString:@"[No Notes"]) {
         job.notes = self.notesField.text;
     }
@@ -474,14 +474,14 @@
 #pragma mark - UIActionSheetDelegate methods
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([actionSheet.title isEqualToString:@"Due Date"]) {
-        if (buttonIndex == 0) {
-            NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
-            [dateformatter setDateFormat:@"MM/dd/yyyy"];
-            [self.dueDate setText:[dateformatter stringFromDate:[self.pickerView date]]];
-        }
-        return;
-    }
+//    if ([actionSheet.title isEqualToString:@"Due Date"]) {
+//        if (buttonIndex == 0) {
+//            NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
+//            [dateformatter setDateFormat:@"MM/dd/yyyy"];
+//            [self.dueDate setText:[dateformatter stringFromDate:[self.pickerView date]]];
+//        }
+//        return;
+//    }
     if (buttonIndex == 0) {
         self.mediaPicker.sourceType = UIImagePickerControllerSourceTypeCamera;
         [self presentViewController:self.mediaPicker animated:YES completion:NULL];
