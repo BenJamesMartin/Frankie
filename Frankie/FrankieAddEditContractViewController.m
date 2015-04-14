@@ -9,16 +9,16 @@
 
 #import <Parse/Parse.h>
 
-#import "FrankieAddContractViewController.h"
+#import "FrankieAddEditContractViewController.h"
 #import "FrankieAppDelegate.h"
 #import "ProjectStep.h"
 #import "Job.h"
 
-@interface FrankieAddContractViewController ()
+@interface FrankieAddEditContractViewController ()
 
 @end
 
-@implementation FrankieAddContractViewController
+@implementation FrankieAddEditContractViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -29,38 +29,29 @@
     return self;
 }
 
-#pragma mark - UIAlertView delegate methods
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    
-    [super viewWillAppear:animated];
-    
-    // Remove the current selection in our table view
-    NSIndexPath *tableSelection = [self.tableView indexPathForSelectedRow];
-    [self.tableView deselectRowAtIndexPath:tableSelection animated:YES];
-}
+#pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+
+
+    // If we're not editing an existing job, we're creating a new one. Add a cancel button in the top-left.
+    if (self.job == nil) {
+        // Set left bar button item (Cancel button)
+        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(cancelCreation)];
+        
+        self.navigationItem.leftBarButtonItem = backItem;
+    }
 
     self.navigationItem.title = @"New Project";
     [self.uploadButton setImage:[UIImage imageNamed:@"image-upload-icon.png"] forState:UIControlStateNormal];
     self.steps = @[];
-    
-    // Set left bar button item (Cancel button)
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
-                                                                 style:UIBarButtonItemStylePlain
-                                                                target:self
-                                                                action:@selector(cancelCreation)];
-    
-    self.navigationItem.leftBarButtonItem = backItem;
 
     self.projectHasBeenEdited = NO;
     
@@ -77,6 +68,161 @@
                selector:@selector(keyboardShown:)
                    name:UIKeyboardWillShowNotification
                  object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
+    
+    // Remove the current selection in our table view
+    NSIndexPath *tableSelection = [self.tableView indexPathForSelectedRow];
+    [self.tableView deselectRowAtIndexPath:tableSelection animated:YES];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    // If we're editing an existing job, load the data for that job.
+    if (self.job != nil) {
+        [self loadData];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    // This was an attempt to get rid of weird error occurring on masterVC
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [center removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+}
+
+
+#pragma mark - Load data for existing job
+
+- (void)loadData
+{
+    // Create reference to proper cells
+    NSIndexPath *path0 = [NSIndexPath indexPathForRow:0 inSection:0];
+    NSIndexPath *path1 = [NSIndexPath indexPathForRow:1 inSection:0];
+    NSIndexPath *path2 = [NSIndexPath indexPathForRow:2 inSection:0];
+    NSIndexPath *path3 = [NSIndexPath indexPathForRow:3 inSection:0];
+    NSIndexPath *path4 = [NSIndexPath indexPathForRow:4 inSection:0];
+    NSIndexPath *path5 = [NSIndexPath indexPathForRow:5 inSection:0];
+    
+    UITableViewCell *cell0 = [self.tableView cellForRowAtIndexPath:path0];
+    UITableViewCell *cell1 = [self.tableView cellForRowAtIndexPath:path1];
+    UITableViewCell *cell2 = [self.tableView cellForRowAtIndexPath:path2];
+    UITableViewCell *cell3 = [self.tableView cellForRowAtIndexPath:path3];
+    UITableViewCell *cell4 = [self.tableView cellForRowAtIndexPath:path4];
+    UITableViewCell *cell5 = [self.tableView cellForRowAtIndexPath:path5];
+    
+    for (UIView *subview in cell0.contentView.subviews) {
+        if (subview.tag == 1) {
+            UITextField *tf = (UITextField *)subview;
+            tf.text = self.job.title;
+            tf.alpha = 0.0;
+            [UIView animateWithDuration:0.5 animations:^{
+                tf.alpha = 1.0;
+            }];
+            self.projectTitle = tf;
+        }
+    }
+    
+    for (UIView *subview in cell1.contentView.subviews) {
+        if (subview.tag == 2) {
+            UITextField *tf = (UITextField *)subview;
+            
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+            numberFormatter.maximumFractionDigits = 0;
+            NSString *currencyString = [numberFormatter stringFromNumber:self.job.price];
+            tf.text = currencyString;
+            tf.alpha = 0.0;
+            [UIView animateWithDuration:0.5 animations:^{
+                tf.alpha = 1.0;
+            }];
+            self.price = tf;
+        }
+    }
+    
+    NSArray *steps = self.job.steps;
+    if (steps.count > 0) {
+        UILabel *stepsLabel = [UILabel new];
+        if (steps.count == 1)
+            stepsLabel.text = [NSString stringWithFormat:@"%lu Step", steps.count];
+        else
+            stepsLabel.text = [NSString stringWithFormat:@"%lu Steps", steps.count];
+        stepsLabel.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
+        stepsLabel.textColor = [UIColor darkGrayColor];
+        [stepsLabel sizeToFit];
+        cell2.accessoryView = stepsLabel;
+        cell2.accessoryView.alpha = 0.0;
+        [UIView animateWithDuration:0.5 animations:^{
+            cell2.accessoryView.alpha = 1.0;
+        }];
+    }
+    
+    NSDictionary *clientInformation = self.job.clientInformation;
+    if (clientInformation != nil) {
+        UILabel *stepsLabel = [UILabel new];
+        stepsLabel.text = [NSString stringWithFormat:@"%@", clientInformation[@"name"]];
+        stepsLabel.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
+        stepsLabel.textColor = [UIColor darkGrayColor];
+        [stepsLabel sizeToFit];
+        cell3.accessoryView = stepsLabel;
+        [UIView animateWithDuration:0.5 animations:^{
+            cell3.accessoryView.alpha = 1.0;
+        }];
+    }
+    
+    SVPlacemark *placemark = self.job.location;
+    if (placemark != nil) {
+        UILabel *stepsLabel = [UILabel new];
+        stepsLabel.text = [NSString stringWithFormat:@"%@ %@", placemark.subThoroughfare, placemark.thoroughfare];
+        stepsLabel.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
+        stepsLabel.textColor = [UIColor darkGrayColor];
+        [stepsLabel sizeToFit];
+        cell4.accessoryView = stepsLabel;
+        [UIView animateWithDuration:0.5 animations:^{
+            cell4.accessoryView.alpha = 1.0;
+        }];
+    }
+    
+    NSString *notes = self.job.notes;
+    if (notes != nil) {
+        if (notes.length > 0) {
+            NSArray *words = [notes componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+            NSMutableString *mutableNotes = [[NSMutableString alloc] initWithString:@""];
+            
+            for (int i = 0; i < words.count; i++) {
+                [mutableNotes appendString:words[i]];
+                if (i != words.count - 1)
+                    [mutableNotes appendString:@" "];
+                if (i == 2)
+                    break;
+            }
+            [mutableNotes appendString:@"...   "];
+            
+            UILabel *label = [UILabel new];
+            label.text = mutableNotes;
+            label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
+            label.textColor = [UIColor darkGrayColor];
+            [label sizeToFit];
+            if (label.frame.size.width > 135) {
+                label.frame = CGRectMake(label.frame.origin.x, label.frame.origin.y, 135, label.frame.size.height);
+            }
+            cell5.accessoryView = label;
+            [UIView animateWithDuration:0.5 animations:^{
+                cell5.accessoryView.alpha = 1.0;
+            }];
+        }
+    }
+    
+    NSData *imageData = self.job.picture;
+    if (imageData != nil) {
+        UIImage *image = [UIImage imageWithData:imageData];
+        [self.uploadButton setImage:image forState:UIControlStateNormal];
+    }
 }
 
 - (void)cancelCreation
@@ -98,14 +244,6 @@
     else {
         [self.navigationController popViewControllerAnimated:YES];
     }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    // This was an attempt to get rid of weird error occurring on masterVC
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    [center removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 }
 
 // Adds gesture recognizer to image upload button so can be tapped to dismiss keyboard
@@ -154,56 +292,87 @@
 
 #pragma mark - createNewContract
 
-- (IBAction)createNewContract:(id)sender
+- (IBAction)createOrEditContract:(id)sender
 {
-    // Store new contract in Core Data
-    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Job class]) inManagedObjectContext:context];
-    
-    [entity setValue:self.projectTitle.text forKey:@"title"];
-    float price = [[self.price.text stringByTrimmingCharactersInSet:[NSCharacterSet symbolCharacterSet]] floatValue];
-    [entity setValue:[NSNumber numberWithFloat:price] forKey:@"price"];
-    [entity setValue:self.steps forKey:@"steps"];
-    [entity setValue:self.clientInformation forKey:@"clientInformation"];
-    [entity setValue:self.locationPlacemark forKey:@"location"];
-    [entity setValue:self.notes forKey:@"notes"];
-    [entity setValue:[NSNumber numberWithBool:NO] forKeyPath:@"completed"];
-    [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString] forKey:@"objectId"];
-    
-    NSData *imageData;
-    if (!([[self.uploadButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"image-upload-icon"]])) {
-        UIImage *image = [self.uploadButton imageForState:UIControlStateNormal];
-        imageData = UIImageJPEGRepresentation(image, 0.9f);
-        [entity setValue:imageData forKey:@"picture"];
+    // Edit existing contract
+    if (self.job != nil) {
+        [self.job setValue:self.projectTitle.text forKey:@"title"];
+        NSString *priceStr =[self.price.text stringByReplacingOccurrencesOfString:@"$" withString:@""];
+        priceStr = [priceStr stringByReplacingOccurrencesOfString:@"," withString:@""];
+        float price = [priceStr floatValue];
+        [self.job setValue:[NSNumber numberWithFloat:price] forKey:@"price"];
+        [self.job setValue:self.steps forKey:@"steps"];
+        [self.job setValue:self.clientInformation forKey:@"clientInformation"];
+        [self.job setValue:self.locationPlacemark forKey:@"location"];
+        [self.job setValue:self.notes forKey:@"notes"];
+        [self.job setValue:[NSNumber numberWithBool:NO] forKeyPath:@"completed"];
+        [self.job setValue:[[[(NSManagedObject*)self.job objectID] URIRepresentation] absoluteString] forKey:@"objectId"];
+        
+        NSData *imageData;
+        if (!([[self.uploadButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"image-upload-icon"]])) {
+            UIImage *image = [self.uploadButton imageForState:UIControlStateNormal];
+            imageData = UIImageJPEGRepresentation(image, 0.9f);
+            [self.job setValue:imageData forKey:@"picture"];
+        }
+        else {
+            imageData = nil;
+        }
     }
+    // Add new contract
     else {
-        imageData = nil;
+        // Store new contract in Core Data
+        NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Job class]) inManagedObjectContext:context];
+        
+        [entity setValue:self.projectTitle.text forKey:@"title"];
+        NSString *priceStr =[self.price.text stringByReplacingOccurrencesOfString:@"$" withString:@""];
+        priceStr = [priceStr stringByReplacingOccurrencesOfString:@"," withString:@""];
+        float price = [priceStr floatValue];
+        [entity setValue:[NSNumber numberWithFloat:price] forKey:@"price"];
+        [entity setValue:self.steps forKey:@"steps"];
+        [entity setValue:self.clientInformation forKey:@"clientInformation"];
+        [entity setValue:self.locationPlacemark forKey:@"location"];
+        [entity setValue:self.notes forKey:@"notes"];
+        [entity setValue:[NSNumber numberWithBool:NO] forKeyPath:@"completed"];
+        [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString] forKey:@"objectId"];
+        
+        NSData *imageData;
+        if (!([[self.uploadButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"image-upload-icon"]])) {
+            UIImage *image = [self.uploadButton imageForState:UIControlStateNormal];
+            imageData = UIImageJPEGRepresentation(image, 0.9f);
+            [entity setValue:imageData forKey:@"picture"];
+        }
+        else {
+            imageData = nil;
+        }
+        
+        //    PFObject *project = [PFObject objectWithClassName:@"Project"];
+        //    project[@"user"] = [PFUser currentUser];
+        //    if (imageData != nil) {
+        //        project[@"photo"] = [PFFile fileWithData:imageData];
+        //    }
+        //    project[@"title"] = self.projectTitle.text;
+        //    project[@"price"] = [NSNumber numberWithInt:[self.price.text integerValue]];
+        //    project[@"steps"] = self.steps;
+        //    project[@"clientInformation"] = self.clientInformation;
+        //    project[@"location"] = self.locationPlacemark;
+        //    project[@"completed"] = [NSNumber numberWithBool:NO];
+        //    project[@"notes"] = self.notes;
+        //
+        //    project.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+        //
+        //    [project saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        //        if (!error) {
+        //            [entity setValue:[project objectId] forKeyPath:@"parseId"];
+        //            if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+        //                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+        //            }
+        //        }
+        //    }];
+
     }
     
-//    PFObject *project = [PFObject objectWithClassName:@"Project"];
-//    project[@"user"] = [PFUser currentUser];
-//    if (imageData != nil) {
-//        project[@"photo"] = [PFFile fileWithData:imageData];
-//    }
-//    project[@"title"] = self.projectTitle.text;
-//    project[@"price"] = [NSNumber numberWithInt:[self.price.text integerValue]];
-//    project[@"steps"] = self.steps;
-//    project[@"clientInformation"] = self.clientInformation;
-//    project[@"location"] = self.locationPlacemark;
-//    project[@"completed"] = [NSNumber numberWithBool:NO];
-//    project[@"notes"] = self.notes;
-//    
-//    project.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-//    
-//    [project saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//        if (!error) {
-//            [entity setValue:[project objectId] forKeyPath:@"parseId"];
-//            if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-//                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-//            }
-//        }
-//    }];
-    
+    // Now the Core Data object has been added, return back to master VC where the fetched results controller will take care of updating its table view.
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -273,15 +442,15 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     // Set text fields as properties
-    if (textField.tag == 0) {
+    if (textField.tag == 1) {
         self.projectTitle = textField;
     }
-    if (textField.tag == 1) {
+    if (textField.tag == 2) {
         self.price = textField;
     }
     
     // Remove currency formatting from number
-    if (textField.tag == 1 && textField.text.length > 0) {
+    if (textField.tag == 2 && textField.text.length > 0) {
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         formatter.numberStyle = NSNumberFormatterCurrencyStyle;
         formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
@@ -293,7 +462,7 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     // Add currency formatting to price field
-    if (textField.tag == 1) {
+    if (textField.tag == 2) {
         NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
         f.numberStyle = NSNumberFormatterDecimalStyle;
         NSNumber *currency = [f numberFromString:textField.text];
@@ -311,7 +480,7 @@
     self.projectHasBeenEdited = YES;
     
     // If the textField is the price textField, don't let the length of the price textField exceed six numbers
-    if (textField.tag == 1) {
+    if (textField.tag == 2) {
         if (range.length + range.location > textField.text.length) {
             return NO;
         }

@@ -7,7 +7,7 @@
 //
 
 #import "FrankieLocationViewController.h"
-#import "FrankieAddContractViewController.h"
+#import "FrankieAddEditContractViewController.h"
 
 @interface FrankieLocationViewController ()
 
@@ -41,7 +41,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    FrankieAddContractViewController *avc = [self.navigationController.viewControllers lastObject];
+    FrankieAddEditContractViewController *avc = [self.navigationController.viewControllers lastObject];
     avc.locationPlacemark = self.placemark;
  
     if (self.placemark != nil) {

@@ -9,7 +9,7 @@
 #import "FrankieStepsViewController.h"
 #import "FrankieStepsTableViewCell.h"
 
-#import "FrankieAddContractViewController.h"
+#import "FrankieAddEditContractViewController.h"
 #import "ProjectStep.h"
 
 @interface FrankieStepsViewController ()
@@ -47,7 +47,7 @@
     if (!parent){
         // Set text of steps cell and set steps property in add contract VC only if a step had been created
         if (self.shouldAddStep) {
-            FrankieAddContractViewController *avc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+            FrankieAddEditContractViewController *avc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
             
             NSIndexPath *tableSelection = [avc.tableView indexPathForSelectedRow];
             UITableViewCell *cell = [avc.tableView cellForRowAtIndexPath:tableSelection];

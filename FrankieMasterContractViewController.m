@@ -13,7 +13,7 @@
 #import "FrankieMasterContractViewController.h"
 #import "FrankieMasterContractTableViewCell.h"
 #import "FrankieDetailContractViewController.h"
-#import "FrankieAddContractViewController.h"
+#import "FrankieAddEditContractViewController.h"
 #import "FrankieLoginViewController.h"
 #import "FrankieSettingsViewController.h"
 #import "FrankieAppDelegate.h"
@@ -52,6 +52,12 @@
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadTable" object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSIndexPath *path = [self.tableView indexPathForSelectedRow];
+    [self.tableView deselectRowAtIndexPath:path animated:YES];
 }
 
 - (void)setNavigationBarAttributes
@@ -312,7 +318,7 @@
 
 - (void)loadAddContractViewController {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-    FrankieAddContractViewController *addContractVC = [storyboard instantiateViewControllerWithIdentifier:@"AddContract"];
+    FrankieAddEditContractViewController *addContractVC = [storyboard instantiateViewControllerWithIdentifier:@"FrankieAddEditContractViewController"];
     [self.navigationController pushViewController:addContractVC animated:YES];
 }
 
@@ -461,28 +467,12 @@
     // Push view controller instead of performing segue
  
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-    FrankieDetailContractViewController *detailContractVC = [storyboard instantiateViewControllerWithIdentifier:@"DetailContract"];
+    FrankieAddEditContractViewController *aevc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieAddEditContractViewController"];
     
     Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
-    NSEntityDescription *entity = [job entity];
-    NSDictionary *attributes = [entity attributesByName];
-    NSMutableDictionary *keysAndValues = [NSMutableDictionary new];
+    aevc.job = job;
     
-    // Changing nil to NSNull because app is crashing due to setting a nil value in the detailContractVC.project dictionary.
-    for (NSString *attribute in attributes) {
-        id value = [job valueForKey: attribute];
-        if (value == nil) {
-            [keysAndValues setValue:[NSNull null] forKey:attribute];
-        }
-        else {
-            [keysAndValues setObject:value forKey:attribute];
-        }
-    }
-    detailContractVC.project = keysAndValues;
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-   [self.navigationController pushViewController:detailContractVC animated:YES];
+    [self.navigationController pushViewController:aevc animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

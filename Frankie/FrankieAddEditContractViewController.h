@@ -13,17 +13,17 @@
 #import "FrankieClientInformationViewController.h"
 #import "FrankieLocationViewController.h"
 #import "FrankieNotesViewController.h"
+#import "Job.h"
 
-@interface FrankieAddContractViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UINavigationControllerDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface FrankieAddEditContractViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UINavigationControllerDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 
-@property (strong, nonatomic) IBOutlet UIScrollView *keyboardScrollView;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIDatePicker *pickerView;
 @property (strong, nonatomic) UIGestureRecognizer *touch;
-@property (strong, nonatomic) IBOutlet UITextField *projectTitle;
 @property (strong, nonatomic) IBOutlet UIButton *uploadButton;
-@property (strong, nonatomic) IBOutlet UITextField *price;
+@property (strong, nonatomic) UITextField *projectTitle;
+@property (strong, nonatomic) UITextField *price;
 @property (strong, nonatomic) UIImagePickerController *mediaPicker;
 
 // Determines whether to show warning before cancelling project upload
@@ -40,6 +40,8 @@
 @property (strong, nonatomic) NSArray *steps;
 @property (strong, nonatomic) NSString *notes;
 
-- (IBAction)createNewContract:(id)sender;
+@property (strong, nonatomic) Job *job;
+
+- (IBAction)createOrEditContract:(id)sender;
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "FrankieClientInformationViewController.h"
-#import "FrankieAddContractViewController.h"
+#import "FrankieAddEditContractViewController.h"
 
 @interface FrankieClientInformationViewController ()
 
@@ -32,7 +32,7 @@
 {
     [self.view endEditing:YES];
     
-    FrankieAddContractViewController *avc = [self.navigationController.viewControllers lastObject];
+    FrankieAddEditContractViewController *avc = [self.navigationController.viewControllers lastObject];
     avc.clientInformation = self.clientInformation;
     
     if (self.clientInformation[@"name"] != nil && ![self.clientInformation[@"name"] isEqualToString:@""]) {

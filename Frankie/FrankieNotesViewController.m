@@ -7,7 +7,7 @@
 //
 
 #import "FrankieNotesViewController.h"
-#import "FrankieAddContractViewController.h"
+#import "FrankieAddEditContractViewController.h"
 
 @interface FrankieNotesViewController ()
 
@@ -33,7 +33,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    FrankieAddContractViewController *avc = [self.navigationController.viewControllers lastObject];
+    FrankieAddEditContractViewController *avc = [self.navigationController.viewControllers lastObject];
     avc.notes = self.notes.text;
     
     // Add up to three words to notes table view cell in add contract VC
