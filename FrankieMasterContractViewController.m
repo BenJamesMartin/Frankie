@@ -427,19 +427,19 @@
         
         if (numberOfDays > 0) {
             if (numberOfDays == 1)
-                cell.nextStepDueDate.text = @"Due tomorrow";
+                cell.nextStepDueDate.text = @"DUE TOMORROW";
             else
-                cell.nextStepDueDate.text = [NSString stringWithFormat:@"Due in %d days", numberOfDays];
+                cell.nextStepDueDate.text = [NSString stringWithFormat:@"DUE IN %d DAYS", numberOfDays];
         }
         else if (numberOfDays == 0) {
-            cell.nextStepDueDate.text = @"Due Today";
+            cell.nextStepDueDate.text = @"DUE TODAY";
         }
         else {
             numberOfDays = abs(numberOfDays);
             if (numberOfDays == 1)
-                cell.nextStepDueDate.text = @"Due yesterday";
+                cell.nextStepDueDate.text = @"DUE YESTERDAY";
             else
-                cell.nextStepDueDate.text = [NSString stringWithFormat:@"Due %d days ago", numberOfDays];
+                cell.nextStepDueDate.text = [NSString stringWithFormat:@"DUE %d DAYS AGO", numberOfDays];
         }
     }
     
