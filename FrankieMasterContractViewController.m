@@ -59,7 +59,6 @@
 {
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error]) {
-        NSLog(@"Could not perform fetch %@", error);
     }
     else {
         [self.tableView reloadData];
@@ -406,8 +405,11 @@
 {
     Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
     
-    if (job.title != nil)
+    // If the job title has been set and it has not been edited to a blank string
+    if (job.title != nil && ![job.title isEqualToString:@""])
         cell.title.text = job.title;
+    else
+        cell.title.text = @"[Title]";
     
     NSArray *steps = job.steps;
     ProjectStep *nextStep = steps.firstObject;

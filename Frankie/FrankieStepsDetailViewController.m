@@ -195,11 +195,9 @@
         formatter.dateFormat = @"MMMM dd, yyyy";
         self.dueDateField.text = [formatter stringFromDate:date];
         self.step.dueDate = date;
-        [self.dueDateField resignFirstResponder];
     }];
     
     [dateSelectionVC setCancelButtonAction:^(RMDateSelectionViewController *controller) {
-        [self.dueDateField resignFirstResponder];
     }];
     
     [self presentViewController:dateSelectionVC animated:YES completion:nil];

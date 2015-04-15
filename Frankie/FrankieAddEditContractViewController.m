@@ -152,7 +152,8 @@
             [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
             numberFormatter.maximumFractionDigits = 0;
             NSString *currencyString = [numberFormatter stringFromNumber:self.job.price];
-            tf.text = currencyString;
+            if (self.job.price.floatValue != 0)
+                tf.text = currencyString;
             tf.alpha = 0.0;
             [UIView animateWithDuration:0.5 animations:^{
                 tf.alpha = 1.0;

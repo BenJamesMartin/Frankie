@@ -22,4 +22,9 @@
 @dynamic steps;
 @dynamic title;
 
+// Set default values here
+- (void)awakeFromInsert
+{
+}
+
 @end
