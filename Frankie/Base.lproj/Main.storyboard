@@ -839,17 +839,6 @@
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Bathroom Remodel" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QdZ-Zt-VJq">
-                                                    <rect key="frame" x="77" y="6" width="215" height="34"/>
-                                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="tintColor" red="0.57647058819999997" green="0.70588235290000001" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="16"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="done"/>
-                                                    <connections>
-                                                        <outlet property="delegate" destination="VsT-R0-WFb" id="42R-lT-Chb"/>
-                                                    </connections>
-                                                </textField>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -895,11 +884,23 @@
                                     <outlet property="delegate" destination="VsT-R0-WFb" id="nbX-NO-Iy6"/>
                                 </connections>
                             </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Bathroom Remodel" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QdZ-Zt-VJq">
+                                <rect key="frame" x="77" y="308" width="215" height="34"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.57647058819999997" green="0.70588235290000001" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="done"/>
+                                <connections>
+                                    <outlet property="delegate" destination="VsT-R0-WFb" id="42R-lT-Chb"/>
+                                </connections>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <connections>
                         <outlet property="dueDateField" destination="rhE-5H-BuC" id="2yx-xL-SBI"/>
+                        <outlet property="nameField" destination="QdZ-Zt-VJq" id="IoY-kw-ldv"/>
                         <outlet property="tableView" destination="rdJ-3c-H2l" id="669-ge-1ty"/>
                         <outlet property="uploadButton" destination="Lau-OR-CbI" id="Nnf-xX-aUL"/>
                     </connections>

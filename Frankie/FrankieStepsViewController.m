@@ -24,13 +24,16 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addStep)];
     
     self.steps = [NSMutableArray new];
-    self.stepCount = 0;
-    self.cellForDetailView = [NSMutableDictionary new];
-    self.isNavigatingFromDetailView = NO;
-    self.shouldAddStep = NO;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"StepsCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
+    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(doneEditing)];
+    
+    self.navigationItem.leftBarButtonItem = backItem;
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -39,47 +42,43 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
--(void)willMoveToParentViewController:(UIViewController *)parent
+- (void)doneEditing
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+// Only for navigating from and back to addEdit (parent) VC
+// If navigating from addEdit (this VC was pushed), parent is defined
+// If navigating back to addEdit (this VC was popped), parent is undefined
+- (void)willMoveToParentViewController:(UIViewController *)parent
 {
     [super willMoveToParentViewController:parent];
     
     // Navigating back to add contract VC
     if (!parent){
         // Set text of steps cell and set steps property in add contract VC only if a step had been created
-        if (self.shouldAddStep) {
-            FrankieAddEditContractViewController *avc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
-            
-            NSIndexPath *tableSelection = [avc.tableView indexPathForSelectedRow];
-            UITableViewCell *cell = [avc.tableView cellForRowAtIndexPath:tableSelection];
-            
-            UILabel *label = [UILabel new];
-            NSString *labelText = (self.stepCount == 1 ? @"Step" : @"Steps");
-            label.text = [NSString stringWithFormat:@"%d %@    ", self.stepCount, labelText];
-            label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
-            label.textColor = [UIColor darkGrayColor];
-            [label sizeToFit];
-            cell.accessoryView = label;
-            
-            avc.steps = self.steps;
-            self.shouldAddStep = NO;
-        }
+        FrankieAddEditContractViewController *avc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+        
+        NSIndexPath *tableSelection = [avc.tableView indexPathForSelectedRow];
+        UITableViewCell *cell = [avc.tableView cellForRowAtIndexPath:tableSelection];
+        
+        UILabel *label = [UILabel new];
+        NSString *labelText = (self.steps.count == 1 ? @"Step" : @"Steps");
+        label.text = [NSString stringWithFormat:@"%lu %@    ", self.steps.count, labelText];
+        label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
+        label.textColor = [UIColor darkGrayColor];
+        [label sizeToFit];
+        cell.accessoryView = label;
+        
+        avc.steps = self.steps;
     }
 }
 
-// If navigating from creating a new step, add new table cell entry and associate that VC with correct index path
+// If navigating from creating a new step, an object was added to model. Reload the table view.
+// If navigating here for the first time, there is no data so reloading it will do nothing.
 - (void)viewDidAppear:(BOOL)animated
 {
-    if (self.isNavigatingFromDetailView && !self.wasEditingStep) {
-        NSInteger rowCount = [self.tableView numberOfRowsInSection:0];
-        int pathCount = (int)(rowCount == 0 ? 0 : rowCount);
-        NSIndexPath *path = [NSIndexPath indexPathForRow:pathCount inSection:0];
-        self.cellForDetailView[path.description] = self.currentDVC;
-    
-        self.stepCount++;
-        [self.tableView insertRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    self.wasEditingStep = NO;
-    self.isNavigatingFromDetailView = NO;
+    [self.tableView reloadData];
 }
 
 // Nav bar top-right add button
@@ -88,8 +87,6 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     FrankieStepsDetailViewController *dvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsDetailViewController"];
     [self.navigationController pushViewController:dvc animated:YES];
-    self.currentDVC = dvc;
-    self.wasEditingStep = NO;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -106,7 +103,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return self.stepCount;
+    return self.steps.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -119,13 +116,18 @@
         cell = [[FrankieStepsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    ProjectStep *step = [self.steps lastObject];
+    ProjectStep *step = self.steps[indexPath.row];
     
     NSDateFormatter *formatter = [NSDateFormatter new];
     formatter.dateFormat = @"MMMM dd, yyyy";
     
-    cell.picture.image = step.picture;
     cell.name.text = step.name;
+    if (step.picture != nil) {
+        cell.picture.image = step.picture;
+    }
+    else {
+        cell.picture.image = [UIImage imageNamed:@"image-upload-icon-small"];
+    }
     cell.dueDate.text = [formatter stringFromDate:step.dueDate];
         
     return cell;
@@ -135,23 +137,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-    FrankieStepsDetailViewController *dvc = self.cellForDetailView[indexPath.description];
-    
-    if (dvc == nil) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        dvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsDetailViewController"];
-        self.cellForDetailView[cell.description] = dvc;
-    }
 
-    self.wasEditingStep = YES;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    FrankieStepsDetailViewController *dvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsDetailViewController"];
+
+    dvc.step = self.steps[indexPath.row];
     [self.navigationController pushViewController:dvc animated:YES];
 }
 
 // Allow deletion of steps by side swipe
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        self.stepCount--;
+        [self.steps removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }

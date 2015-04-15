@@ -23,8 +23,53 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.step = [ProjectStep new];
+
+    self.hasChangedBackButton = NO;
+    // Editing existing step - load its data
+    if (self.step != nil) {
+        [self loadStep];
+        [self editLeftBarButtonItemWithTitle:@"Done"];
+        self.hasChangedBackButton = YES;
+    }
+    // Creating a new step
+    else {
+        self.step = [ProjectStep new];
+    }
+
     self.stepHasBeenEdited = NO;
+}
+
+- (void)editLeftBarButtonItemWithTitle:(NSString *)title
+{
+    if (![self.navigationItem.leftBarButtonItem.title isEqualToString:title]) {
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:title
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(createOrEditStep)];
+        
+        [self.navigationItem setLeftBarButtonItem:item animated:YES];
+    }
+}
+
+- (void)createOrEditStep
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)loadStep
+{
+    self.nameField.text = self.step.name;
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateFormat = @"MMMM dd, yyyy";
+    self.dueDateField.text = [formatter stringFromDate:self.step.dueDate];
+    if (self.step.picture != nil) {
+        self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self.uploadButton setImage:self.step.picture forState:UIControlStateNormal];
+    }
+    else {
+        [self.uploadButton setImage:[UIImage imageNamed:@"image-upload-icon"] forState:UIControlStateNormal];
+    }
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -34,11 +79,14 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    // Change cell when editing
-    // When not editing, simply change step and it will
-    
     // Make sure this is happening when dismissing detail view and not when presenting image picker
     if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound && self.stepHasBeenEdited) {
+        
+        // Check if object should be added to steps model by checking if name property has been set.
+        BOOL shouldAddObject = YES;
+        if ([self.step nameHasBeenSet]) {
+            shouldAddObject = NO;
+        }
         [self.view endEditing:YES];
         
         // Regardless of whether editing or creating new step, set Step model properties (name, dueDate, picture)
@@ -56,7 +104,12 @@
         if (cell != nil) {
             cell.name.text = self.step.name;
             cell.dueDate.text = self.dueDateField.text;
-            cell.picture.image = self.step.picture;
+            if (self.step.picture != nil) {
+                cell.picture.image = self.step.picture;
+            }
+            else {
+                cell.picture.image = [UIImage imageNamed:@"image-upload-icon-small"];
+            }
         }
         
         // If a date was not set, add the default date (one month from current date as specified in ProjectStep init method) to the date text field
@@ -65,9 +118,8 @@
         self.dueDateField.text = [formatter stringFromDate:self.step.dueDate];
         
         // Reset shouldAddStep flag and verify that we are navigating back to master view from this view (step detail) versus its parent view (add project VC)
-        svc.shouldAddStep = YES;
-        svc.isNavigatingFromDetailView = YES;
-        [svc.steps addObject:self.step];
+        if (shouldAddObject)
+            [svc.steps addObject:self.step];
     }
 }
 
@@ -97,8 +149,10 @@
     return cell;
 }
 
+
 #pragma mark - UITableViewDelegate
 
+// No cells can be selected in this view controller
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 }
@@ -113,17 +167,18 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    if (textField.tag == 0) {
-        self.nameField = textField;
-    }
-    if (textField.tag == 1) {
-        self.dueDateField = textField;
+    if (textField == self.dueDateField) {
         [self showDatePicker];
+        [textField resignFirstResponder];
     }
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    // If creating a new step, information has just been added to it. It can now be created instead of discarded.
+    if (!self.hasChangedBackButton) {
+        [self editLeftBarButtonItemWithTitle:@"Create"];
+    }
     self.stepHasBeenEdited = YES;
     return YES;
 }
@@ -156,6 +211,9 @@
 }
 
 - (IBAction)choosePhoto:(id)sender {
+    if (!self.hasChangedBackButton) {
+        [self editLeftBarButtonItemWithTitle:@"Create"];
+    }
     self.stepHasBeenEdited = YES;
     
     self.mediaPicker = [UIImagePickerController new];

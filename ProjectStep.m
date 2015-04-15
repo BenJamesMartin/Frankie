@@ -21,11 +21,16 @@
         [dateComponents setMonth:1];
         NSCalendar *calendar = [NSCalendar currentCalendar];
         self.dueDate = [calendar dateByAddingComponents:dateComponents toDate:[NSDate date] options:0];
-        
-        self.picture = [UIImage imageNamed:@"image-upload-icon-small"];
     }
     
     return self;
+}
+
+- (BOOL)nameHasBeenSet
+{
+    if ([self.name isEqualToString:@"[Step Name]"])
+        return NO;
+    return YES;
 }
 
 

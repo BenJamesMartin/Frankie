@@ -36,8 +36,8 @@
 {
     [super viewDidLoad];
     
-
-
+    self.shouldSetJobInViewDidAppear = YES;
+    
     // If we're not editing an existing job, we're creating a new one. Add a cancel button in the top-left.
     if (self.job == nil) {
         // Set left bar button item (Cancel button)
@@ -45,6 +45,15 @@
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(cancelCreation)];
+        
+        self.navigationItem.leftBarButtonItem = backItem;
+    }
+    // If we're editing the job, change the back button title to a more appropriate "Done"
+    else {
+        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(createOrEditContract:)];
         
         self.navigationItem.leftBarButtonItem = backItem;
     }
@@ -70,6 +79,11 @@
                  object:nil];
 }
 
+- (void)doneEditing
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
@@ -81,9 +95,12 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    // If we're editing an existing job, load the data for that job.
-    if (self.job != nil) {
+    // If we're editing an existing job (navigating from master view), load the data for that job.
+    // If we're navigating back from steps VC, we should not write over steps.
+    if (self.job != nil && self.shouldSetJobInViewDidAppear) {
+        self.steps = self.job.steps;
         [self loadData];
+        self.shouldSetJobInViewDidAppear = NO;
     }
 }
 
@@ -221,7 +238,12 @@
     NSData *imageData = self.job.picture;
     if (imageData != nil) {
         UIImage *image = [UIImage imageWithData:imageData];
+        self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.uploadButton setImage:image forState:UIControlStateNormal];
+        self.uploadButton.alpha = 0.0;
+        [UIView animateWithDuration:0.5 animations:^{
+            self.uploadButton.alpha = 1.0;
+        }];
     }
 }
 
@@ -258,7 +280,7 @@
     }];
     
     // A single gesture recognizer can only be added to one view, so we need a gesture recognizer for each view.
-    for (UIView *view in @[self.view, self.uploadButton]) {
+    for (UIView *view in @[self.view, self.tableView, self.uploadButton]) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismissTap)];
         [view addGestureRecognizer:tap];
     }
@@ -271,7 +293,7 @@
         self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     }];
     
-    for (UIView *view in @[self.view, self.uploadButton]) {
+    for (UIView *view in @[self.view, self.tableView, self.uploadButton]) {
         for (UIGestureRecognizer *gr in [view gestureRecognizers]) {
             if ([gr class] == [UITapGestureRecognizer class]) {
                 [view removeGestureRecognizer:gr];
@@ -309,6 +331,7 @@
         [self.job setValue:[[[(NSManagedObject*)self.job objectID] URIRepresentation] absoluteString] forKey:@"objectId"];
         
         NSData *imageData;
+        // If an image has been uploaded (the image upload button's image is not the defaul upload icon)
         if (!([[self.uploadButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"image-upload-icon"]])) {
             UIImage *image = [self.uploadButton imageForState:UIControlStateNormal];
             imageData = UIImageJPEGRepresentation(image, 0.9f);
@@ -534,6 +557,7 @@
             self.svc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsViewController"];
         }
         [self.svc.view endEditing:YES];
+        self.svc.steps = self.steps.mutableCopy;
         [self.navigationController pushViewController:self.svc animated:YES];
     }
     // Client information

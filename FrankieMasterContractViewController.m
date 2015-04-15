@@ -54,8 +54,20 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadTable" object:nil];
 }
 
+// If editing a contract, reload data when view reappears
 - (void)viewDidAppear:(BOOL)animated
 {
+    NSError *error;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        NSLog(@"Could not perform fetch %@", error);
+    }
+    else {
+        [self.tableView reloadData];
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     NSIndexPath *path = [self.tableView indexPathForSelectedRow];
     [self.tableView deselectRowAtIndexPath:path animated:YES];
 }
@@ -82,28 +94,9 @@
     self.fetchedResultsController = nil;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
-//    NSShadow *shadow = [[NSShadow alloc] init];
-//    shadow.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8];
-//    shadow.shadowOffset = CGSizeMake(0, 1);
-//    [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
-//                                                           [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0], NSForegroundColorAttributeName,
-//                                                           shadow, NSShadowAttributeName,
-//                                                           [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:21.0], NSFontAttributeName, nil]];
-}
-
 - (void)revealLeftMenu
 {
-    NSLog(@"done");
     [[NSNotificationCenter defaultCenter] postNotificationName:@"revealSideMenu" object:nil];
-//    [self.revealSideViewController pushOldViewControllerOnDirection:PPRevealSideDirectionLeft animated:YES];
-//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-//    FrankieSideMenuViewController *smvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieSideMenuViewController"];
-//    [self.revealSideViewController pushViewController:smvc onDirection:PPRevealSideDirectionLeft animated:YES completion:^{
-//        NSLog(@"completion");
-//    }];
 }
 
 - (void)loadSettingsViewController
@@ -116,7 +109,7 @@
 
 - (NSFetchedResultsController *)fetchedResultsController
 {
-    // Because both the property name and the method name are 'fetchedResultsController', we must use _fetchedResultsController to access the property. self.fetchedResultsController will call the method, resulting in an infinite loop. The exception is when setting the property as we do below, e.g. self.fetchedResultsController = [something] or when sending a message to that instance as we do below with [fetchedResultsController performFetch:].
+    // Because both the property name and the method name are 'fetchedResultsController', we must use _fetchedResultsController to access the property directly. self.fetchedResultsController will call the getter, resulting in an infinite loop. The exception is when setting the property (as we do below with "self.fetchedResultsController = aFetchedResultsController") or when sending a message to that instance (as we do below with "[fetchedResultsController performFetch:]").
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
@@ -449,7 +442,6 @@
         }
     }
     
-    
     if (job.picture != nil) {
         UIImage *image = [UIImage imageWithData:job.picture];
         cell.picture.image = image;
@@ -463,10 +455,9 @@
 
 #pragma mark - UITableViewDelegate
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Push view controller instead of performing segue
- 
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     FrankieAddEditContractViewController *aevc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieAddEditContractViewController"];
     
     Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];

@@ -20,8 +20,10 @@
 @property (strong, nonatomic) UIImagePickerController *mediaPicker;
 @property (assign, nonatomic) BOOL hasSelectedImage;
 
-@property (strong, nonatomic) UITextField *nameField;
+@property (strong, nonatomic) IBOutlet UITextField *nameField;
 @property (strong, nonatomic) IBOutlet UITextField *dueDateField;
+
+@property (assign, nonatomic) BOOL hasChangedBackButton;
 
 @property (assign, nonatomic) BOOL stepHasBeenEdited;
 

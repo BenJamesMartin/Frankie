@@ -10,8 +10,9 @@
 
 @interface ProjectStep : NSObject
 
-@property (strong, nonatomic) UIImage *picture;
+- (BOOL)nameHasBeenSet;
 
+@property (strong, nonatomic) UIImage *picture;
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSDate *dueDate;
 

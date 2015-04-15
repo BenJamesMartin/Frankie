@@ -40,6 +40,10 @@
 @property (strong, nonatomic) NSArray *steps;
 @property (strong, nonatomic) NSString *notes;
 
+// When loading contract from master VC, set job model
+// When loading contract from step VC (navigating backwards), do not set job model
+@property (assign, nonatomic) BOOL shouldSetJobInViewDidAppear;
+
 @property (strong, nonatomic) Job *job;
 
 - (IBAction)createOrEditContract:(id)sender;

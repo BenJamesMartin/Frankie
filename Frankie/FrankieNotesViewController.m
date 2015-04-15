@@ -28,13 +28,26 @@
     // Rounded corners
     self.notes.layer.cornerRadius = 3.0;
     
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(doneEditing)];
+    
+    self.navigationItem.leftBarButtonItem = backItem;
+    
     [self.notes becomeFirstResponder];
+}
+
+- (void)doneEditing
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     FrankieAddEditContractViewController *avc = [self.navigationController.viewControllers lastObject];
     avc.notes = self.notes.text;
+    [self.view endEditing:YES];
     
     // Add up to three words to notes table view cell in add contract VC
     if (self.notes.text.length > 0) {

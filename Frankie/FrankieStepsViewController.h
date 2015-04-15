@@ -12,12 +12,5 @@
 @interface FrankieStepsViewController : UITableViewController
 
 @property (strong, nonatomic) NSMutableArray *steps;
-@property (assign, nonatomic) int stepCount;
-
-@property (strong, nonatomic) FrankieStepsDetailViewController *currentDVC;
-@property (strong, nonatomic) NSMutableDictionary *cellForDetailView;
-@property (assign, nonatomic) BOOL isNavigatingFromDetailView;
-@property (assign, nonatomic) BOOL wasEditingStep;
-@property (assign, nonatomic) BOOL shouldAddStep;
 
 @end

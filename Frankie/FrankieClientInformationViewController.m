@@ -20,6 +20,18 @@
 
     self.clientInformation = [NSMutableDictionary new];
     self.infoField = @[@"name", @"phone", @"email"];
+    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(doneEditing)];
+    
+    self.navigationItem.leftBarButtonItem = backItem;
+}
+
+- (void)doneEditing
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
