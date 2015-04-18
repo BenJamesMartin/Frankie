@@ -400,10 +400,6 @@
         else {
             imageData = nil;
         }
-        
-//        if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-//        }
 
         
         //    PFObject *project = [PFObject objectWithClassName:@"Project"];
@@ -430,6 +426,10 @@
         //        }
         //    }];
 
+    }
+    
+    if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
     }
     
     // Now the Core Data object has been added, return back to master VC where the fetched results controller will take care of updating its table view.
