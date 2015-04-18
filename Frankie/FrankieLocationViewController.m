@@ -8,6 +8,7 @@
 
 #import "FrankieLocationViewController.h"
 #import "FrankieAddEditContractViewController.h"
+#import "RTNActivityView.h"
 
 @interface FrankieLocationViewController ()
 
@@ -61,7 +62,9 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     CLGeocoder *geocoder = [CLGeocoder new];
+    [RTNActivityView show];
     [geocoder geocodeAddressString:searchBar.text completionHandler:^(NSArray *placemarks, NSError *error) {
+        [RTNActivityView hide];
         CLPlacemark *placemark = placemarks.lastObject;
         
         MKPlacemark *mkPlacemark = [[MKPlacemark alloc] initWithPlacemark:placemark];

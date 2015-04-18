@@ -30,6 +30,9 @@
 @property (strong, nonatomic) MKPointAnnotation *annotation;
 @property (strong, nonatomic) IBOutlet UIButton *directionsButton;
 
-@property (strong, nonatomic) IBOutlet CLLocationManager *locationManager;
+// Because directions are provided from the didUpdateLocations callback, which is called multiple times per minute, ensure directions are only obtained once.
+@property (assign, nonatomic) BOOL hasProvidedDirections;
+
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
 @end

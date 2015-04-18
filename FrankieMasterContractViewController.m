@@ -42,7 +42,7 @@
     [super viewDidLoad];
     
     [self setNavigationBarAttributes];
-    [self syncParseWithCoreData];
+//    [self syncParseWithCoreData];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"FrankieMasterContractTableViewCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     

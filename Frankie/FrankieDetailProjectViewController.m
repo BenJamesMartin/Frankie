@@ -12,6 +12,7 @@
 #import "FrankieDetailProjectViewController.h"
 #import "FrankieAddEditContractViewController.h"
 #import "FrankieProjectDetailStepsTableViewCell.h"
+#import "RTNActivityView.h"
 #import "ProjectStep.h"
 
 @implementation FrankieDetailProjectViewController
@@ -374,34 +375,24 @@
 
 - (IBAction)getDirections:(id)sender
 {
-    CLPlacemark *placemark = self.job.location;
-    NSString *city = placemark.locality;
-    city = [city stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-    NSString *state = placemark.administrativeArea;
-    state = [state stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-    NSString *streetNumber = placemark.subThoroughfare;
-    NSString *streetName = placemark.thoroughfare;
-    streetName = [streetName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-    
-    NSString *addressString = [NSString stringWithFormat:@"http://maps.apple.com/?q=%@+%@,+%@,+%@", streetNumber, streetName, city, state];
-    
-    // Request location before asking directions
-    
-    CLLocationManager *locationManager = [CLLocationManager new];
-    [locationManager startUpdatingLocation];
-    self.locationManager = [CLLocationManager new];
-    self.locationManager.delegate = self;
-    self.locationManager.distanceFilter = kCLDistanceFilterNone;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.locationManager requestWhenInUseAuthorization];
+    self.hasProvidedDirections = NO;
+    // If the user has provided a project location, prompt for their location to obtain directions
+    if (self.job.location != nil) {
+        CLLocationManager *locationManager = [CLLocationManager new];
+        [locationManager startUpdatingLocation];
+        self.locationManager = [CLLocationManager new];
+        self.locationManager.delegate = self;
+        self.locationManager.distanceFilter = kCLDistanceFilterNone;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            [self.locationManager requestWhenInUseAuthorization];
+        }
+        self.locationView.showsUserLocation = YES;
     }
-    self.locationView.showsUserLocation = YES;
-
-    
-//    NSString *addressString = @"http://maps.apple.com/?q=1+Infinite+Loop,+Cupertino,+California";
-//    NSURL *url = [NSURL URLWithString:addressString];
-//    [[UIApplication sharedApplication] openURL:url];
+    // If no project location has been provided, inform the user he needs to provide one to obtain directions
+    else {
+        [self showAlertControllerWithMessage:@"Please edit the project and provide its location to obtain directions."];
+    }
 }
 
 
@@ -409,33 +400,39 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    CLLocation *location = locations.lastObject;
-    CLGeocoder *geocoder = [CLGeocoder new];
-    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-        CLPlacemark *sourcePlacemark = placemarks.lastObject;
-        NSString *sourceStreetNumber = sourcePlacemark.subThoroughfare;
-        // If Maps cannot determine the exact street number and provides a range, use the lower end of the range. Entering a range into a Maps query will result in no street number being used.
-        sourceStreetNumber = [sourceStreetNumber componentsSeparatedByString:@"-"][0];
-        NSString *sourceStreetName = sourcePlacemark.thoroughfare;
-        sourceStreetName = [sourceStreetName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-        NSString *sourceCity = sourcePlacemark.locality;
-        sourceCity = [sourceCity stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-        NSString *sourceState = sourcePlacemark.administrativeArea;
-        sourceState = [sourceState stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-        
-        CLPlacemark *destinationPlacemark = self.job.location;
-        NSString *destinationStreetNumber = destinationPlacemark.subThoroughfare;
-        NSString *destinationStreetName = destinationPlacemark.thoroughfare;
-        destinationStreetName = [destinationStreetName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-        NSString *destinationCity = destinationPlacemark.locality;
-        destinationCity = [destinationCity stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-        NSString *destinationState = sourcePlacemark.administrativeArea;
-        destinationState = [destinationState stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-        
-        NSString *directionsString = [NSString stringWithFormat:@"http://maps.apple.com/?saddr=%@+%@,+%@,+%@&daddr=%@+%@,+%@,+%@", sourceStreetNumber, sourceStreetName, sourceCity, sourceState, destinationStreetNumber, destinationStreetName, destinationCity, destinationState];
-        NSURL *url = [NSURL URLWithString:directionsString];
-        [[UIApplication sharedApplication] openURL:url];
-    }];
+    if (!self.hasProvidedDirections) {
+        CLLocation *location = locations.lastObject;
+        CLGeocoder *geocoder = [CLGeocoder new];
+        [RTNActivityView show];
+        [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+            [RTNActivityView hide];
+            CLPlacemark *sourcePlacemark = placemarks.lastObject;
+            NSString *sourceStreetNumber = sourcePlacemark.subThoroughfare;
+            // If Core Location cannot determine the exact street number, it provides a range (e.g. "2203-2217" instead of "2215"). Entering a range into a Maps query will result in no street number being used, resulting in inaccurate directions. Use the lower end of the range to ensure a complete address is provided.
+            sourceStreetNumber = [sourceStreetNumber componentsSeparatedByString:@"-"][0];
+            NSString *sourceStreetName = sourcePlacemark.thoroughfare;
+            sourceStreetName = [sourceStreetName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+            NSString *sourceCity = sourcePlacemark.locality;
+            sourceCity = [sourceCity stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+            NSString *sourceState = sourcePlacemark.administrativeArea;
+            sourceState = [sourceState stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+            
+            CLPlacemark *destinationPlacemark = self.job.location;
+            NSString *destinationStreetNumber = destinationPlacemark.subThoroughfare;
+            NSString *destinationStreetName = destinationPlacemark.thoroughfare;
+            destinationStreetName = [destinationStreetName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+            NSString *destinationCity = destinationPlacemark.locality;
+            destinationCity = [destinationCity stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+            NSString *destinationState = sourcePlacemark.administrativeArea;
+            destinationState = [destinationState stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+            
+            NSString *directionsString = [NSString stringWithFormat:@"http://maps.apple.com/?saddr=%@+%@,+%@,+%@&daddr=%@+%@,+%@,+%@", sourceStreetNumber, sourceStreetName, sourceCity, sourceState, destinationStreetNumber, destinationStreetName, destinationCity, destinationState];
+            NSURL *url = [NSURL URLWithString:directionsString];
+            [[UIApplication sharedApplication] openURL:url];
+            
+            self.hasProvidedDirections = YES;
+        }];
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
