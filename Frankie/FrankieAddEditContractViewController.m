@@ -212,7 +212,7 @@
         }];
     }
     
-    SVPlacemark *placemark = self.job.location;
+    CLPlacemark *placemark = self.job.location;
     if (placemark != nil) {
         UILabel *stepsLabel = [UILabel new];
         stepsLabel.text = [NSString stringWithFormat:@"%@ %@", placemark.subThoroughfare, placemark.thoroughfare];

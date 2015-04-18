@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import <CoreLocation/CoreLocation.h>
 
 #import "FrankieStepsViewController.h"
 #import "FrankieClientInformationViewController.h"
@@ -35,7 +36,7 @@
 @property (strong, nonatomic) FrankieNotesViewController *nvc;
 
 @property (strong, nonatomic) NSDictionary *clientInformation;
-@property (strong, nonatomic) SVPlacemark *locationPlacemark;
+@property (strong, nonatomic) CLPlacemark *locationPlacemark;
 @property (assign, nonatomic) int stepCount;
 @property (strong, nonatomic) NSArray *steps;
 @property (strong, nonatomic) NSString *notes;

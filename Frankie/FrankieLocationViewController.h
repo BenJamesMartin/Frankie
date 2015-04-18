@@ -10,11 +10,10 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <FlatUIKit/FlatUIKit.h>
-#import <SVGeocoder/SVGeocoder.h>
 
 @interface FrankieLocationViewController : UIViewController <UISearchBarDelegate>
 
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
-@property (strong, nonatomic) SVPlacemark *placemark;
+@property (strong, nonatomic) CLPlacemark *placemark;
 
 @end

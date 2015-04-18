@@ -60,31 +60,18 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-//    CLGeocoder *geocoder = [CLGeocoder new];
-//    [geocoder geocodeAddressString:searchBar.text completionHandler:^(NSArray *placemarks, NSError *error) {
-//        CLPlacemark *placemark = placemarks.lastObject;
-//        
-//    }];
-    
-    
-    
-    [SVGeocoder geocode:searchBar.text
-        completion:^(NSArray *placemarks, NSHTTPURLResponse *urlResponse, NSError *error) {
-            SVPlacemark *placemark = [placemarks firstObject];
-            CLLocationCoordinate2D coordinate = placemark.coordinate;
-            
-            MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
-            [annotation setCoordinate:coordinate];
-            [annotation setTitle:searchBar.text];
-            [self.mapView addAnnotation:annotation];
-            
-            MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(coordinate, 1000, 1000);
-            [self.mapView setRegion:region animated:YES];
-            
-            self.placemark = placemark;
-            
-            [searchBar resignFirstResponder];
-        }];
+    CLGeocoder *geocoder = [CLGeocoder new];
+    [geocoder geocodeAddressString:searchBar.text completionHandler:^(NSArray *placemarks, NSError *error) {
+        CLPlacemark *placemark = placemarks.lastObject;
+        
+        MKPlacemark *mkPlacemark = [[MKPlacemark alloc] initWithPlacemark:placemark];
+        [self.mapView addAnnotation:mkPlacemark];
+        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(mkPlacemark.coordinate, 1000, 1000);
+        [self.mapView setRegion:region animated:YES];
+        
+        self.placemark = placemark;
+        [searchBar resignFirstResponder];
+    }];
 }
 
 /*

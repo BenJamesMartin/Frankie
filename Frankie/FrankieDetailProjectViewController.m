@@ -102,7 +102,7 @@
 
 - (void)centerOnProjectLocation
 {
-    SVPlacemark *placemark = self.job.location;
+    CLPlacemark *placemark = self.job.location;
     if (placemark != nil) {
         MKCoordinateRegion region;
         MKCoordinateSpan span;
@@ -110,8 +110,9 @@
         span.longitudeDelta = 0.015;
         CLLocationCoordinate2D location;
         
-        location.latitude = placemark.coordinate.latitude;
-        location.longitude = placemark.coordinate.longitude;
+        MKPlacemark *mkPlacemark = [[MKPlacemark alloc] initWithPlacemark:placemark];
+        location.latitude = mkPlacemark.coordinate.latitude;
+        location.longitude = mkPlacemark.coordinate.longitude;
         region.span = span;
         region.center = location;
         [self.locationView setRegion:region animated:YES];
@@ -373,7 +374,7 @@
 
 - (IBAction)getDirections:(id)sender
 {
-    SVPlacemark *placemark = self.job.location;
+    CLPlacemark *placemark = self.job.location;
     NSString *city = placemark.locality;
     city = [city stringByReplacingOccurrencesOfString:@" " withString:@"+"];
     NSString *state = placemark.administrativeArea;
@@ -422,7 +423,7 @@
         NSString *sourceState = sourcePlacemark.administrativeArea;
         sourceState = [sourceState stringByReplacingOccurrencesOfString:@" " withString:@"+"];
         
-        SVPlacemark *destinationPlacemark = self.job.location;
+        CLPlacemark *destinationPlacemark = self.job.location;
         NSString *destinationStreetNumber = destinationPlacemark.subThoroughfare;
         NSString *destinationStreetName = destinationPlacemark.thoroughfare;
         destinationStreetName = [destinationStreetName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
