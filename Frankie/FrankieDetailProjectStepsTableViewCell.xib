@@ -12,6 +12,15 @@
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JrD-J9-7XK" id="wUn-1g-0DG">
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qzP-ha-6Ig">
+                        <rect key="frame" x="57" y="11" width="45" height="45"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <real key="value" value="22.5"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fkt-Qh-qbw">
                         <rect key="frame" x="119" y="13" width="172" height="21"/>
                         <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="16"/>
@@ -27,20 +36,15 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="checkmark-empty" translatesAutoresizingMaskIntoConstraints="NO" id="qfo-gG-n3h">
                         <rect key="frame" x="18" y="24" width="20" height="20"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qzP-ha-6Ig">
-                        <rect key="frame" x="57" y="11" width="45" height="45"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                <real key="value" value="22.5"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                        </userDefinedRuntimeAttributes>
+                    <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="late-step-icon" translatesAutoresizingMaskIntoConstraints="NO" id="FTG-Yl-YCT">
+                        <rect key="frame" x="84" y="14" width="15" height="15"/>
                     </imageView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
                 <outlet property="checkmarkImage" destination="qfo-gG-n3h" id="6ya-Ln-zQt"/>
                 <outlet property="dueIn" destination="orW-iH-zr2" id="Q6o-mO-zoi"/>
+                <outlet property="lateStepIcon" destination="FTG-Yl-YCT" id="QCX-pd-NKe"/>
                 <outlet property="name" destination="Fkt-Qh-qbw" id="rZd-dD-kFy"/>
                 <outlet property="picture" destination="qzP-ha-6Ig" id="5HS-z8-0ji"/>
             </connections>
@@ -49,5 +53,6 @@
     </objects>
     <resources>
         <image name="checkmark-empty" width="38" height="38"/>
+        <image name="late-step-icon" width="15" height="15"/>
     </resources>
 </document>

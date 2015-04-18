@@ -47,10 +47,10 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    if (self.reloadDataOnReappear) {
+//    if (self.reloadDataOnReappear) {
         [self loadProjectData];
-        self.reloadDataOnReappear = NO;
-    }
+//        self.reloadDataOnReappear = NO;
+//    }
 }
 
 
@@ -315,9 +315,40 @@
     else {
         cell.checkmarkImage.image = [UIImage imageNamed:@"checkmark-empty"];
         
-        double secondsUntilStepIsDue = [step.dueDate timeIntervalSinceNow];
-        int numberOfDays = floor(secondsUntilStepIsDue / 86400);
-        cell.dueIn.text = [NSString stringWithFormat:@"DUE IN %d DAYS", numberOfDays];
+        double timeSinceDueDateInSeconds = [step.dueDate timeIntervalSinceNow];
+        int numberOfDays;
+        if (timeSinceDueDateInSeconds / 86400 >= 0) {
+            numberOfDays = floor(timeSinceDueDateInSeconds / 86400);
+        }
+        else {
+            numberOfDays = ceil(timeSinceDueDateInSeconds / 86400);
+        }
+        
+        if (numberOfDays > 0) {
+            cell.lateStepIcon.alpha = 1.0;
+            if (numberOfDays == 1)
+                cell.dueIn.text = @"DUE TOMORROW";
+            else
+                cell.dueIn.text = [NSString stringWithFormat:@"DUE IN %d DAYS", numberOfDays];
+        }
+        else if (numberOfDays == 0) {
+            cell.dueIn.text = @"DUE TODAY";
+        }
+        else {
+            numberOfDays = abs(numberOfDays);
+            cell.lateStepIcon.alpha = 1.0;
+            if (numberOfDays == 1)
+                cell.dueIn.text = @"DUE YESTERDAY";
+            else
+                cell.dueIn.text = [NSString stringWithFormat:@"DUE %d DAYS AGO", numberOfDays];
+        }
+        
+//        double secondsUntilStepIsDue = [step.dueDate timeIntervalSinceNow];
+//        int numberOfDays = floor(secondsUntilStepIsDue / 86400);
+//        if (numberOfDays >= 0) {
+//            
+//        }
+//        cell.dueIn.text = [NSString stringWithFormat:@"DUE IN %d DAYS", numberOfDays];
     }
     
     if (step.picture != nil && ![step.picture isEqual:[UIImage imageNamed:@"image-upload-icon"]])

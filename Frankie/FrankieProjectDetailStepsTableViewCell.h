@@ -15,5 +15,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *name;
 @property (strong, nonatomic) IBOutlet UILabel *dueIn;
 
+@property (strong, nonatomic) IBOutlet UIImageView *lateStepIcon;
+
 
 @end

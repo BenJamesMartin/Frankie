@@ -14,5 +14,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *title;
 @property (strong, nonatomic) IBOutlet UILabel *nextStepName;
 @property (strong, nonatomic) IBOutlet UILabel *nextStepDueDate;
+@property (strong, nonatomic) IBOutlet UIImageView *lateStepIcon;
 
 @end

@@ -427,6 +427,7 @@
         }
         
         if (numberOfDays > 0) {
+            cell.lateStepIcon.alpha = 1.0;
             if (numberOfDays == 1)
                 cell.nextStepDueDate.text = @"DUE TOMORROW";
             else
@@ -437,6 +438,7 @@
         }
         else {
             numberOfDays = abs(numberOfDays);
+            cell.lateStepIcon.alpha = 1.0;
             if (numberOfDays == 1)
                 cell.nextStepDueDate.text = @"DUE YESTERDAY";
             else
