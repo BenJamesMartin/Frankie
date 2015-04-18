@@ -30,6 +30,7 @@
         [self loadStep];
         [self editLeftBarButtonItemWithTitle:@"Done"];
         self.hasChangedBackButton = YES;
+        self.navigationItem.title = self.step.name;
     }
     // Creating a new step
     else {
@@ -180,6 +181,11 @@
         [self editLeftBarButtonItemWithTitle:@"Create"];
     }
     self.stepHasBeenEdited = YES;
+    if ([self.step.name isEqualToString:@"[Step Name]"]) {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.createButton.alpha = 1.0;
+        }];
+    }
     return YES;
 }
 
@@ -211,6 +217,11 @@
 - (IBAction)choosePhoto:(id)sender {
     if (!self.hasChangedBackButton) {
         [self editLeftBarButtonItemWithTitle:@"Create"];
+    }
+    if ([self.step.name isEqualToString:@"[Step Name]"]) {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.createButton.alpha = 1.0;
+        }];
     }
     self.stepHasBeenEdited = YES;
     
@@ -289,6 +300,10 @@
     return view;
 }
 
+- (IBAction)createStep:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 /*
 #pragma mark - Navigation

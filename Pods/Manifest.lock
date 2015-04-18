@@ -1,6 +1,7 @@
 PODS:
   - Bolts (1.1.4)
   - FlatUIKit (1.6)
+  - HMSegmentedControl (1.5.1)
   - Parse (1.7.0):
     - Bolts (~> 1.1)
   - pop (1.0.7)
@@ -14,6 +15,7 @@ PODS:
 
 DEPENDENCIES:
   - FlatUIKit (~> 1.6)
+  - HMSegmentedControl (~> 1.5.1)
   - Parse (~> 1.7.0)
   - pop (~> 1.0.7)
   - PPRevealSideViewController (~> 1.2.0)
@@ -25,6 +27,7 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   Bolts: f8e2f94edbf9fec7bb8de5ecaaa3aa6b7de6f64e
   FlatUIKit: a59c93fe2fde5329dfb71dd9317b1b0386d6a178
+  HMSegmentedControl: 35460abdd15c3087368db2d3d956717f088b34d1
   Parse: 3c2d4e6ade7b59d31c0bc8106340c6b81b31bc0f
   pop: 628ffc631644601567ee8bfaaaea493ebd7d0923
   PPHelpMe: 243c40d2fad33ebdcc6b158c0db54893e0cc2d14

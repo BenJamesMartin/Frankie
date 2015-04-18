@@ -12,8 +12,8 @@
 
 #import "FrankieMasterContractViewController.h"
 #import "FrankieMasterContractTableViewCell.h"
-#import "FrankieDetailContractViewController.h"
 #import "FrankieAddEditContractViewController.h"
+#import "FrankieDetailProjectViewController.h"
 #import "FrankieLoginViewController.h"
 #import "FrankieSettingsViewController.h"
 #import "FrankieAppDelegate.h"
@@ -460,12 +460,14 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    FrankieDetailProjectViewController *dpvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieDetailProjectViewController"];
     FrankieAddEditContractViewController *aevc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieAddEditContractViewController"];
     
     Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
+    dpvc.job = job;
     aevc.job = job;
     
-    [self.navigationController pushViewController:aevc animated:YES];
+    [self.navigationController pushViewController:dpvc animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

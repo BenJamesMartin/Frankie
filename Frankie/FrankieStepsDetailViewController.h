@@ -26,6 +26,7 @@
 @property (assign, nonatomic) BOOL hasChangedBackButton;
 
 @property (assign, nonatomic) BOOL stepHasBeenEdited;
+@property (strong, nonatomic) IBOutlet UIButton *createButton;
 
 
 @end

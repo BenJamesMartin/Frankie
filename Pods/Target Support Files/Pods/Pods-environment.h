@@ -18,6 +18,12 @@
 #define COCOAPODS_VERSION_MINOR_FlatUIKit 6
 #define COCOAPODS_VERSION_PATCH_FlatUIKit 0
 
+// HMSegmentedControl
+#define COCOAPODS_POD_AVAILABLE_HMSegmentedControl
+#define COCOAPODS_VERSION_MAJOR_HMSegmentedControl 1
+#define COCOAPODS_VERSION_MINOR_HMSegmentedControl 5
+#define COCOAPODS_VERSION_PATCH_HMSegmentedControl 1
+
 // PPHelpMe
 #define COCOAPODS_POD_AVAILABLE_PPHelpMe
 #define COCOAPODS_VERSION_MAJOR_PPHelpMe 1

@@ -15,4 +15,7 @@
 @property (strong, nonatomic) NSArray *infoField;
 @property (strong, nonatomic) NSMutableDictionary *clientInformation;
 
+@property (strong, nonatomic) UITextField *phoneNumberField;
+@property (strong, nonatomic) UITextField *emailField;
+
 @end

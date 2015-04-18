@@ -292,9 +292,9 @@
 }
 
 
-#pragma mark - valid email checker
+#pragma mark - Valid email checker
 
--(BOOL) NSStringIsValidEmail:(NSString *)checkString
+- (BOOL)NSStringIsValidEmail:(NSString *)checkString
 {
     BOOL stricterFilter = YES; // Discussion http://blog.logichigh.com/2010/09/02/validating-an-e-mail-address/
     NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";

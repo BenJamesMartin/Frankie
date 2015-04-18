@@ -8,8 +8,10 @@
 //
 
 #import <Parse/Parse.h>
+#import <UITextField+Shake/UITextField+Shake.h>
 
 #import "FrankieAddEditContractViewController.h"
+#import "FrankieDetailProjectViewController.h"
 #import "FrankieAppDelegate.h"
 #import "ProjectStep.h"
 #import "Job.h"
@@ -95,6 +97,9 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    // Regardless of whether we're loading data for an existing contract, create references to the title and price text fields on the table view
+    [self createTextFieldsReferences];
+    
     // If we're editing an existing job (navigating from master view), load the data for that job.
     // If we're navigating back from steps VC, we should not write over steps.
     if (self.job != nil && self.shouldSetJobInViewDidAppear) {
@@ -110,57 +115,72 @@
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [center removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    
+    if ([self.navigationController.viewControllers.lastObject isKindOfClass:FrankieDetailProjectViewController.class]) {
+        FrankieDetailProjectViewController *dpvc = self.navigationController.viewControllers.lastObject;
+        
+        dpvc.job = self.job;
+    }
 }
 
 
-#pragma mark - Load data for existing job
+#pragma mark - Load data for existing project
 
-- (void)loadData
+- (void)createTextFieldsReferences
 {
-    // Create reference to proper cells
     NSIndexPath *path0 = [NSIndexPath indexPathForRow:0 inSection:0];
     NSIndexPath *path1 = [NSIndexPath indexPathForRow:1 inSection:0];
-    NSIndexPath *path2 = [NSIndexPath indexPathForRow:2 inSection:0];
-    NSIndexPath *path3 = [NSIndexPath indexPathForRow:3 inSection:0];
-    NSIndexPath *path4 = [NSIndexPath indexPathForRow:4 inSection:0];
-    NSIndexPath *path5 = [NSIndexPath indexPathForRow:5 inSection:0];
     
     UITableViewCell *cell0 = [self.tableView cellForRowAtIndexPath:path0];
     UITableViewCell *cell1 = [self.tableView cellForRowAtIndexPath:path1];
-    UITableViewCell *cell2 = [self.tableView cellForRowAtIndexPath:path2];
-    UITableViewCell *cell3 = [self.tableView cellForRowAtIndexPath:path3];
-    UITableViewCell *cell4 = [self.tableView cellForRowAtIndexPath:path4];
-    UITableViewCell *cell5 = [self.tableView cellForRowAtIndexPath:path5];
     
     for (UIView *subview in cell0.contentView.subviews) {
         if (subview.tag == 1) {
             UITextField *tf = (UITextField *)subview;
-            tf.text = self.job.title;
-            tf.alpha = 0.0;
-            [UIView animateWithDuration:0.5 animations:^{
-                tf.alpha = 1.0;
-            }];
             self.projectTitle = tf;
+            if (self.job.title != nil) {
+                tf.text = self.job.title;
+                tf.alpha = 0.0;
+                [UIView animateWithDuration:0.5 animations:^{
+                    tf.alpha = 1.0;
+                }];
+            }
         }
     }
     
     for (UIView *subview in cell1.contentView.subviews) {
         if (subview.tag == 2) {
             UITextField *tf = (UITextField *)subview;
-            
-            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-            [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
-            numberFormatter.maximumFractionDigits = 0;
-            NSString *currencyString = [numberFormatter stringFromNumber:self.job.price];
-            if (self.job.price.floatValue != 0)
-                tf.text = currencyString;
-            tf.alpha = 0.0;
-            [UIView animateWithDuration:0.5 animations:^{
-                tf.alpha = 1.0;
-            }];
             self.price = tf;
+            if (self.job.price != nil) {
+                NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+                [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+                numberFormatter.maximumFractionDigits = 0;
+                NSString *currencyString = [numberFormatter stringFromNumber:self.job.price];
+                if (self.job.price.floatValue != 0)
+                    tf.text = currencyString;
+                tf.alpha = 0.0;
+                [UIView animateWithDuration:0.5 animations:^{
+                    tf.alpha = 1.0;
+                }];
+            }
         }
     }
+
+}
+
+- (void)loadData
+{
+    // Create reference to proper cells
+    NSIndexPath *path2 = [NSIndexPath indexPathForRow:2 inSection:0];
+    NSIndexPath *path3 = [NSIndexPath indexPathForRow:3 inSection:0];
+    NSIndexPath *path4 = [NSIndexPath indexPathForRow:4 inSection:0];
+    NSIndexPath *path5 = [NSIndexPath indexPathForRow:5 inSection:0];
+    
+    UITableViewCell *cell2 = [self.tableView cellForRowAtIndexPath:path2];
+    UITableViewCell *cell3 = [self.tableView cellForRowAtIndexPath:path3];
+    UITableViewCell *cell4 = [self.tableView cellForRowAtIndexPath:path4];
+    UITableViewCell *cell5 = [self.tableView cellForRowAtIndexPath:path5];
     
     NSArray *steps = self.job.steps;
     if (steps.count > 0) {
@@ -317,6 +337,16 @@
 
 - (IBAction)createOrEditContract:(id)sender
 {
+    if (self.projectTitle.text.length == 0) {
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.tableView setContentOffset:CGPointZero animated:NO];
+        } completion:^(BOOL finished) {
+            [self.projectTitle shake:10 withDelta:7 speed:0.03 completion:^{
+            }];
+        }];
+        return;
+    }
+    
     // Edit existing contract
     if (self.job != nil) {
         [self.job setValue:self.projectTitle.text forKey:@"title"];
@@ -359,6 +389,7 @@
         [entity setValue:self.notes forKey:@"notes"];
         [entity setValue:[NSNumber numberWithBool:NO] forKeyPath:@"completed"];
         [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString] forKey:@"objectId"];
+        [entity setValue:[NSDate date] forKey:@"createdAt"];
         
         NSData *imageData;
         if (!([[self.uploadButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"image-upload-icon"]])) {
@@ -369,6 +400,11 @@
         else {
             imageData = nil;
         }
+        
+//        if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+//        }
+
         
         //    PFObject *project = [PFObject objectWithClassName:@"Project"];
         //    project[@"user"] = [PFUser currentUser];
@@ -388,9 +424,9 @@
         //    [project saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         //        if (!error) {
         //            [entity setValue:[project objectId] forKeyPath:@"parseId"];
-        //            if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-        //                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-        //            }
+//                    if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+//                    }
         //        }
         //    }];
 
@@ -455,7 +491,8 @@
 
 #pragma mark - UITextField delegate
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
     if (textField) {
         [textField resignFirstResponder];
         return YES;
@@ -484,7 +521,8 @@
     }
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField {
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
     // Add currency formatting to price field
     if (textField.tag == 2) {
         NSNumberFormatter *f = [[NSNumberFormatter alloc] init];

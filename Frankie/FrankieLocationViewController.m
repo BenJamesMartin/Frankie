@@ -27,11 +27,6 @@
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:[UIColor colorFromHexCode:@"007AFF"]];
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor darkGrayColor]}];
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setDefaultTextAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"Avenir-Light" size:14.0]}];
-    
-    
-//    NSString *addressString = @"http://maps.apple.com/?q=1+Infinite+Loop,+Cupertino,+CA";
-//    NSURL *url = [NSURL URLWithString:addressString];
-//    [[UIApplication sharedApplication] openURL:url];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -67,8 +62,11 @@
 {
 //    CLGeocoder *geocoder = [CLGeocoder new];
 //    [geocoder geocodeAddressString:searchBar.text completionHandler:^(NSArray *placemarks, NSError *error) {
+//        CLPlacemark *placemark = placemarks.lastObject;
 //        
 //    }];
+    
+    
     
     [SVGeocoder geocode:searchBar.text
         completion:^(NSArray *placemarks, NSHTTPURLResponse *urlResponse, NSError *error) {

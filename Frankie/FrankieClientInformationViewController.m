@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Benjamin Martin. All rights reserved.
 //
 
+#import <UITextField+Shake/UITextField+Shake.h>
+
 #import "FrankieClientInformationViewController.h"
 #import "FrankieAddEditContractViewController.h"
 
@@ -64,6 +66,16 @@
     }
 }
 
+- (BOOL)NSStringIsValidEmail:(NSString *)checkString
+{
+    BOOL stricterFilter = YES;
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
@@ -101,10 +113,42 @@
 }
 
 
-#pragma mark - UITextFieldDelegate
+#pragma mark - Text field delegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    textField.textColor = [UIColor darkGrayColor];
+    
+    if (textField.tag == 1)
+        self.phoneNumberField = textField;
+    
+    if (textField.tag == 2)
+        self.emailField = textField;
+}
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    if (textField == self.phoneNumberField) {
+        // If the phone number entered is not complete (10 numbers and 2 dashes added automatically), shake text field and change text color to red
+        if (self.phoneNumberField.text.length < 12) {
+            [self.phoneNumberField shake:10 withDelta:5 speed:0.05 completion:^{
+                self.phoneNumberField.textColor = [UIColor alizarinColor];
+            }];
+            return;
+        }
+    }
+    
+    if (textField == self.emailField) {
+        // If the email entered is not valid, shake text field and change text color to red
+        if (![self NSStringIsValidEmail:textField.text]) {
+            [self.emailField shake:10 withDelta:5 speed:0.05 completion:^{
+                self.emailField.textColor = [UIColor alizarinColor];
+            }];
+            return;
+        }
+    }
+    
+    // If inputs are correct, set client information
     self.clientInformation[self.infoField[textField.tag]] = textField.text;
 }
 

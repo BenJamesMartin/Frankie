@@ -175,12 +175,12 @@
         return _persistentStoreCoordinator;
     }
     
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Model.sqlite"];
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Frankie Model.sqlite"];
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-     [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
-                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
+        [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+        [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
+         nil];
 
-    
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
