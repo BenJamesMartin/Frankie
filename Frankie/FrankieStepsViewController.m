@@ -24,6 +24,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addStep)];
     
     self.steps = [NSMutableArray new];
+//    self.isNavigatingFromStepDetail = NO;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"StepsCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
@@ -59,26 +60,63 @@
         // Set text of steps cell and set steps property in add contract VC only if a step had been created
         FrankieAddEditContractViewController *avc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
         
-        NSIndexPath *tableSelection = [avc.tableView indexPathForSelectedRow];
-        UITableViewCell *cell = [avc.tableView cellForRowAtIndexPath:tableSelection];
-        
         UILabel *label = [UILabel new];
         NSString *labelText = (self.steps.count == 1 ? @"Step" : @"Steps");
         label.text = [NSString stringWithFormat:@"%lu %@    ", self.steps.count, labelText];
         label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
         label.textColor = [UIColor darkGrayColor];
         [label sizeToFit];
-        cell.accessoryView = label;
+        avc.stepsCell.accessoryView = label;
         
         avc.steps = self.steps;
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    // Navigating back to add/edit VC. Next time the view appears, we'll be navigating back from it, not the step detail VC.
+//    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
+//        self.isNavigatingFromStepDetail = NO;
+//    }
+//    // Navigating to step detail VC. Next time the view appears, we'll be navigating back from it. Use this to determine when to reload table data and immediately present the step detail if no steps have been created yet.
+//    else {
+//        self.isNavigatingFromStepDetail = YES;
+//    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    // If applicable, deselect the previously selected table view cell
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    // If we're navigating back from the step detail, no step was created, and there are 0 steps in total, don't show this VC as it will simply be an empty table view. Navigate back to the add/edit VC.
+//    if (self.isNavigatingFromStepDetail) {
+//        if (self.steps.count == 0) {
+//            [self.navigationController popViewControllerAnimated:NO];
+//        }
+//    }
+//    // Else we're navigating from the add/edit VC. If no steps exist, go straight to the creation of a new step instead of showing an empty table view.
+//    else {
+//        if (self.steps.count == 0) {
+//            if (self.steps.count == 0) {
+//                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+//                FrankieStepsDetailViewController *dvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsDetailViewController"];
+//                
+//                [self.navigationController pushViewController:dvc animated:YES];
+//            }
+//        }
+//    }
+}
+
 // If navigating from creating a new step, an object was added to model. Reload the table view.
 // If navigating here for the first time, there is no data so reloading it will do nothing.
+// Table views cannot be manipulated until the view has appeared, so this must be done here (not in viewWillAppear).
 - (void)viewDidAppear:(BOOL)animated
 {
-    [self.tableView reloadData];
+//    if (self.isNavigatingFromStepDetail) {
+        [self.tableView reloadData];
+//    }
 }
 
 // Nav bar top-right add button
@@ -96,13 +134,13 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return self.steps.count;
 }
 

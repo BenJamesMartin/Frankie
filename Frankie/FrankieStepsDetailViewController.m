@@ -8,6 +8,7 @@
 
 #import <RMDateSelectionViewController/RMDateSelectionViewController.h>
 
+#import "FrankieAddEditContractViewController.h"
 #import "FrankieStepsDetailViewController.h"
 #import "FrankieStepsViewController.h"
 #import "FrankieStepsTableViewCell.h"
@@ -35,6 +36,7 @@
     // Creating a new step
     else {
         self.step = [ProjectStep new];
+        self.navigationItem.title = @"New Step";
     }
 
     self.stepHasBeenEdited = NO;
@@ -54,7 +56,9 @@
 
 - (void)createOrEditStep
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    // Animate the view controller transition if this is not the first step.
+    BOOL willAnimate = (self.isFirstStep ? NO : YES);
+    [self.navigationController popViewControllerAnimated:willAnimate];
 }
 
 - (void)loadStep
@@ -70,7 +74,6 @@
     else {
         [self.uploadButton setImage:[UIImage imageNamed:@"image-upload-icon"] forState:UIControlStateNormal];
     }
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -80,13 +83,14 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    // Make sure this is happening when dismissing detail view and not when presenting image picker
+    // Make sure this is happening when dismissing detail view and not when presenting image picker (in which case this VC would be found in the stack of view controllers).
+    // If this VC is disappearing and the step has been edited, save it to the model via creating or updating
     if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound && self.stepHasBeenEdited) {
-        
-        // Check if object should be added to steps model by checking if name property has been set.
-        BOOL shouldAddObject = YES;
+        // Check if new object should be added to steps model by checking if name property has been set.
+        // If name has already been set, this is an existing step and should not be added again.
+        BOOL shouldAddNewObject = YES;
         if ([self.step nameHasBeenSet]) {
-            shouldAddObject = NO;
+            shouldAddNewObject = NO;
         }
         [self.view endEditing:YES];
         
@@ -97,35 +101,52 @@
         if (self.nameField.text.length > 0)
             self.step.name = self.nameField.text;
         
-        FrankieStepsViewController *svc = (FrankieStepsViewController *)[self.navigationController.viewControllers lastObject];
-        NSIndexPath *path = [svc.tableView indexPathForSelectedRow];
-        FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[svc.tableView cellForRowAtIndexPath:path];
-        
-        // If editing an already existing step, change the cell's contents corresponding to the step
-        if (cell != nil) {
-            cell.name.text = self.step.name;
-            cell.dueDate.text = self.dueDateField.text;
-            if (self.step.picture != nil) {
-                cell.picture.image = self.step.picture;
+        if ([self.navigationController.viewControllers.lastObject class] == [FrankieAddEditContractViewController class]) {
+            FrankieAddEditContractViewController *aevc = self.navigationController.viewControllers.lastObject;
+            NSIndexPath *indexPath = [aevc.tableView indexPathForSelectedRow];
+            UITableViewCell *cell = [aevc.tableView cellForRowAtIndexPath:indexPath];
+            
+            UILabel *label = [UILabel new];
+            label.text = @"1 Step";
+            label.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
+            label.textColor = [UIColor darkGrayColor];
+            [label sizeToFit];
+            cell.accessoryView = label;
+            
+            if (shouldAddNewObject) {
+                [aevc.steps addObject:self.step];
             }
-            else {
-                cell.picture.image = [UIImage imageNamed:@"image-upload-icon-small"];
+        }
+        else if ([self.navigationController.viewControllers.lastObject class] == [FrankieStepsViewController class]) {
+            FrankieStepsViewController *svc = (FrankieStepsViewController *)[self.navigationController.viewControllers lastObject];
+            NSIndexPath *path = [svc.tableView indexPathForSelectedRow];
+            FrankieStepsTableViewCell *cell = (FrankieStepsTableViewCell *)[svc.tableView cellForRowAtIndexPath:path];
+            
+            // If editing an already existing step, change the cell's contents corresponding to the step
+            if (cell != nil) {
+                cell.name.text = self.step.name;
+                cell.dueDate.text = self.dueDateField.text;
+                if (self.step.picture != nil) {
+                    cell.picture.image = self.step.picture;
+                }
+                else {
+                    cell.picture.image = [UIImage imageNamed:@"image-upload-icon-small"];
+                }
             }
+            
+            if (shouldAddNewObject)
+                [svc.steps addObject:self.step];
         }
         
         // If a date was not set, add the default date (one month from current date as specified in ProjectStep init method) to the date text field
         NSDateFormatter *formatter = [NSDateFormatter new];
         formatter.dateFormat = @"MMMM dd, yyyy";
         self.dueDateField.text = [formatter stringFromDate:self.step.dueDate];
-        
-        // Reset shouldAddStep flag and verify that we are navigating back to master view from this view (step detail) versus its parent view (add project VC)
-        if (shouldAddObject)
-            [svc.steps addObject:self.step];
     }
 }
 
 
-#pragma mark - UITableViewDataSource
+#pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -302,7 +323,9 @@
 
 - (IBAction)createStep:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    // Animate the view controller transition if this is not the first step.
+    BOOL willAnimate = (self.isFirstStep ? NO : YES);
+    [self.navigationController popViewControllerAnimated:willAnimate];
 }
 
 /*

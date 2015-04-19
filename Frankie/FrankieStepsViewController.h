@@ -12,5 +12,7 @@
 @interface FrankieStepsViewController : UITableViewController
 
 @property (strong, nonatomic) NSMutableArray *steps;
+// Used to determine whether to reload table data and automatically show the detail VC (if no steps have been created yet)
+//@property (assign, nonatomic) BOOL isNavigatingFromStepDetail;
 
 @end

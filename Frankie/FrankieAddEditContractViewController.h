@@ -11,6 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 #import "FrankieStepsViewController.h"
+#import "FrankieStepsDetailViewController.h"
 #import "FrankieClientInformationViewController.h"
 #import "FrankieLocationViewController.h"
 #import "FrankieNotesViewController.h"
@@ -20,6 +21,8 @@
 
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) UITableViewCell *stepsCell;
+
 @property (strong, nonatomic) UIDatePicker *pickerView;
 @property (strong, nonatomic) UIGestureRecognizer *touch;
 @property (strong, nonatomic) IBOutlet UIButton *uploadButton;
@@ -38,7 +41,7 @@
 @property (strong, nonatomic) NSDictionary *clientInformation;
 @property (strong, nonatomic) CLPlacemark *locationPlacemark;
 @property (assign, nonatomic) int stepCount;
-@property (strong, nonatomic) NSArray *steps;
+@property (strong, nonatomic) NSMutableArray *steps;
 @property (strong, nonatomic) NSString *notes;
 
 // When loading contract from master VC, set job model
@@ -46,6 +49,9 @@
 @property (assign, nonatomic) BOOL shouldSetJobInViewDidAppear;
 
 @property (strong, nonatomic) Job *job;
+
+// Used to determine if step cell should navigate directly to add/edit step VC to create first step instead of master step VC showing all steps (of which there'd be none)
+@property (assign, nonatomic) BOOL isCreatingFirstStep;
 
 - (IBAction)createOrEditContract:(id)sender;
 

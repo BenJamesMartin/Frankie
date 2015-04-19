@@ -62,7 +62,7 @@
 
     self.navigationItem.title = @"New Project";
     [self.uploadButton setImage:[UIImage imageNamed:@"image-upload-icon.png"] forState:UIControlStateNormal];
-    self.steps = @[];
+    self.steps = [NSMutableArray new];
 
     self.projectHasBeenEdited = NO;
     
@@ -93,6 +93,17 @@
     // Remove the current selection in our table view
     NSIndexPath *tableSelection = [self.tableView indexPathForSelectedRow];
     [self.tableView deselectRowAtIndexPath:tableSelection animated:YES];
+    
+    if (self.isCreatingFirstStep && self.steps.count > 0) {
+        if (self.svc == nil) {
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            self.svc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsViewController"];
+        }
+        [self.svc.view endEditing:YES];
+        self.svc.steps = self.steps;
+        [self.navigationController pushViewController:self.svc animated:NO];
+        self.isCreatingFirstStep = NO;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -271,7 +282,7 @@
 - (void)cancelCreation
 {
     if (self.projectHasBeenEdited) {
-        UIAlertController *cancelController = [UIAlertController alertControllerWithTitle:@"Cancel Upload?" message:@"Are you sure you wish to cancel the creation of this project?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *cancelController = [UIAlertController alertControllerWithTitle:@"Cancel Upload?" message:@"Cancel the creation of this project?" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
             [self.navigationController popViewControllerAnimated:YES];
         }];
@@ -576,6 +587,10 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     
+    if (indexPath.row == 2) {
+        self.stepsCell = cell;
+    }
+    
     return cell;
 }
 
@@ -583,7 +598,7 @@
 #pragma mark - UITableViewDelegate
 
 // Manually perform navigation controller push to keep reference to each VC
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.projectHasBeenEdited = YES;
     
@@ -592,12 +607,23 @@
     
     // Steps
     if (indexPath.row == 2) {
-        if (self.svc == nil) {
-            self.svc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsViewController"];
+        // If no steps have been created yet, navigate directly to add/edit step VC
+        if (self.steps.count == 0) {
+            FrankieStepsDetailViewController *sdvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsDetailViewController"];
+            [sdvc.view endEditing:YES];
+            self.isCreatingFirstStep = YES;
+            sdvc.isFirstStep = YES;
+            [self.navigationController pushViewController:sdvc animated:YES];
         }
-        [self.svc.view endEditing:YES];
-        self.svc.steps = self.steps.mutableCopy;
-        [self.navigationController pushViewController:self.svc animated:YES];
+        // If at least one step has been created, navigate to master step VC to view all steps
+        else {
+            if (self.svc == nil) {
+                self.svc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsViewController"];
+            }
+            [self.svc.view endEditing:YES];
+            self.svc.steps = self.steps.mutableCopy;
+            [self.navigationController pushViewController:self.svc animated:YES];
+        }
     }
     // Client information
     else if (indexPath.row == 3) {

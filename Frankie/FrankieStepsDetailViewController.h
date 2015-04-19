@@ -28,5 +28,7 @@
 @property (assign, nonatomic) BOOL stepHasBeenEdited;
 @property (strong, nonatomic) IBOutlet UIButton *createButton;
 
+// This step is the first step to be added. Used to determine how view controller navigations should animate.
+@property (assign, nonatomic) BOOL isFirstStep;
 
 @end
