@@ -427,9 +427,10 @@
         }
         
         if (numberOfDays > 0) {
-            cell.lateStepIcon.alpha = 1.0;
-            if (numberOfDays == 1)
+            if (numberOfDays == 1) {
                 cell.nextStepDueDate.text = @"DUE TOMORROW";
+                cell.lateStepIcon.alpha = 1.0;
+            }
             else
                 cell.nextStepDueDate.text = [NSString stringWithFormat:@"DUE IN %d DAYS", numberOfDays];
         }
