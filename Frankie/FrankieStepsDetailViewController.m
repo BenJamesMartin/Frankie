@@ -21,6 +21,9 @@
 
 @implementation FrankieStepsDetailViewController
 
+
+#pragma mark - View lifecycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -40,45 +43,17 @@
     }
 
     self.stepHasBeenEdited = NO;
-}
-
-- (void)editLeftBarButtonItemWithTitle:(NSString *)title
-{
-    if (![self.navigationItem.leftBarButtonItem.title isEqualToString:title]) {
-        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:title
-                                                                 style:UIBarButtonItemStylePlain
-                                                                target:self
-                                                                action:@selector(createOrEditStep)];
-        
-        [self.navigationItem setLeftBarButtonItem:item animated:YES];
-    }
-}
-
-- (void)createOrEditStep
-{
-    // Animate the view controller transition if this is not the first step.
-    BOOL willAnimate = (self.isFirstStep ? NO : YES);
-    [self.navigationController popViewControllerAnimated:willAnimate];
-}
-
-- (void)loadStep
-{
-    self.nameField.text = self.step.name;
-    NSDateFormatter *formatter = [NSDateFormatter new];
-    formatter.dateFormat = @"MMMM dd, yyyy";
-    self.dueDateField.text = [formatter stringFromDate:self.step.dueDate];
-    if (self.step.picture != nil) {
-        self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        [self.uploadButton setImage:self.step.picture forState:UIControlStateNormal];
-    }
-    else {
-        [self.uploadButton setImage:[UIImage imageNamed:@"image-upload-icon"] forState:UIControlStateNormal];
-    }
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
+    // Scroll view up/down on showing/hiding keyboard
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self
+               selector:@selector(keyboardDismiss)
+                   name:UIKeyboardWillHideNotification
+                 object:nil];
+    [center addObserver:self
+               selector:@selector(keyboardShown:)
+                   name:UIKeyboardWillShowNotification
+                 object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -146,6 +121,95 @@
 }
 
 
+#pragma mark - View scrolling for keyboard
+
+// Adds gesture recognizer to image upload button so can be tapped to dismiss keyboard
+- (void)keyboardShown:(NSNotification *)notification
+{
+    // Get the keyboard height and adjust the view to accomodate the keyboard
+    NSDictionary *info = [notification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    CGFloat kbHeight = kbSize.height;
+    
+    [UIView animateWithDuration:0.50 animations:^{
+        self.view.frame = CGRectMake(0, -kbHeight, self.view.frame.size.width, self.view.frame.size.height);
+    }];
+    
+    // A single gesture recognizer can only be added to one view, so we need a gesture recognizer for each view.
+    for (UIView *view in @[self.view, self.tableView, self.uploadButton, self.dueDateField]) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardDismissTap)];
+        [view addGestureRecognizer:tap];
+    }
+}
+
+// When the keyboard dismisses, remove the tap gesture recognizer on the scrollView image upload button
+- (void)keyboardDismiss
+{
+    // Adjust the view back to its origin when hiding the keyboard
+    [UIView animateWithDuration:0.25 animations:^{
+        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    }];
+    
+    for (UIView *view in @[self.view, self.tableView, self.uploadButton, self.dueDateField]) {
+        for (UIGestureRecognizer *gr in [view gestureRecognizers]) {
+            if ([gr class] == [UITapGestureRecognizer class]) {
+                [view removeGestureRecognizer:gr];
+            }
+        }
+    }
+}
+
+- (void)keyboardDismissTap
+{
+    [self.view endEditing:YES];
+}
+
+
+#pragma mark - Navigation bar left button & action
+
+- (void)editLeftBarButtonItemWithTitle:(NSString *)title
+{
+    if (![self.navigationItem.leftBarButtonItem.title isEqualToString:title]) {
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:title
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(createOrEditStep)];
+        
+        [self.navigationItem setLeftBarButtonItem:item animated:YES];
+    }
+}
+
+- (void)createOrEditStep
+{
+    // Animate the view controller transition if this is not the first step.
+    BOOL willAnimate = (self.isFirstStep ? NO : YES);
+    [self.navigationController popViewControllerAnimated:willAnimate];
+}
+
+
+#pragma mark - Loading an existing step
+
+- (void)loadStep
+{
+    self.nameField.text = self.step.name;
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateFormat = @"MMMM dd, yyyy";
+    self.dueDateField.text = [formatter stringFromDate:self.step.dueDate];
+    if (self.step.picture != nil) {
+        self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self.uploadButton setImage:self.step.picture forState:UIControlStateNormal];
+    }
+    else {
+        [self.uploadButton setImage:[UIImage imageNamed:@"image-upload-icon"] forState:UIControlStateNormal];
+    }
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -172,7 +236,7 @@
 }
 
 
-#pragma mark - UITableViewDelegate
+#pragma mark - Table view delegate
 
 // No cells can be selected in this view controller
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -185,7 +249,7 @@
 }
 
 
-#pragma mark - UITextField delegate
+#pragma mark - Text field delegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
@@ -207,6 +271,12 @@
             self.createButton.alpha = 1.0;
         }];
     }
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
     return YES;
 }
 
