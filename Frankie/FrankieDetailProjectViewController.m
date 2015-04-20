@@ -33,13 +33,11 @@
     self.tableView.dataSource = self;
     [self.tableView registerNib:[UINib nibWithNibName:@"FrankieDetailProjectStepsTableViewCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     [self.interchangeableView addSubview:self.tableView];
     
     [self loadProjectData];
-    
-    // Padding (note this doesn't really matter here because the text view doesn't have a border
-    self.notes.textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -77,17 +75,21 @@
     
     UIImage *image = [UIImage imageWithData:self.job.picture];
     if (image != nil && ![image isEqual:[UIImage imageNamed:@"image-upload-icon"]]) {
+        self.image.contentMode = UIViewContentModeScaleAspectFill;
         self.image.layer.borderWidth = 0.0;
         self.image.image = image;
     }
     else {
+        self.image.contentMode = UIViewContentModeScaleAspectFill;
         self.image.image = [UIImage imageNamed:@"image-upload-icon-small"];
         self.image.layer.borderColor = [UIColor colorWithRed:200/255.f green:200/255.f blue:200/255.f alpha:1.0].CGColor;
         self.image.layer.borderWidth = 2.0;
     }
     
-    if (self.job.notes != nil && ![self.job.notes isEqualToString:@""])
+    if (self.job.notes != nil && ![self.job.notes isEqualToString:@""]) {
+        self.notes.textAlignment = NSTextAlignmentLeft;
         self.notes.text = self.job.notes;
+    }
     else {
         self.notes.textAlignment = NSTextAlignmentCenter;
         self.notes.text = @"No project notes.";
@@ -166,7 +168,7 @@
     
     // ** --- Font : Segmented Control Profile --- **
     UIColor *lightGrayHeader = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
-    self.segmentedControl.frame = CGRectMake(0, 216, self.view.frame.size.width, 40);
+    self.segmentedControl.frame = CGRectMake(0, 228, self.view.frame.size.width, 40);
     [self.segmentedControl addTarget:self action:@selector(segmentedControlChangedValue:) forControlEvents:UIControlEventValueChanged];
     self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
     self.segmentedControl.selectionIndicatorHeight = 1.0f;
@@ -298,6 +300,7 @@
 - (FrankieProjectDetailStepsTableViewCell *)configureCell:(FrankieProjectDetailStepsTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     ProjectStep *step = self.job.steps[indexPath.row];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // Set checkmark image as completed and set date format as "Completed [date]".
     if (step.completed) {

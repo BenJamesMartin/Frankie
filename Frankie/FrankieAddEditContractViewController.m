@@ -136,7 +136,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated
-{    
+{
     // If we're editing an existing project, set project of detail project VC
     if ([self.navigationController.viewControllers.lastObject isKindOfClass:FrankieDetailProjectViewController.class]) {
         FrankieDetailProjectViewController *dpvc = self.navigationController.viewControllers.lastObject;
@@ -161,10 +161,10 @@
             self.projectTitle = tf;
             if (self.job.title != nil) {
                 tf.text = self.job.title;
-//                tf.alpha = 0.0;
-//                [UIView animateWithDuration:0.5 animations:^{
-//                    tf.alpha = 1.0;
-//                }];
+                tf.alpha = 0.0;
+                [UIView animateWithDuration:0.5 animations:^{
+                    tf.alpha = 1.0;
+                }];
             }
         }
     }
@@ -180,10 +180,10 @@
                 NSString *currencyString = [numberFormatter stringFromNumber:self.job.price];
                 if (self.job.price.floatValue != 0)
                     tf.text = currencyString;
-//                tf.alpha = 0.0;
-//                [UIView animateWithDuration:0.5 animations:^{
-//                    tf.alpha = 1.0;
-//                }];
+                tf.alpha = 0.0;
+                [UIView animateWithDuration:0.5 animations:^{
+                    tf.alpha = 1.0;
+                }];
             }
         }
     }
@@ -214,10 +214,10 @@
         stepsLabel.textColor = [UIColor darkGrayColor];
         [stepsLabel sizeToFit];
         cell2.accessoryView = stepsLabel;
-//        cell2.accessoryView.alpha = 0.0;
-//        [UIView animateWithDuration:0.5 animations:^{
-//            cell2.accessoryView.alpha = 1.0;
-//        }];
+        cell2.accessoryView.alpha = 0.0;
+        [UIView animateWithDuration:0.5 animations:^{
+            cell2.accessoryView.alpha = 1.0;
+        }];
     }
     
     NSDictionary *clientInformation = self.job.clientInformation;
@@ -228,9 +228,10 @@
         stepsLabel.textColor = [UIColor darkGrayColor];
         [stepsLabel sizeToFit];
         cell3.accessoryView = stepsLabel;
-//        [UIView animateWithDuration:0.5 animations:^{
-//            cell3.accessoryView.alpha = 1.0;
-//        }];
+        cell3.accessoryView.alpha = 0.0;
+        [UIView animateWithDuration:0.5 animations:^{
+            cell3.accessoryView.alpha = 1.0;
+        }];
     }
     
     CLPlacemark *placemark = self.job.location;
@@ -241,9 +242,10 @@
         stepsLabel.textColor = [UIColor darkGrayColor];
         [stepsLabel sizeToFit];
         cell4.accessoryView = stepsLabel;
-//        [UIView animateWithDuration:0.5 animations:^{
-//            cell4.accessoryView.alpha = 1.0;
-//        }];
+        cell4.accessoryView.alpha = 0.0;
+        [UIView animateWithDuration:0.5 animations:^{
+            cell4.accessoryView.alpha = 1.0;
+        }];
     }
     
     NSString *notes = self.job.notes;
@@ -271,9 +273,10 @@
                 label.frame = CGRectMake(label.frame.origin.x, label.frame.origin.y, 135, label.frame.size.height);
             }
             cell5.accessoryView = label;
-//            [UIView animateWithDuration:0.5 animations:^{
-//                cell5.accessoryView.alpha = 1.0;
-//            }];
+            cell5.accessoryView.alpha = 0.0;
+            [UIView animateWithDuration:0.5 animations:^{
+                cell5.accessoryView.alpha = 1.0;
+            }];
         }
     }
 }
