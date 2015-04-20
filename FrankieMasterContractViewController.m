@@ -342,22 +342,22 @@
         
         // Protect from trying to delete a parse object immediately after it was created.
         // This causes the program to crash with error "Can not do a comparison for query type: (null)"
-        if ([job.parseId isEqual:[NSNull null]] || job.parseId == nil) {
-            return;
-        }
+//        if ([job.parseId isEqual:[NSNull null]] || job.parseId == nil) {
+//            return;
+//        }
         
-        PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
-        [postQuery whereKey:@"objectId" equalTo:job.parseId];
-        [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            if (!error) {
-                [object deleteEventually];
-            }
-        }];
+//        PFQuery *postQuery = [PFQuery queryWithClassName:@"Project"];
+//        [postQuery whereKey:@"objectId" equalTo:job.parseId];
+//        [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+//            if (!error) {
+//                [object deleteEventually];
+//            }
+//        }];
         
         NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@", job.objectId];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF == %@", job.objectID];
         [request setPredicate:predicate];
         
         NSError *error;
@@ -367,6 +367,7 @@
             [context deleteObject:job];
         }
         [context save:&error];
+        [self.tableView reloadData];
     }
 }
 

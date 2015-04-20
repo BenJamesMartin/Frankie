@@ -357,25 +357,41 @@
 
 -(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     self.hasSelectedImage = YES;
+    UIImage *image;
+    
+    // Resize image for display in step cells (in steps VC and project detail VC) on background thread
+    void (^completionBlock)(UIImage *) = ^void(UIImage *image) {
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            UIGraphicsBeginImageContext(CGSizeMake(50, 50));
+            [image drawInRect:CGRectMake(0, 0, 50, 50)];
+            UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            self.step.picture = newImage;
+        });
+    };
+    
     if (self.mediaPicker.sourceType == UIImagePickerControllerSourceTypeCamera) {
-        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        image = [info objectForKey:UIImagePickerControllerOriginalImage];
         self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.uploadButton setImage:image forState:UIControlStateNormal];
-        self.step.picture = image;
+        completionBlock(image);
     }
     else {
         NSURL *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
         [library assetForURL:referenceURL resultBlock:^(ALAsset *asset) {
-            UIImage  *copyOfOriginalImage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
+            UIImage *copyOfOriginalImage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
             self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
             [self.uploadButton setImage:copyOfOriginalImage forState:UIControlStateNormal];
             self.step.picture = copyOfOriginalImage;
+            completionBlock(copyOfOriginalImage);
         }
             failureBlock:^(NSError *error) {
                 // error handling
             }];
     }
+    
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 

@@ -458,8 +458,9 @@
     // Save Core Data context in background
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-            NSLog(@"saved");
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+            });
         }
     });
 
