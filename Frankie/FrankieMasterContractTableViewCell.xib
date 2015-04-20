@@ -55,6 +55,6 @@
     </objects>
     <resources>
         <image name="image-upload-icon-small" width="60" height="60"/>
-        <image name="late-step-icon" width="15" height="15"/>
+        <image name="late-step-icon" width="30" height="30"/>
     </resources>
 </document>

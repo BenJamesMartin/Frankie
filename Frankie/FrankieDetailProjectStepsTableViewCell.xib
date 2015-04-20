@@ -37,7 +37,7 @@
                         <rect key="frame" x="18" y="30" width="20" height="20"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="late-step-icon" translatesAutoresizingMaskIntoConstraints="NO" id="FTG-Yl-YCT">
-                        <rect key="frame" x="84" y="20" width="15" height="15"/>
+                        <rect key="frame" x="91" y="15" width="15" height="15"/>
                     </imageView>
                 </subviews>
             </tableViewCellContentView>
@@ -53,6 +53,6 @@
     </objects>
     <resources>
         <image name="checkmark-empty" width="38" height="38"/>
-        <image name="late-step-icon" width="15" height="15"/>
+        <image name="late-step-icon" width="30" height="30"/>
     </resources>
 </document>
