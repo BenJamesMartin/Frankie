@@ -399,6 +399,15 @@
         else {
             imageData = nil;
         }
+        
+        // Save Core Data context in background
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+                });
+            }
+        });
     }
     // Add new contract
     else {
@@ -452,17 +461,11 @@
 //                    }
         //        }
         //    }];
-
-    }
-    
-    // Save Core Data context in background
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        
         if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-            });
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
         }
-    });
+    }
 
     // Now the Core Data object has been added, return back to master VC where the fetched results controller will take care of updating its table view.
     [self.navigationController popViewControllerAnimated:YES];
