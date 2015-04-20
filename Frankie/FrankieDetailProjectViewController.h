@@ -14,7 +14,6 @@
 @interface FrankieDetailProjectViewController : UIViewController <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate>
 
 @property (strong, nonatomic) Job *job;
-@property (assign, nonatomic) BOOL reloadDataOnReappear;
 
 @property (strong, nonatomic) IBOutlet UIImageView *image;
 @property (strong, nonatomic) IBOutlet UILabel *clientName;

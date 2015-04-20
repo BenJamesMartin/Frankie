@@ -29,8 +29,6 @@
     [self drawSegmentedControl];
     self.locationView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, 320, 312)];
     
-    self.reloadDataOnReappear = NO;
-    
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 312) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -41,16 +39,13 @@
     
     [self loadProjectData];
     
-    // Padding
+    // Padding (note this doesn't really matter here because the text view doesn't have a border
     self.notes.textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-//    if (self.reloadDataOnReappear) {
-        [self loadProjectData];
-//        self.reloadDataOnReappear = NO;
-//    }
+    [self loadProjectData];
 }
 
 
@@ -62,8 +57,6 @@
     FrankieAddEditContractViewController *aevc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieAddEditContractViewController"];
     aevc.job = self.job;
     [self.navigationController pushViewController:aevc animated:YES];
-    
-    self.reloadDataOnReappear = YES;
 }
 
 
@@ -71,6 +64,9 @@
 
 - (void)loadProjectData
 {
+    // Load (or reload) project title, client information,
+    self.navigationItem.title = self.job.title;
+    
     NSDictionary *clientInformation = self.job.clientInformation;
     NSString *name = clientInformation[@"name"];
     if (name != nil && name.length > 0)
@@ -98,6 +94,7 @@
         self.notes.text = @"No project notes.";
     }
     
+    [self.tableView reloadData];
     [self centerOnProjectLocation];
 }
 
@@ -343,13 +340,6 @@
             else
                 cell.dueIn.text = [NSString stringWithFormat:@"DUE %d DAYS AGO", numberOfDays];
         }
-        
-//        double secondsUntilStepIsDue = [step.dueDate timeIntervalSinceNow];
-//        int numberOfDays = floor(secondsUntilStepIsDue / 86400);
-//        if (numberOfDays >= 0) {
-//            
-//        }
-//        cell.dueIn.text = [NSString stringWithFormat:@"DUE IN %d DAYS", numberOfDays];
     }
     
     if (step.picture != nil && ![step.picture isEqual:[UIImage imageNamed:@"image-upload-icon"]])

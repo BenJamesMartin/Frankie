@@ -76,6 +76,7 @@
         if (self.nameField.text.length > 0)
             self.step.name = self.nameField.text;
         
+        // If the user is creating the first step, we're navigating from the add/edit VC
         if ([self.navigationController.viewControllers.lastObject class] == [FrankieAddEditContractViewController class]) {
             FrankieAddEditContractViewController *aevc = self.navigationController.viewControllers.lastObject;
             NSIndexPath *indexPath = [aevc.tableView indexPathForSelectedRow];
@@ -92,6 +93,7 @@
                 [aevc.steps addObject:self.step];
             }
         }
+        // If the user is creating subsequent steps or editing an existing step, we're navigating from the step master VC
         else if ([self.navigationController.viewControllers.lastObject class] == [FrankieStepsViewController class]) {
             FrankieStepsViewController *svc = (FrankieStepsViewController *)[self.navigationController.viewControllers lastObject];
             NSIndexPath *path = [svc.tableView indexPathForSelectedRow];

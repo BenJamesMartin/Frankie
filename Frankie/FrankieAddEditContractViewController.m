@@ -15,6 +15,7 @@
 #import "FrankieAppDelegate.h"
 #import "ProjectStep.h"
 #import "Job.h"
+#import "RTNActivityView.h"
 
 @interface FrankieAddEditContractViewController ()
 
@@ -60,7 +61,13 @@
         self.navigationItem.leftBarButtonItem = backItem;
     }
 
-    self.navigationItem.title = @"New Project";
+    if ([self.navigationItem.title isEqualToString:@""] || self.navigationItem.title == nil) {
+        self.navigationItem.title = @"New Project";
+    }
+    else {
+        self.navigationItem.title = self.job.title;
+    }
+    
     [self.uploadButton setImage:[UIImage imageNamed:@"image-upload-icon.png"] forState:UIControlStateNormal];
     self.steps = [NSMutableArray new];
 
@@ -358,8 +365,18 @@
         return;
     }
     
+    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
     // Edit existing contract
     if (self.job != nil) {
+        // Fetch object from Core Data
+        
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
+        request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.job.objectID];
+        request.fetchLimit = 1;
+        NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
+        self.job = fetchedObjects[0];
+        
         [self.job setValue:self.projectTitle.text forKey:@"title"];
         NSString *priceStr =[self.price.text stringByReplacingOccurrencesOfString:@"$" withString:@""];
         priceStr = [priceStr stringByReplacingOccurrencesOfString:@"," withString:@""];
@@ -386,7 +403,6 @@
     // Add new contract
     else {
         // Store new contract in Core Data
-        NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Job class]) inManagedObjectContext:context];
         
         [entity setValue:self.projectTitle.text forKey:@"title"];
@@ -412,7 +428,7 @@
             imageData = nil;
         }
 
-        
+        // Parse remote storage
         //    PFObject *project = [PFObject objectWithClassName:@"Project"];
         //    project[@"user"] = [PFUser currentUser];
         //    if (imageData != nil) {
@@ -439,10 +455,14 @@
 
     }
     
-    if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-    }
-    
+    // Save Core Data context in background
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+            NSLog(@"saved");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+        }
+    });
+
     // Now the Core Data object has been added, return back to master VC where the fetched results controller will take care of updating its table view.
     [self.navigationController popViewControllerAnimated:YES];
 }

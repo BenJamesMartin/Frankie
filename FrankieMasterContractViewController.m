@@ -221,7 +221,8 @@
     [project saveInBackground];
 }
 
-- (void)syncParseWithCoreData {
+- (void)syncParseWithCoreData
+{
     NSError *error;
     NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
