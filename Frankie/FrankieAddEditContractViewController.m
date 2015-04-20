@@ -61,7 +61,7 @@
         self.navigationItem.leftBarButtonItem = backItem;
     }
 
-    if ([self.navigationItem.title isEqualToString:@""] || self.navigationItem.title == nil) {
+    if ([self.job.title isEqualToString:@""] || self.job.title == nil) {
         self.navigationItem.title = @"New Project";
     }
     else {
@@ -101,6 +101,14 @@
     NSIndexPath *tableSelection = [self.tableView indexPathForSelectedRow];
     [self.tableView deselectRowAtIndexPath:tableSelection animated:YES];
     
+    // If editing an existing project, load project image
+    NSData *imageData = self.job.picture;
+    if (imageData != nil) {
+        UIImage *image = [UIImage imageWithData:imageData];
+        self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self.uploadButton setImage:image forState:UIControlStateNormal];
+    }
+    
     if (self.isCreatingFirstStep && self.steps.count > 0) {
         if (self.svc == nil) {
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -128,15 +136,10 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated
-{
-    // This was an attempt to get rid of weird error occurring on masterVC
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    [center removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    
+{    
+    // If we're editing an existing project, set project of detail project VC
     if ([self.navigationController.viewControllers.lastObject isKindOfClass:FrankieDetailProjectViewController.class]) {
         FrankieDetailProjectViewController *dpvc = self.navigationController.viewControllers.lastObject;
-        
         dpvc.job = self.job;
     }
 }
@@ -158,10 +161,10 @@
             self.projectTitle = tf;
             if (self.job.title != nil) {
                 tf.text = self.job.title;
-                tf.alpha = 0.0;
-                [UIView animateWithDuration:0.5 animations:^{
-                    tf.alpha = 1.0;
-                }];
+//                tf.alpha = 0.0;
+//                [UIView animateWithDuration:0.5 animations:^{
+//                    tf.alpha = 1.0;
+//                }];
             }
         }
     }
@@ -177,10 +180,10 @@
                 NSString *currencyString = [numberFormatter stringFromNumber:self.job.price];
                 if (self.job.price.floatValue != 0)
                     tf.text = currencyString;
-                tf.alpha = 0.0;
-                [UIView animateWithDuration:0.5 animations:^{
-                    tf.alpha = 1.0;
-                }];
+//                tf.alpha = 0.0;
+//                [UIView animateWithDuration:0.5 animations:^{
+//                    tf.alpha = 1.0;
+//                }];
             }
         }
     }
@@ -211,10 +214,10 @@
         stepsLabel.textColor = [UIColor darkGrayColor];
         [stepsLabel sizeToFit];
         cell2.accessoryView = stepsLabel;
-        cell2.accessoryView.alpha = 0.0;
-        [UIView animateWithDuration:0.5 animations:^{
-            cell2.accessoryView.alpha = 1.0;
-        }];
+//        cell2.accessoryView.alpha = 0.0;
+//        [UIView animateWithDuration:0.5 animations:^{
+//            cell2.accessoryView.alpha = 1.0;
+//        }];
     }
     
     NSDictionary *clientInformation = self.job.clientInformation;
@@ -225,9 +228,9 @@
         stepsLabel.textColor = [UIColor darkGrayColor];
         [stepsLabel sizeToFit];
         cell3.accessoryView = stepsLabel;
-        [UIView animateWithDuration:0.5 animations:^{
-            cell3.accessoryView.alpha = 1.0;
-        }];
+//        [UIView animateWithDuration:0.5 animations:^{
+//            cell3.accessoryView.alpha = 1.0;
+//        }];
     }
     
     CLPlacemark *placemark = self.job.location;
@@ -238,9 +241,9 @@
         stepsLabel.textColor = [UIColor darkGrayColor];
         [stepsLabel sizeToFit];
         cell4.accessoryView = stepsLabel;
-        [UIView animateWithDuration:0.5 animations:^{
-            cell4.accessoryView.alpha = 1.0;
-        }];
+//        [UIView animateWithDuration:0.5 animations:^{
+//            cell4.accessoryView.alpha = 1.0;
+//        }];
     }
     
     NSString *notes = self.job.notes;
@@ -268,21 +271,10 @@
                 label.frame = CGRectMake(label.frame.origin.x, label.frame.origin.y, 135, label.frame.size.height);
             }
             cell5.accessoryView = label;
-            [UIView animateWithDuration:0.5 animations:^{
-                cell5.accessoryView.alpha = 1.0;
-            }];
+//            [UIView animateWithDuration:0.5 animations:^{
+//                cell5.accessoryView.alpha = 1.0;
+//            }];
         }
-    }
-    
-    NSData *imageData = self.job.picture;
-    if (imageData != nil) {
-        UIImage *image = [UIImage imageWithData:imageData];
-        self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        [self.uploadButton setImage:image forState:UIControlStateNormal];
-        self.uploadButton.alpha = 0.0;
-        [UIView animateWithDuration:0.5 animations:^{
-            self.uploadButton.alpha = 1.0;
-        }];
     }
 }
 

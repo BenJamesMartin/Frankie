@@ -9,6 +9,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import <HMSegmentedControl/HMSegmentedControl.h>
 #import "Job.h"
 
 @interface FrankieDetailProjectViewController : UIViewController <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate>
@@ -20,6 +21,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *dateRange;
 @property (strong, nonatomic) IBOutlet UITextView *notes;
 
+@property (strong, nonatomic) IBOutlet HMSegmentedControl *segmentedControl;
 @property (strong, nonatomic) IBOutlet UIView *interchangeableView;
 @property (strong, nonatomic) IBOutlet UILabel *noStepsLabel;
 @property (strong, nonatomic) UITableView *tableView;

@@ -7,7 +7,6 @@
 //
 
 #import <pop/POP.h>
-#import <HMSegmentedControl/HMSegmentedControl.h>
 
 #import "FrankieDetailProjectViewController.h"
 #import "FrankieAddEditContractViewController.h"
@@ -157,9 +156,9 @@
 // Draw the segmented control onto the view
 - (void)drawSegmentedControl
 {
-    HMSegmentedControl *segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:@[@"Steps", @"Location"]];
+    self.segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:@[@"Steps", @"Location"]];
     
-    [segmentedControl setTitleFormatter:^NSAttributedString *(HMSegmentedControl *segmentedControl, NSString *title, NSUInteger index, BOOL selected) {
+    [self.segmentedControl setTitleFormatter:^NSAttributedString *(HMSegmentedControl *segmentedControl, NSString *title, NSUInteger index, BOOL selected) {
         NSAttributedString *attString = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName : [UIColor darkGrayColor],
               NSFontAttributeName: [UIFont fontWithName:@"Avenir" size:14.0]}];
         return attString;
@@ -167,16 +166,16 @@
     
     // ** --- Font : Segmented Control Profile --- **
     UIColor *lightGrayHeader = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
-    segmentedControl.frame = CGRectMake(0, 216, self.view.frame.size.width, 40);
-    [segmentedControl addTarget:self action:@selector(segmentedControlChangedValue:) forControlEvents:UIControlEventValueChanged];
-    segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
-    segmentedControl.selectionIndicatorHeight = 1.0f;
-    segmentedControl.selectionIndicatorColor = [UIColor lightGrayColor];
-    segmentedControl.selectionStyle = HMSegmentedControlSelectionStyleFullWidthStripe;
-    segmentedControl.backgroundColor = lightGrayHeader;
-    segmentedControl.selectionIndicatorLocation = HMSegmentedControlSelectionIndicatorLocationDown;
-    segmentedControl.selectedSegmentIndex = 0;
-    [self.view addSubview:segmentedControl];
+    self.segmentedControl.frame = CGRectMake(0, 216, self.view.frame.size.width, 40);
+    [self.segmentedControl addTarget:self action:@selector(segmentedControlChangedValue:) forControlEvents:UIControlEventValueChanged];
+    self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
+    self.segmentedControl.selectionIndicatorHeight = 1.0f;
+    self.segmentedControl.selectionIndicatorColor = [UIColor lightGrayColor];
+    self.segmentedControl.selectionStyle = HMSegmentedControlSelectionStyleFullWidthStripe;
+    self.segmentedControl.backgroundColor = lightGrayHeader;
+    self.segmentedControl.selectionIndicatorLocation = HMSegmentedControlSelectionIndicatorLocationDown;
+    self.segmentedControl.selectedSegmentIndex = 0;
+    [self.view addSubview:self.segmentedControl];
 }
 
 - (void)segmentedControlChangedValue:(HMSegmentedControl *)segmentedControl
@@ -275,7 +274,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSArray *steps = self.job.steps;
-    if (steps.count == 0)
+    if (steps.count == 0 && self.segmentedControl.selectedSegmentIndex == 0)
         self.noStepsLabel.alpha = 1.0;
     else
         self.noStepsLabel.alpha = 0.0;
@@ -460,9 +459,8 @@
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
-        
+        [self.locationManager startUpdatingLocation];   
     }
-        [self.locationManager startUpdatingLocation];
 }
 
 @end
