@@ -6,11 +6,9 @@
 //  Copyright (c) 2015 Benjamin Martin. All rights reserved.
 //
 
-#import <pop/POP.h>
-
 #import "FrankieDetailProjectViewController.h"
 #import "FrankieAddEditContractViewController.h"
-#import "FrankieProjectDetailStepsTableViewCell.h"
+#import "FrankieAppDelegate.h"
 #import "RTNActivityView.h"
 #import "ProjectStep.h"
 
@@ -43,6 +41,32 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [self loadProjectData];
+    self.hasFinishedLoading = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.job.objectID];
+    request.fetchLimit = 1;
+    NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
+    Job *job = fetchedObjects[0];
+    for (ProjectStep *step in job.steps) {
+        NSLog(@"step complete %d", step.completed);
+    }
+    [job setValue:self.job.steps forKey:@"steps"];
+    for (ProjectStep *step in job.steps) {
+        NSLog(@"step complete %d", step.completed);
+    }
+
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+            });
+        }
+    });
 }
 
 
@@ -206,23 +230,6 @@
     }
 }
 
-- (int)calculateProjectStepCount
-{
-    NSArray *steps = self.job.steps;
-    return (int)steps.count;
-}
-
-
-#pragma mark - Text view delegate
-
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    if ([textView.text isEqualToString:@"No project notes."]) {
-        textView.text = @"";
-        textView.textAlignment = NSTextAlignmentCenter;
-    }
-}
-
 
 #pragma mark - Contact client actions
 
@@ -300,6 +307,7 @@
 - (FrankieProjectDetailStepsTableViewCell *)configureCell:(FrankieProjectDetailStepsTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     ProjectStep *step = self.job.steps[indexPath.row];
+    cell.step = step;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // Set checkmark image as completed and set date format as "Completed [date]".
@@ -313,36 +321,7 @@
     // Set checkmark image as incomplete and set date format as "DUE IN [X] DAYS".
     else {
         cell.checkmarkImage.image = [UIImage imageNamed:@"checkmark-empty"];
-        
-        double timeSinceDueDateInSeconds = [step.dueDate timeIntervalSinceNow];
-        int numberOfDays;
-        if (timeSinceDueDateInSeconds / 86400 >= 0) {
-            numberOfDays = floor(timeSinceDueDateInSeconds / 86400);
-        }
-        else {
-            numberOfDays = ceil(timeSinceDueDateInSeconds / 86400);
-        }
-        
-        if (numberOfDays > 0) {
-            if (numberOfDays == 1) {
-                cell.dueIn.text = @"DUE TOMORROW";
-                cell.lateStepIcon.alpha = 1.0;
-            }
-            else
-                cell.dueIn.text = [NSString stringWithFormat:@"DUE IN %d DAYS", numberOfDays];
-        }
-        else if (numberOfDays == 0) {
-            cell.dueIn.text = @"DUE TODAY";
-            cell.lateStepIcon.alpha = 1.0;
-        }
-        else {
-            numberOfDays = abs(numberOfDays);
-            cell.lateStepIcon.alpha = 1.0;
-            if (numberOfDays == 1)
-                cell.dueIn.text = @"DUE YESTERDAY";
-            else
-                cell.dueIn.text = [NSString stringWithFormat:@"DUE %d DAYS AGO", numberOfDays];
-        }
+        [self formatDateLabelAsDaysSinceForCell:cell];
     }
     
     if (step.picture != nil && ![step.picture isEqual:[UIImage imageNamed:@"image-upload-icon"]])
@@ -352,18 +331,195 @@
     
     cell.name.text = step.name;
     
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(moveCell:)];
+    longPress.minimumPressDuration = 0.01;
+    [cell addGestureRecognizer:longPress];
+    
     return cell;
 }
 
-- (void)shakeCell
+
+#pragma mark - Format dueIn label in cell
+
+- (void)formatDateLabelAsDaysSinceForCell:(FrankieProjectDetailStepsTableViewCell *)cell
 {
+    ProjectStep *step = cell.step;
+    double timeSinceDueDateInSeconds = [step.dueDate timeIntervalSinceNow];
+    int numberOfDays;
+    if (timeSinceDueDateInSeconds / 86400 >= 0) {
+        numberOfDays = floor(timeSinceDueDateInSeconds / 86400);
+    }
+    else {
+        numberOfDays = ceil(timeSinceDueDateInSeconds / 86400);
+    }
     
+    if (numberOfDays > 0) {
+        if (numberOfDays == 1) {
+            cell.dueIn.text = @"DUE TOMORROW";
+            if (!self.hasFinishedLoading)
+                cell.lateStepIcon.alpha = 1.0;
+        }
+        else
+            cell.dueIn.text = [NSString stringWithFormat:@"Due in %d days", numberOfDays];
+    }
+    else if (numberOfDays == 0) {
+        cell.dueIn.text = @"DUE TODAY";
+        if (!self.hasFinishedLoading)
+            cell.lateStepIcon.alpha = 1.0;
+    }
+    else {
+        numberOfDays = abs(numberOfDays);
+        if (!self.hasFinishedLoading)
+            cell.lateStepIcon.alpha = 1.0;
+        if (numberOfDays == 1)
+            cell.dueIn.text = @"DUE YESTERDAY";
+        else
+            cell.dueIn.text = [NSString stringWithFormat:@"DUE %d DAYS AGO", numberOfDays];
+    }
+}
+
+
+#pragma mark - Long press gesture recognizer to complete project step
+
+- (void)moveCell:(UILongPressGestureRecognizer *)gesture
+{
+    __block FrankieProjectDetailStepsTableViewCell *cell = (FrankieProjectDetailStepsTableViewCell *)gesture.view;
+    [cell pop_removeAllAnimations];
+    self.cellToAnimate = cell;
+    
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        self.gestureHasEnded = NO;
+        
+        POPDecayAnimation *anim = [POPDecayAnimation animationWithPropertyNamed:kPOPLayerPositionX];
+        anim.delegate = self;
+        anim.velocity = @(500.);
+        anim.name = @"decayAnimation";
+        [cell.layer pop_addAnimation:anim forKey:@"decayAnimation"];
+        
+        POPBasicAnimation *fadeAnim = [POPBasicAnimation animationWithPropertyNamed:kPOPViewAlpha];
+        fadeAnim.delegate = self;
+        fadeAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
+        fadeAnim.fromValue = @(1.0);
+        fadeAnim.toValue = @(0.1);
+        fadeAnim.duration = 1.2;
+        fadeAnim.name = @"fadeAnimation";
+        [cell.contentView pop_addAnimation:fadeAnim forKey:@"fadeAnimation"];
+    }
+    
+    else if (gesture.state == UIGestureRecognizerStateEnded) {
+        // If the gesture has ended, the animation should end as well, reverting the cell back to its base state
+        self.gestureHasEnded = YES;
+        
+        // Toggle cell completion state
+        NSArray *steps = self.job.steps;
+        int index = (int)[steps indexOfObject:cell.step];
+        ProjectStep *step = steps[index];
+        
+        step.completed = !step.completed;
+        step.completionDate = (step.completionDate ? nil : [NSDate date]);
+    }
+}
+
+
+#pragma mark - Pop animation delegate
+
+// When the cell is moving back to its base state, toggle the completion checkmark image of the step cell
+- (void)pop_animationDidStart:(POPAnimation *)anim
+{
+    float animationDuration = 0.2;
+//    __block BOOL shouldAnimateBackLateStep = NO;
+    
+    if ([anim.name isEqualToString:@"layerPositionAnimation"]) {
+        [UIView animateWithDuration:animationDuration animations:^{
+            self.cellToAnimate.checkmarkImage.alpha = 0.0;
+            self.cellToAnimate.dueIn.alpha = 0.0;
+            self.cellToAnimate.lateStepIcon.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            if ([self.cellToAnimate.checkmarkImage.image isEqual:[UIImage imageNamed:@"checkmark-empty"]]) {
+                self.cellToAnimate.checkmarkImage.image = [UIImage imageNamed:@"checkmark-filled"];
+                ProjectStep *step = self.cellToAnimate.step;
+                NSDateFormatter *formatter = [NSDateFormatter new];
+                formatter.dateFormat = @"MMMM dd, yyyy";
+                NSString *formattedDate = [formatter stringFromDate:step.completionDate];
+                self.cellToAnimate.dueIn.text = [NSString stringWithFormat:@"Completed %@", formattedDate];
+                [UIView animateWithDuration:(animationDuration * 2) animations:^{
+                    self.cellToAnimate.checkmarkImage.alpha = 1.0;
+                    self.cellToAnimate.dueIn.alpha = 1.0;
+                }];
+            }
+            else {
+                self.cellToAnimate.checkmarkImage.image = [UIImage imageNamed:@"checkmark-empty"];
+                [self formatDateLabelAsDaysSinceForCell:self.cellToAnimate];
+                NSDate *dueDate = self.cellToAnimate.step.dueDate;
+                NSLog(@"due date %@ and interval %f", dueDate, fabs([dueDate timeIntervalSinceNow]));
+                if (fabs([dueDate timeIntervalSinceNow]) < 172799) {
+                    [UIView animateWithDuration:(animationDuration * 2) animations:^{
+                        self.cellToAnimate.lateStepIcon.alpha = 1.0;
+                        self.cellToAnimate.checkmarkImage.alpha = 1.0;
+                        self.cellToAnimate.dueIn.alpha = 1.0;
+                    }];
+                }
+                else {
+                    [UIView animateWithDuration:(animationDuration * 2) animations:^{
+                        self.cellToAnimate.checkmarkImage.alpha = 1.0;
+                        self.cellToAnimate.dueIn.alpha = 1.0;
+                    }];
+                }
+            }
+        }];
+    }
+}
+
+- (void)pop_animationDidApply:(POPDecayAnimation *)anim
+{
+    if (self.gestureHasEnded && [anim.name isEqualToString:@"decayAnimation"]) {
+        [self addDecayAnimationWithAnimation:anim];
+        [self addAlphaAnimationWithAnimation];
+    }
+}
+
+- (void)pop_animationDidStop:(POPDecayAnimation *)anim finished:(BOOL)finished
+{
+    if (!self.gestureHasEnded && [anim.name isEqualToString:@"decayAnimation"]) {
+        [self addDecayAnimationWithAnimation:anim];
+        [self addAlphaAnimationWithAnimation];
+    }
+}
+
+
+#pragma mark - Pop animation convenience methods
+
+- (void)addDecayAnimationWithAnimation:(POPDecayAnimation *)anim
+{
+    [self.cellToAnimate.layer pop_removeAnimationForKey:@"decayAnimation"];
+    CGPoint currentVelocity = [anim.velocity CGPointValue];
+    CGPoint velocity = CGPointMake(currentVelocity.x, -currentVelocity.y);
+    POPSpringAnimation *positionAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPosition];
+    positionAnimation.name = @"layerPositionAnimation";
+    positionAnimation.delegate = self;
+    positionAnimation.velocity = [NSValue valueWithCGPoint:velocity];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:self.cellToAnimate];
+    positionAnimation.toValue = [NSValue valueWithCGPoint: CGPointMake(self.cellToAnimate.contentView.center.x, self.cellToAnimate.contentView.center.y * (((indexPath.row + 1) * 2) - 1))];
+    positionAnimation.springBounciness = 10.0;
+    [self.cellToAnimate.layer pop_addAnimation:positionAnimation forKey:@"layerPositionAnimation"];
+}
+
+- (void)addAlphaAnimationWithAnimation
+{
+    // Fade back fade animation
+    [self.cellToAnimate.contentView pop_removeAnimationForKey:@"fadeAnimation"];
+    POPBasicAnimation *fadeAnim = [POPBasicAnimation animationWithPropertyNamed:kPOPViewAlpha];
+    fadeAnim.fromValue = @(self.cellToAnimate.contentView.alpha);
+    fadeAnim.toValue = @(1.0);
+    fadeAnim.duration = 0.4;
+    fadeAnim.name = @"fadeAnimation";
+    [self.cellToAnimate.contentView pop_addAnimation:fadeAnim forKey:@"fadeAnimation"];
 }
 
 
 #pragma mark - Table view delegate
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 }
 

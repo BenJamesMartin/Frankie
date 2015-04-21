@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ProjectStep.h"
 
 @interface FrankieProjectDetailStepsTableViewCell : UITableViewCell
 
@@ -16,6 +17,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *dueIn;
 
 @property (strong, nonatomic) IBOutlet UIImageView *lateStepIcon;
+
+@property (strong, nonatomic) IBOutlet ProjectStep *step;
 
 
 @end
