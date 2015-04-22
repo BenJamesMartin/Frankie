@@ -67,13 +67,22 @@
         [RTNActivityView hide];
         CLPlacemark *placemark = placemarks.lastObject;
         
-        MKPlacemark *mkPlacemark = [[MKPlacemark alloc] initWithPlacemark:placemark];
-        [self.mapView addAnnotation:mkPlacemark];
-        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(mkPlacemark.coordinate, 1000, 1000);
-        [self.mapView setRegion:region animated:YES];
-        
-        self.placemark = placemark;
-        [searchBar resignFirstResponder];
+        if (placemark == nil) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"Location not found. Please use the city name for more accurate results." preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action = [UIAlertAction actionWithTitle:@"Done" style:UIAlertActionStyleCancel handler:nil];
+            [alert addAction:action];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else {
+            MKPlacemark *mkPlacemark = [[MKPlacemark alloc] initWithPlacemark:placemark];
+            [self.mapView addAnnotation:mkPlacemark];
+            MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(mkPlacemark.coordinate, 1000, 1000);
+            [self.mapView setRegion:region animated:YES];
+            
+            self.placemark = placemark;
+            [searchBar resignFirstResponder];
+        }
     }];
 }
 
