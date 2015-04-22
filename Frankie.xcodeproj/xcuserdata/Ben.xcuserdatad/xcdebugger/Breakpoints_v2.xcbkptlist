@@ -20,6 +20,14 @@
                   moduleName = "libobjc.A.dylib"
                   offsetFromSymbolStart = "0">
                </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[NSObject(NSObject) doesNotRecognizeSelector:]"
+                  moduleName = "CoreFoundation"
+                  offsetFromSymbolStart = "0">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>

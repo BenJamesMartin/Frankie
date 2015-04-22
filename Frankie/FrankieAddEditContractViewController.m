@@ -478,14 +478,26 @@
     self.mediaPicker.allowsEditing = YES;
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                 delegate:self
-                                                        cancelButtonTitle:@"Cancel"
-                                                   destructiveButtonTitle:nil
-                                                        otherButtonTitles:@"Take photo", @"Choose Existing", nil];
-
-        [actionSheet showInView:self.view];
-    } else {
+        UIAlertController *uploadPhotoController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        UIAlertAction *takePhoto = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            self.mediaPicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self presentViewController:self.mediaPicker animated:YES completion:NULL];
+        }];
+        UIAlertAction *chooseExisting = [UIAlertAction actionWithTitle:@"Choose Existing" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            self.mediaPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            [self presentViewController:self.mediaPicker animated:YES completion:NULL];
+        }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        [uploadPhotoController addAction:takePhoto];
+        [uploadPhotoController addAction:chooseExisting];
+        [uploadPhotoController addAction:cancel];
+        
+        [self presentViewController:uploadPhotoController animated:YES completion:nil];
+    }
+    else {
         self.mediaPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentViewController:self.mediaPicker animated:YES completion:NULL];
     }
@@ -494,11 +506,11 @@
 
 # pragma mark - UIImagePickerController delegate methods
 
--(void) imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
--(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     if (self.mediaPicker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
         self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
