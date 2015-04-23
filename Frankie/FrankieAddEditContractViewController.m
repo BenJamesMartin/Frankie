@@ -365,7 +365,6 @@
     // Edit existing contract
     if (self.job != nil) {
         // Fetch object from Core Data
-        
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
         request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.job.objectID];
         request.fetchLimit = 1;
@@ -395,14 +394,9 @@
             imageData = nil;
         }
         
-        // Save Core Data context in background
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-                });
-            }
-        });
+        if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+        }
     }
     // Add new contract
     else {
@@ -410,7 +404,7 @@
         NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Job class]) inManagedObjectContext:context];
         
         [entity setValue:self.projectTitle.text forKey:@"title"];
-        NSString *priceStr =[self.price.text stringByReplacingOccurrencesOfString:@"$" withString:@""];
+        NSString *priceStr = [self.price.text stringByReplacingOccurrencesOfString:@"$" withString:@""];
         priceStr = [priceStr stringByReplacingOccurrencesOfString:@"," withString:@""];
         float price = [priceStr floatValue];
         [entity setValue:[NSNumber numberWithFloat:price] forKey:@"price"];

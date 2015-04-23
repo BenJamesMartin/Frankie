@@ -52,13 +52,7 @@
     request.fetchLimit = 1;
     NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
     Job *job = fetchedObjects[0];
-    for (ProjectStep *step in job.steps) {
-        NSLog(@"step complete %d", step.completed);
-    }
     [job setValue:self.job.steps forKey:@"steps"];
-    for (ProjectStep *step in job.steps) {
-        NSLog(@"step complete %d", step.completed);
-    }
 
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
@@ -369,8 +363,8 @@
     }
     else {
         numberOfDays = abs(numberOfDays);
+        cell.lateStepIcon.alpha = 1.0;
         if (!self.hasFinishedLoading)
-            cell.lateStepIcon.alpha = 1.0;
         if (numberOfDays == 1)
             cell.dueIn.text = @"DUE YESTERDAY";
         else
@@ -451,7 +445,6 @@
                 self.cellToAnimate.checkmarkImage.image = [UIImage imageNamed:@"checkmark-empty"];
                 [self formatDateLabelAsDaysSinceForCell:self.cellToAnimate];
                 NSDate *dueDate = self.cellToAnimate.step.dueDate;
-                NSLog(@"due date %@ and interval %f", dueDate, fabs([dueDate timeIntervalSinceNow]));
                 if (fabs([dueDate timeIntervalSinceNow]) < 172799) {
                     [UIView animateWithDuration:(animationDuration * 2) animations:^{
                         self.cellToAnimate.lateStepIcon.alpha = 1.0;

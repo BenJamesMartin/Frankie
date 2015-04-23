@@ -58,14 +58,15 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     NSError *error;
-    if (![self.fetchedResultsController performFetch:&error]) {
+    if (![[self fetchedResultsController] performFetch:&error]) {
     }
     else {
         [self.tableView reloadData];
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     NSIndexPath *path = [self.tableView indexPathForSelectedRow];
     [self.tableView deselectRowAtIndexPath:path animated:YES];
@@ -78,7 +79,6 @@
     self.navigationController.navigationBar.alpha = 0.96;
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger-icon"] landscapeImagePhone:nil style:UIBarButtonItemStylePlain target:self action:@selector(revealLeftMenu)];
-    self.fetchedResultsController.delegate = self;
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
@@ -89,8 +89,9 @@
      action:@selector(loadAddContractViewController)];
 }
 
-- (void)viewDidUnload {
-    self.fetchedResultsController = nil;
+- (void)viewDidUnload
+{
+//    self.fetchedResultsController = nil;
 }
 
 - (void)revealLeftMenu
@@ -168,7 +169,8 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self.tableView cellForRowAtIndexPath:indexPath];
+            [self configureCell:(FrankieMasterContractTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+//            [self.tableView cellForRowAtIndexPath:indexPath];
             break;
             
         case NSFetchedResultsChangeMove:
@@ -309,19 +311,30 @@
     }];
 }
 
-- (void)loadAddContractViewController {
+- (void)loadAddContractViewController
+{
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     FrankieAddEditContractViewController *addContractVC = [storyboard instantiateViewControllerWithIdentifier:@"FrankieAddEditContractViewController"];
     [self.navigationController pushViewController:addContractVC animated:YES];
 }
 
-- (void)logOutUser {
+- (void)logOutUser
+{
     [PFUser logOut];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (void)reloadTable {
-    [self.tableView reloadData];
+- (void)reloadTable
+{
+    NSError *error;
+    if (![[self fetchedResultsController] performFetch:&error]) {
+        NSLog(@"error fetching");
+    }
+    else {
+        NSLog(@"successful fetch");
+        [self.tableView reloadData];
+    }
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -330,13 +343,33 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - UITableViewDelegate methods
+#pragma mark - Table view delegate
 
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    FrankieDetailProjectViewController *dpvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieDetailProjectViewController"];
+    
+    Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
+    dpvc.job = job;
+    
+    [self.navigationController pushViewController:dpvc animated:YES];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 87;
+}
+
+// Allows deletion of cells/projects by side swiping on table view cell
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return YES;
 }
 
--(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+// Action to perform when tapping delete button revealed upon side swiping cell
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
         
@@ -371,6 +404,7 @@
     }
 }
 
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -391,19 +425,21 @@
 #pragma mark - cellForRowAtIndexPath
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"Cell";
-    FrankieMasterContractTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Cell"];
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellIdentifier = @"Cell";
+    FrankieMasterContractTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     
     if (cell == nil) {
-        cell = [[FrankieMasterContractTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[FrankieMasterContractTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     
-    return [self configureCell:cell atIndexPath:indexPath];
+    [self configureCell:cell atIndexPath:indexPath];
+    
+    return cell;
 }
 
-- (FrankieMasterContractTableViewCell *)configureCell:(FrankieMasterContractTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureCell:(FrankieMasterContractTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
     
@@ -457,29 +493,8 @@
     else {
         cell.picture.image = [UIImage imageNamed:@"image-upload-icon-small"];
     }
-    
-    return cell;
 }
 
-#pragma mark - UITableViewDelegate
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    FrankieDetailProjectViewController *dpvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieDetailProjectViewController"];
-    FrankieAddEditContractViewController *aevc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieAddEditContractViewController"];
-    
-    Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
-    dpvc.job = job;
-    aevc.job = job;
-    
-    [self.navigationController pushViewController:dpvc animated:YES];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 87;
-}
 
 #pragma mark - UIImagePickerController delegate methods
 
