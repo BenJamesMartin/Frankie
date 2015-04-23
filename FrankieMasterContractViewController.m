@@ -443,6 +443,9 @@
 {
     Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
     
+    // Add custom detail disclosure indicator
+    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"custom-detail-disclosure"]];
+    
     // If the job title has been set and it has not been edited to a blank string
     if (job.title != nil && ![job.title isEqualToString:@""])
         cell.title.text = job.title;
