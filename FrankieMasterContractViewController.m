@@ -452,7 +452,24 @@
     else
         cell.title.text = @"[Title]";
     
+    if (job.picture != nil) {
+        UIImage *image = [UIImage imageWithData:job.picture];
+        cell.picture.image = image;
+    }
+    else {
+        cell.picture.image = [UIImage imageNamed:@"image-upload-icon-small"];
+    }
+    
     NSArray *steps = job.steps;
+    if (steps.count == 0) {
+        cell.projectCompleteLabel.alpha = 0.0;
+        cell.nextStepDueDate.alpha = 0.0;
+        cell.lateStepIcon.alpha = 0.0;
+        cell.nextStepName.alpha = 1.0;
+        cell.nextStepName.text = @"No steps created yet.";
+        return;
+    }
+    
     ProjectStep *nextStep;
     for (ProjectStep *step in steps) {
         if (!step.completed) {
@@ -460,6 +477,7 @@
             break;
         }
     }
+
     if (nextStep == nil) {
         cell.projectCompleteLabel.alpha = 1.0;
         cell.lateStepIcon.alpha = 0.0;
@@ -505,13 +523,6 @@
                     cell.nextStepDueDate.text = [NSString stringWithFormat:@"DUE %d DAYS AGO", numberOfDays];
             }
         }
-    }
-    if (job.picture != nil) {
-        UIImage *image = [UIImage imageWithData:job.picture];
-        cell.picture.image = image;
-    }
-    else {
-        cell.picture.image = [UIImage imageNamed:@"image-upload-icon-small"];
     }
 }
 

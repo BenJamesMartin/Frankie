@@ -410,7 +410,7 @@
         ProjectStep *step = steps[index];
         
         step.completed = !step.completed;
-        step.completionDate = (step.completionDate ? nil : [NSDate date]);
+        step.completionDate = (step.completionDate ? step.completionDate : [NSDate date]);
     }
 }
 
