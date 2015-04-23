@@ -450,42 +450,59 @@
         cell.title.text = @"[Title]";
     
     NSArray *steps = job.steps;
-    ProjectStep *nextStep = steps.firstObject;
-    if (nextStep.name != nil) {
-        cell.nextStepName.text = [NSString stringWithFormat:@"Next step: %@", nextStep.name];
+    ProjectStep *nextStep;
+    for (ProjectStep *step in steps) {
+        if (!step.completed) {
+            nextStep = step;
+            break;
+        }
     }
-    if (nextStep.dueDate != nil) {
-        double timeSinceDueDateInSeconds = [nextStep.dueDate timeIntervalSinceNow];
-        int numberOfDays;
-        if (timeSinceDueDateInSeconds / 86400 >= 0) {
-            numberOfDays = floor(timeSinceDueDateInSeconds / 86400);
-        }
-        else {
-            numberOfDays = ceil(timeSinceDueDateInSeconds / 86400);
-        }
+    if (nextStep == nil) {
+        cell.projectCompleteLabel.alpha = 1.0;
+        cell.lateStepIcon.alpha = 0.0;
+        cell.nextStepName.alpha = 0.0;
+        cell.nextStepDueDate.alpha = 0.0;
+    }
+    else {
+        cell.projectCompleteLabel.alpha = 0.0;
+        cell.nextStepName.alpha = 1.0;
+        cell.nextStepDueDate.alpha = 1.0;
         
-        if (numberOfDays > 0) {
-            if (numberOfDays == 1) {
-                cell.nextStepDueDate.text = @"DUE TOMORROW";
+        if (nextStep.name != nil) {
+            cell.nextStepName.text = [NSString stringWithFormat:@"Next step: %@", nextStep.name];
+        }
+        if (nextStep.dueDate != nil) {
+            double timeSinceDueDateInSeconds = [nextStep.dueDate timeIntervalSinceNow];
+            int numberOfDays;
+            if (timeSinceDueDateInSeconds / 86400 >= 0) {
+                numberOfDays = floor(timeSinceDueDateInSeconds / 86400);
+            }
+            else {
+                numberOfDays = ceil(timeSinceDueDateInSeconds / 86400);
+            }
+            
+            if (numberOfDays > 0) {
+                if (numberOfDays == 1) {
+                    cell.nextStepDueDate.text = @"DUE TOMORROW";
+                    cell.lateStepIcon.alpha = 1.0;
+                }
+                else
+                    cell.nextStepDueDate.text = [NSString stringWithFormat:@"DUE IN %d DAYS", numberOfDays];
+            }
+            else if (numberOfDays == 0) {
+                cell.nextStepDueDate.text = @"DUE TODAY";
                 cell.lateStepIcon.alpha = 1.0;
             }
-            else
-                cell.nextStepDueDate.text = [NSString stringWithFormat:@"DUE IN %d DAYS", numberOfDays];
-        }
-        else if (numberOfDays == 0) {
-            cell.nextStepDueDate.text = @"DUE TODAY";
-            cell.lateStepIcon.alpha = 1.0;
-        }
-        else {
-            numberOfDays = abs(numberOfDays);
-            cell.lateStepIcon.alpha = 1.0;
-            if (numberOfDays == 1)
-                cell.nextStepDueDate.text = @"DUE YESTERDAY";
-            else
-                cell.nextStepDueDate.text = [NSString stringWithFormat:@"DUE %d DAYS AGO", numberOfDays];
+            else {
+                numberOfDays = abs(numberOfDays);
+                cell.lateStepIcon.alpha = 1.0;
+                if (numberOfDays == 1)
+                    cell.nextStepDueDate.text = @"DUE YESTERDAY";
+                else
+                    cell.nextStepDueDate.text = [NSString stringWithFormat:@"DUE %d DAYS AGO", numberOfDays];
+            }
         }
     }
-    
     if (job.picture != nil) {
         UIImage *image = [UIImage imageWithData:job.picture];
         cell.picture.image = image;

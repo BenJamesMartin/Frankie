@@ -32,6 +32,12 @@
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Project Complete" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mgG-8i-a1M">
+                        <rect key="frame" x="127" y="38" width="159" height="17"/>
+                        <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="14"/>
+                        <color key="textColor" red="0.1803921568627451" green="0.80000000000000004" blue="0.44313725490196076" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="[STEP DUE DATE]" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NiI-zk-AjS">
                         <rect key="frame" x="127" y="55" width="159" height="17"/>
                         <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="10"/>
@@ -48,6 +54,7 @@
                 <outlet property="nextStepDueDate" destination="NiI-zk-AjS" id="pv9-e3-Xar"/>
                 <outlet property="nextStepName" destination="Xxv-vg-80n" id="6k6-u2-25N"/>
                 <outlet property="picture" destination="0vz-q3-ESn" id="VYE-cv-FN6"/>
+                <outlet property="projectCompleteLabel" destination="mgG-8i-a1M" id="KuT-bd-RXO"/>
                 <outlet property="title" destination="a38-YZ-uJ2" id="Ggu-ak-gyh"/>
             </connections>
             <point key="canvasLocation" x="417" y="416.5"/>
