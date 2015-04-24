@@ -44,8 +44,14 @@
     self.hasFinishedLoading = YES;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [UIView setAnimationsEnabled:YES];
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
+    // Save any changes in steps
     NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
     request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.job.objectID];

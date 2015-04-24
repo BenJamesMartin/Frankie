@@ -97,6 +97,8 @@
     
     [super viewWillAppear:animated];
     
+    [UIView setAnimationsEnabled:YES];
+    
     // Remove the current selection in our table view
     NSIndexPath *tableSelection = [self.tableView indexPathForSelectedRow];
     [self.tableView deselectRowAtIndexPath:tableSelection animated:YES];

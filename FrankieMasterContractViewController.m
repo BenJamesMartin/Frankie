@@ -61,6 +61,7 @@
     if (![[self fetchedResultsController] performFetch:&error]) {
     }
     else {
+        _fetchedResultsController = nil;
         [self.tableView reloadData];
     }
 }
@@ -148,10 +149,11 @@
     return _fetchedResultsController;
 }
 
-#pragma mark - NSFetchedResultsController delegate methods
+#pragma mark - Fetched results controller delegate methods
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
+//    _fetchedResultsController = nil;
     [self.tableView beginUpdates];
 }
 
@@ -332,6 +334,7 @@
     }
     else {
         NSLog(@"successful fetch");
+        _fetchedResultsController = nil;
         [self.tableView reloadData];
     }
 
@@ -400,6 +403,7 @@
             [context deleteObject:job];
         }
         [context save:&error];
+        _fetchedResultsController = nil;
         [self.tableView reloadData];
     }
 }

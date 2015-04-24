@@ -47,6 +47,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     self.tableView.userInteractionEnabled = YES;
+    [UIView setAnimationsEnabled:YES];
 }
 
 - (void)didReceiveMemoryWarning {
