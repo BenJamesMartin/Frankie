@@ -6,7 +6,11 @@
 //  Copyright (c) 2015 Benjamin Martin. All rights reserved.
 //
 
+#import <CoreData/CoreData.h>
+#import <Parse/Parse.h>
+
 #import "FrankieSettingsViewController.h"
+#import "FrankieAppDelegate.h"
 
 @interface FrankieSettingsViewController ()
 
@@ -33,6 +37,74 @@
     self.tableView.contentInset = UIEdgeInsetsMake(-35, 0, 0, 0);
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    // If it has been set, load it
+    // If it hasn't been set, it will be set later
+    
+    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Contractor class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"parseId = %@", self.contractor.objectID];
+    request.fetchLimit = 1;
+    NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
+    self.contractor = fetchedObjects[0];
+    
+    NSLog(@"self.contractor %@", self.contractor);
+    
+//    if (self.contractor != nil) {
+//        NSData *imageData;
+//        
+//        if (!([[self.profileImage imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"profile-default"]])) {
+//            UIImage *image = [self.profileImage imageForState:UIControlStateNormal];
+//            imageData = UIImageJPEGRepresentation(image, 0.9f);
+//            [entity setValue:imageData forKey:@"picture"];
+//        }
+//        if (self.nameField.text.length > 0)
+//            [entity setValue:self.nameField.text forKey:@"name"];
+//        if (self.phoneField.text.length > 0)
+//            [entity setValue:self.phoneField.text forKey:@"phone"];
+//        if (self.emailField.text.length > 0)
+//            [entity setValue:self.emailField.text forKey:@"email"];
+//
+//    }
+//    
+//    if (self.contractor != nil) {
+//        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Contractor class])];
+//        request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.contractor.objectID];
+//        request.fetchLimit = 1;
+//        NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
+//        self.contractor = fetchedObjects[0];
+//        
+//        [self.job setValue:self.projectTitle.text forKey:@"title"];
+//        NSString *priceStr =[self.price.text stringByReplacingOccurrencesOfString:@"$" withString:@""];
+//        priceStr = [priceStr stringByReplacingOccurrencesOfString:@"," withString:@""];
+//        float price = [priceStr floatValue];
+//        [self.job setValue:[NSNumber numberWithFloat:price] forKey:@"price"];
+//        [self.job setValue:self.steps forKey:@"steps"];
+//        [self.job setValue:self.clientInformation forKey:@"clientInformation"];
+//        [self.job setValue:self.locationPlacemark forKey:@"location"];
+//        [self.job setValue:self.notes forKey:@"notes"];
+//        [self.job setValue:[NSNumber numberWithBool:NO] forKeyPath:@"completed"];
+//        [self.job setValue:[[[(NSManagedObject*)self.job objectID] URIRepresentation] absoluteString] forKey:@"objectId"];
+//        
+//        NSData *imageData;
+//        // If an image has been uploaded (the image upload button's image is not the defaul upload icon)
+//        if (!([[self.uploadButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"image-upload-icon"]])) {
+//            UIImage *image = [self.uploadButton imageForState:UIControlStateNormal];
+//            imageData = UIImageJPEGRepresentation(image, 0.9f);
+//            [self.job setValue:imageData forKey:@"picture"];
+//        }
+//        else {
+//            imageData = nil;
+//        }
+//        
+//        if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+//        }
+//    }
+}
+
 - (void)revealLeftMenu
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"revealSideMenu" object:nil];
@@ -41,6 +113,28 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [self.view endEditing:YES];
+    
+    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Contractor class]) inManagedObjectContext:context];
+    
+    [entity setValue:[PFUser currentUser].objectId forKey:@"parseId"];
+    
+    NSData *imageData;
+    if (!([[self.profileImage imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"profile-default"]])) {
+        UIImage *image = [self.profileImage imageForState:UIControlStateNormal];
+        imageData = UIImageJPEGRepresentation(image, 0.9f);
+        [entity setValue:imageData forKey:@"picture"];
+    }
+    if (self.nameField.text.length > 0)
+        [entity setValue:self.nameField.text forKey:@"name"];
+    if (self.phoneField.text.length > 0)
+        [entity setValue:self.phoneField.text forKey:@"phone"];
+    if (self.emailField.text.length > 0)
+        [entity setValue:self.emailField.text forKey:@"email"];
+
+    if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -101,14 +195,22 @@
     }];
 }
 
--(void) keyboardDismissTap {
+- (void)keyboardDismissTap {
     [self.view endEditing:YES];
 }
 
-#pragma mark - UITextField delegate
+
+#pragma mark - Text field delegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
+    if (textField.tag == 0)
+        self.nameField = textField;
+    else if (textField.tag == 1)
+        self.phoneField = textField;
+    else
+        self.emailField = textField;
+    
     NSLog(@"textFieldDidBeginEditing");
     [UIView animateWithDuration:0.3 animations:^{
         self.view.frame = CGRectMake(0, -200, self.view.frame.size
@@ -224,7 +326,6 @@
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
-
 
 
 #pragma mark - UITableViewDelegate

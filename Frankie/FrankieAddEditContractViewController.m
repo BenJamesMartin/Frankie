@@ -209,9 +209,9 @@
     if (steps.count > 0) {
         UILabel *stepsLabel = [UILabel new];
         if (steps.count == 1)
-            stepsLabel.text = [NSString stringWithFormat:@"%lu Step", steps.count];
+            stepsLabel.text = [NSString stringWithFormat:@"%lu Step   ", steps.count];
         else
-            stepsLabel.text = [NSString stringWithFormat:@"%lu Steps", steps.count];
+            stepsLabel.text = [NSString stringWithFormat:@"%lu Steps   ", steps.count];
         stepsLabel.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
         stepsLabel.textColor = [UIColor darkGrayColor];
         [stepsLabel sizeToFit];
@@ -305,7 +305,8 @@
 }
 
 // Adds gesture recognizer to image upload button so can be tapped to dismiss keyboard
-- (void)keyboardShown:(NSNotification *)notification {
+- (void)keyboardShown:(NSNotification *)notification
+{
     // Get the keyboard height and adjust the view to accomodate the keyboard
     NSDictionary *info = [notification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
@@ -348,7 +349,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - createNewContract
+#pragma mark - Create a new contract or edit an existing one
 
 - (IBAction)createOrEditContract:(id)sender
 {

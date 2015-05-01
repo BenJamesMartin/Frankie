@@ -39,6 +39,7 @@
 		B5CDB55C190762D6001CB69F /* FrankieLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55BB6A4187B647200BE3703 /* FrankieLoginViewController.m */; };
 		B5EE9CC51ADCA3190000DFBD /* FrankieMasterContractTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5EE9CC41ADCA3190000DFBD /* FrankieMasterContractTableViewCell.xib */; };
 		B5EE9CC81ADCA41E0000DFBD /* FrankieMasterContractTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EE9CC71ADCA41E0000DFBD /* FrankieMasterContractTableViewCell.m */; };
+		B5F7C1B41AEB1A8F0056345D /* Contractor.m in Sources */ = {isa = PBXBuildFile; fileRef = B5F7C1B31AEB1A8F0056345D /* Contractor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +112,8 @@
 		B5EE9CC41ADCA3190000DFBD /* FrankieMasterContractTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FrankieMasterContractTableViewCell.xib; sourceTree = "<group>"; };
 		B5EE9CC61ADCA41E0000DFBD /* FrankieMasterContractTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieMasterContractTableViewCell.h; sourceTree = "<group>"; };
 		B5EE9CC71ADCA41E0000DFBD /* FrankieMasterContractTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieMasterContractTableViewCell.m; sourceTree = "<group>"; };
+		B5F7C1B21AEB1A8F0056345D /* Contractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contractor.h; sourceTree = "<group>"; };
+		B5F7C1B31AEB1A8F0056345D /* Contractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contractor.m; sourceTree = "<group>"; };
 		E4DCE54E948B1D6B6006FC0D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -265,6 +268,8 @@
 				B58AE0981888AB6F0083A645 /* Model.xcdatamodeld */,
 				B587034B1ADE1EAC00469FC2 /* Job.h */,
 				B587034C1ADE1EAC00469FC2 /* Job.m */,
+				B5F7C1B21AEB1A8F0056345D /* Contractor.h */,
+				B5F7C1B31AEB1A8F0056345D /* Contractor.m */,
 			);
 			name = "Core Data";
 			sourceTree = "<group>";
@@ -512,6 +517,7 @@
 				B58AE09A1888AB6F0083A645 /* Model.xcdatamodeld in Sources */,
 				B5AB72D51AD61FF5002F7ED2 /* ProjectStep.m in Sources */,
 				B536D7E81AD3EDCC00181B23 /* FrankieStepsTableViewCell.m in Sources */,
+				B5F7C1B41AEB1A8F0056345D /* Contractor.m in Sources */,
 				B5B99A3B1ACB937B001A2421 /* RTNActivityView.m in Sources */,
 				B55BB69F187B647200BE3703 /* FrankieAppDelegate.m in Sources */,
 				B5AB72D21AD610CC002F7ED2 /* FrankieNotesViewController.m in Sources */,
