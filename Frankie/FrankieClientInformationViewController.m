@@ -152,6 +152,12 @@
     self.clientInformation[self.infoField[textField.tag]] = textField.text;
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 
 #pragma mark - Format phone number
 
@@ -186,7 +192,7 @@
     return YES;
 }
 
--(NSString*)formatNumber:(NSString*)mobileNumber
+- (NSString*)formatNumber:(NSString*)mobileNumber
 {
     mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
     mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@")" withString:@""];
@@ -203,7 +209,7 @@
 }
 
 
--(int)getLength:(NSString*)mobileNumber
+- (int)getLength:(NSString*)mobileNumber
 {
     mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
     mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@")" withString:@""];

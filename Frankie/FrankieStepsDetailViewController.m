@@ -44,7 +44,7 @@
 
     self.stepHasBeenEdited = NO;
     
-    // Scroll view up/down on showing/hiding keyboard
+    // Scroll up/down on showing/hiding keyboard
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserver:self
                selector:@selector(keyboardDismiss)

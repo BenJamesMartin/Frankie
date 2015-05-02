@@ -11,6 +11,8 @@
 #import "FrankieAppDelegate.h"
 #import "RTNActivityView.h"
 #import "ProjectStep.h"
+#import "PresentingAnimator.h"
+#import "DismissingAnimator.h"
 
 @implementation FrankieDetailProjectViewController
 
@@ -240,8 +242,10 @@
     phoneNumber = [phoneNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
     if (phoneNumber != nil && phoneNumber.length > 0)
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", phoneNumber]]];
-    else
-        [self showAlertControllerWithMessage:@"To call this client, please edit the project and provide the client's phone number."];
+    else {
+//        [self showAlertControllerWithMessage:@"To call this client, please edit the project and provide the client's phone number."];
+        [self presentModalVCWithInfo:@{ @"type" : @"phone", @"message" : @"Enter a phone number for this client:"}];
+    }
 }
 
 - (IBAction)emailClient:(id)sender
@@ -250,8 +254,10 @@
     NSString *email = clientInformation[@"email"];
     if (email != nil && email.length > 0)
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", email]]];
-    else
-        [self showAlertControllerWithMessage:@"To email this client, please edit the project and provide the client's email."];
+    else {
+//        [self showAlertControllerWithMessage:@"To email this client, please edit the project and provide the client's email."];
+        
+    }
 }
 
 - (IBAction)textClient:(id)sender
@@ -621,5 +627,169 @@
         [self.locationManager startUpdatingLocation];   
     }
 }
+
+
+#pragma mark - UIViewControllerTransitioningDelegate
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+                                                                  presentingController:(UIViewController *)presenting
+                                                                      sourceController:(UIViewController *)source
+{
+    return [PresentingAnimator new];
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
+{
+    return [DismissingAnimator new];
+}
+
+
+#pragma mark - Present modal VC for entering phone/email
+
+- (void)presentModalVCWithInfo:(NSDictionary *)info
+{
+    NSString *type = info[@"type"];
+    NSString *message = info[@"message"];
+    
+    if ([type isEqualToString:@"phone"])
+        self.isEnteringPhoneNumber = YES;
+    
+    self.modalViewController = [ModalViewController new];
+    self.modalViewController.transitioningDelegate = self;
+    self.modalViewController.modalPresentationStyle = UIModalPresentationCustom;
+    
+    CGFloat labelWidth = 140.0;
+    CGFloat widthTextField = 140.0;
+    CGFloat heightTextField = 40.0;
+    CGFloat yOffsetTextField = 120.0;
+    CGFloat yOffsetTop = -10.0;
+    CGFloat modalWidth = 220.0;
+    
+    [self addDoneButton];
+    
+    UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(modalWidth / 2 - labelWidth / 2, yOffsetTop, labelWidth, 100)];
+    messageLabel.font = [UIFont fontWithName:@"Avenir" size:14.0];
+    messageLabel.textColor = [UIColor darkGrayColor];
+    messageLabel.text = message;
+    messageLabel.textAlignment = NSTextAlignmentCenter;
+    messageLabel.numberOfLines = 5;
+    [self.modalViewController.view addSubview:messageLabel];
+    
+    FUITextField *field = [[FUITextField alloc] initWithFrame:CGRectMake(modalWidth / 2 - widthTextField / 2, yOffsetTextField, widthTextField, heightTextField)];
+    field.placeholder = @"Enter phone number";
+    field.font = [UIFont fontWithName:@"Avenir" size:14.0];
+    field.backgroundColor = [UIColor clearColor];
+    field.edgeInsets = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
+    field.textFieldColor = [UIColor whiteColor];
+    field.textColor = [UIColor grayColor];
+    field.borderColor = [UIColor lightGrayColor];
+    field.borderWidth = 2.0f;
+    field.cornerRadius = 3.0f;
+    field.textAlignment = NSTextAlignmentCenter;
+    field.delegate = self;
+    
+    field.keyboardType = UIKeyboardTypeNamePhonePad;
+    [field becomeFirstResponder];
+    [self.modalViewController.view addSubview:field];
+    
+    [self.navigationController presentViewController:self.modalViewController
+                                            animated:YES
+                                          completion:NULL];
+}
+
+
+#pragma mark - Format phone number
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    
+    if (!self.isEnteringPhoneNumber)
+        return YES;
+    
+    int length = [self getLength:textField.text];
+    
+    if (length == 10)
+    {
+        NSLog(@"length is 10");
+        if (range.length == 0) {
+            NSLog(@"not changing");
+            return NO;
+        }
+    }
+    
+    if (length == 3) {
+        NSString *num = [self formatNumber:textField.text];
+        textField.text = [NSString stringWithFormat:@"%@-",num];
+        if(range.length > 0)
+            textField.text = [NSString stringWithFormat:@"%@-",[num substringToIndex:3]];
+    }
+    else if (length == 6) {
+        NSString *num = [self formatNumber:textField.text];
+        textField.text = [NSString stringWithFormat:@"%@-%@-",[num  substringToIndex:3],[num substringFromIndex:3]];
+        if(range.length > 0)
+            textField.text = [NSString stringWithFormat:@"%@-%@",[num substringToIndex:3],[num substringFromIndex:3]];
+    }
+    
+    return YES;
+}
+
+- (NSString*)formatNumber:(NSString*)mobileNumber
+{
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@")" withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@" " withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"+" withString:@""];
+    
+    int length = (int)[mobileNumber length];
+    if (length > 10) {
+        mobileNumber = [mobileNumber substringFromIndex: length-10];
+    }
+    
+    return mobileNumber;
+}
+
+
+- (int)getLength:(NSString*)mobileNumber
+{
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@")" withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@" " withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"+" withString:@""];
+    
+    int length = (int)[mobileNumber length];
+    
+    return length;
+}
+
+
+#pragma mark - Add done button to modal VC
+
+- (void)addDoneButton
+{
+    UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    dismissButton.translatesAutoresizingMaskIntoConstraints = NO;
+    dismissButton.tintColor = [UIColor colorWithRed:52/255.f green:152/255.f blue:219/255.f alpha:1.0];
+    dismissButton.titleLabel.font = [UIFont fontWithName:@"Avenir" size:20];
+    [dismissButton setTitle:@"Done" forState:UIControlStateNormal];
+    [dismissButton addTarget:self action:@selector(dismiss:) forControlEvents:UIControlEventTouchUpInside];
+    [self.modalViewController.view addSubview:dismissButton];
+    
+    [self.modalViewController.view addConstraint:[NSLayoutConstraint constraintWithItem:dismissButton
+                                                          attribute:NSLayoutAttributeCenterX
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeCenterX
+                                                         multiplier:1.f
+                                                           constant:0.f]];
+    
+    [self.modalViewController.view addConstraints:[NSLayoutConstraint
+                               constraintsWithVisualFormat:@"V:[dismissButton]-10-|"
+                               options:0
+                               metrics:nil
+                               views:NSDictionaryOfVariableBindings(dismissButton)]];
+}
+
+
 
 @end

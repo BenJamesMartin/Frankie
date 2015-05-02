@@ -11,10 +11,12 @@
 #import <MapKit/MapKit.h>
 #import <HMSegmentedControl/HMSegmentedControl.h>
 #import <pop/POP.h>
+#import <FlatUIKit/FlatUIKit.h>
+#import "ModalViewController.h"
 #import "Job.h"
 #import "FrankieProjectDetailStepsTableViewCell.h"
 
-@interface FrankieDetailProjectViewController : UIViewController <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, POPAnimationDelegate>
+@interface FrankieDetailProjectViewController : UIViewController <UITextViewDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, POPAnimationDelegate, UIViewControllerTransitioningDelegate>
 
 @property (strong, nonatomic) Job *job;
 
@@ -42,5 +44,9 @@
 @property (assign, nonatomic) BOOL hasFinishedLoading;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
+
+@property (strong, nonatomic) ModalViewController *modalViewController;
+
+@property (assign, nonatomic) BOOL isEnteringPhoneNumber;
 
 @end
