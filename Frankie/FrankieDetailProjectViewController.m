@@ -197,7 +197,7 @@
     self.segmentedControl.frame = CGRectMake(0, 228, self.view.frame.size.width, 40);
     [self.segmentedControl addTarget:self action:@selector(segmentedControlChangedValue:) forControlEvents:UIControlEventValueChanged];
     self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
-    self.segmentedControl.selectionIndicatorHeight = 1.0f;
+    self.segmentedControl.selectionIndicatorHeight = 2.0f;
     self.segmentedControl.selectionIndicatorColor = [UIColor lightGrayColor];
     self.segmentedControl.selectionStyle = HMSegmentedControlSelectionStyleFullWidthStripe;
     self.segmentedControl.backgroundColor = lightGrayHeader;
