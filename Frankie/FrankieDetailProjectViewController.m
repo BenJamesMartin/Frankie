@@ -13,6 +13,7 @@
 #import "ProjectStep.h"
 #import "PresentingAnimator.h"
 #import "DismissingAnimator.h"
+#import <UITextField+Shake/UITextField+Shake.h>
 
 @implementation FrankieDetailProjectViewController
 
@@ -243,7 +244,6 @@
     if (phoneNumber != nil && phoneNumber.length > 0)
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", phoneNumber]]];
     else {
-//        [self showAlertControllerWithMessage:@"To call this client, please edit the project and provide the client's phone number."];
         [self presentModalVCWithInfo:@{ @"type" : @"phone", @"message" : @"Enter a phone number for this client:"}];
     }
 }
@@ -255,8 +255,7 @@
     if (email != nil && email.length > 0)
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", email]]];
     else {
-//        [self showAlertControllerWithMessage:@"To email this client, please edit the project and provide the client's email."];
-        
+        [self presentModalVCWithInfo:@{ @"type" : @"email", @"message" : @"Enter an email for this client:"}];
     }
 }
 
@@ -267,7 +266,7 @@
     if (phoneNumber != nil && phoneNumber.length > 0)
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms:+%@", phoneNumber]]];
     else
-        [self showAlertControllerWithMessage:@"To text this client, please edit the project and provide the client's phone number."];
+        [self presentModalVCWithInfo:@{ @"type" : @"text", @"message" : @"Enter a phone number for this client:"}];
 }
 
 - (void)showAlertControllerWithMessage:(NSString *)message
@@ -648,20 +647,18 @@
 
 - (void)presentModalVCWithInfo:(NSDictionary *)info
 {
-    NSString *type = info[@"type"];
+    self.contactInfoType = info[@"type"];
     NSString *message = info[@"message"];
     
-    if ([type isEqualToString:@"phone"])
-        self.isEnteringPhoneNumber = YES;
-    
-    self.modalViewController = [ModalViewController new];
-    self.modalViewController.transitioningDelegate = self;
-    self.modalViewController.modalPresentationStyle = UIModalPresentationCustom;
+    self.modalVC = [ModalViewController new];
+    self.modalVC.transitioningDelegate = self;
+    self.modalVC.modalPresentationStyle = UIModalPresentationCustom;
     
     CGFloat labelWidth = 140.0;
     CGFloat widthTextField = 140.0;
     CGFloat heightTextField = 40.0;
-    CGFloat yOffsetTextField = 120.0;
+    CGFloat yOffsetTextField = 90.0;
+    CGFloat yOffsetSubmitButton = 140.0;
     CGFloat yOffsetTop = -10.0;
     CGFloat modalWidth = 220.0;
     
@@ -673,26 +670,49 @@
     messageLabel.text = message;
     messageLabel.textAlignment = NSTextAlignmentCenter;
     messageLabel.numberOfLines = 5;
-    [self.modalViewController.view addSubview:messageLabel];
+    [self.modalVC.view addSubview:messageLabel];
     
-    FUITextField *field = [[FUITextField alloc] initWithFrame:CGRectMake(modalWidth / 2 - widthTextField / 2, yOffsetTextField, widthTextField, heightTextField)];
-    field.placeholder = @"Enter phone number";
-    field.font = [UIFont fontWithName:@"Avenir" size:14.0];
-    field.backgroundColor = [UIColor clearColor];
-    field.edgeInsets = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
-    field.textFieldColor = [UIColor whiteColor];
-    field.textColor = [UIColor grayColor];
-    field.borderColor = [UIColor lightGrayColor];
-    field.borderWidth = 2.0f;
-    field.cornerRadius = 3.0f;
-    field.textAlignment = NSTextAlignmentCenter;
-    field.delegate = self;
+    self.modalField = [[FUITextField alloc] initWithFrame:CGRectMake(modalWidth / 2 - widthTextField / 2, yOffsetTextField, widthTextField, heightTextField)];
+    if ([self.contactInfoType isEqualToString:@"phone"] || [self.contactInfoType isEqualToString:@"text"])
+        self.modalField.placeholder = @"Enter phone number";
+    else
+        self.modalField.placeholder = @"Enter email";
+    self.modalField.font = [UIFont fontWithName:@"Avenir" size:14.0];
+    self.modalField.backgroundColor = [UIColor clearColor];
+    self.modalField.edgeInsets = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
+    self.modalField.textFieldColor = [UIColor whiteColor];
+    self.modalField.textColor = [UIColor grayColor];
+    self.modalField.borderColor = [UIColor lightGrayColor];
+    self.modalField.borderWidth = 2.0f;
+    self.modalField.cornerRadius = 3.0f;
+    self.modalField.textAlignment = NSTextAlignmentCenter;
+    self.modalField.delegate = self;
     
-    field.keyboardType = UIKeyboardTypeNamePhonePad;
-    [field becomeFirstResponder];
-    [self.modalViewController.view addSubview:field];
+    if ([self.contactInfoType isEqualToString:@"phone"] || [self.contactInfoType isEqualToString:@"text"])
+        self.modalField.keyboardType = UIKeyboardTypeNamePhonePad;
+    else
+        self.modalField.keyboardType = UIKeyboardTypeEmailAddress;
+    [self.modalField becomeFirstResponder];
+    [self.modalVC.view addSubview:self.modalField];
     
-    [self.navigationController presentViewController:self.modalViewController
+    
+    UIButton *submitButton = [[UIButton alloc] initWithFrame:CGRectMake(modalWidth / 2 - widthTextField / 2, yOffsetSubmitButton, widthTextField, heightTextField)];
+    NSString *buttonTitle = @"";
+    if ([self.contactInfoType isEqualToString:@"text"])
+        buttonTitle = @"Text Client";
+    else if ([self.contactInfoType isEqualToString:@"phone"])
+        buttonTitle = @"Call Client";
+    else
+        buttonTitle = @"Email Client";
+    [submitButton setTitle:buttonTitle forState:UIControlStateNormal];
+    submitButton.layer.cornerRadius = 3.0;
+    submitButton.backgroundColor = [UIColor colorWithRed:1.0 green:107/255.f blue:57/255.f alpha:1.0];
+    submitButton.font = [UIFont fontWithName:@"Avenir" size:16.0];
+    [submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [submitButton addTarget:self action:@selector(saveClientInformation) forControlEvents:UIControlEventTouchUpInside];
+    [self.modalVC.view addSubview:submitButton];
+    
+    [self.navigationController presentViewController:self.modalVC
                                             animated:YES
                                           completion:NULL];
 }
@@ -700,9 +720,10 @@
 
 #pragma mark - Format phone number
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    textField.textColor = [UIColor grayColor];
     
-    if (!self.isEnteringPhoneNumber)
+    if ([self.contactInfoType isEqualToString:@"email"])
         return YES;
     
     int length = [self getLength:textField.text];
@@ -770,24 +791,97 @@
     UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
     dismissButton.translatesAutoresizingMaskIntoConstraints = NO;
     dismissButton.tintColor = [UIColor colorWithRed:52/255.f green:152/255.f blue:219/255.f alpha:1.0];
-    dismissButton.titleLabel.font = [UIFont fontWithName:@"Avenir" size:20];
-    [dismissButton setTitle:@"Done" forState:UIControlStateNormal];
-    [dismissButton addTarget:self action:@selector(dismiss:) forControlEvents:UIControlEventTouchUpInside];
-    [self.modalViewController.view addSubview:dismissButton];
+    dismissButton.titleLabel.font = [UIFont fontWithName:@"Avenir" size:18.0];
+    [dismissButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [dismissButton addTarget:self action:@selector(dismissModalVC:) forControlEvents:UIControlEventTouchUpInside];
+    [self.modalVC.view addSubview:dismissButton];
     
-    [self.modalViewController.view addConstraint:[NSLayoutConstraint constraintWithItem:dismissButton
+    [self.modalVC.view addConstraint:[NSLayoutConstraint constraintWithItem:dismissButton
                                                           attribute:NSLayoutAttributeCenterX
                                                           relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.view
+                                                             toItem:self.modalVC.view
                                                           attribute:NSLayoutAttributeCenterX
                                                          multiplier:1.f
                                                            constant:0.f]];
     
-    [self.modalViewController.view addConstraints:[NSLayoutConstraint
+    [self.modalVC.view addConstraints:[NSLayoutConstraint
                                constraintsWithVisualFormat:@"V:[dismissButton]-10-|"
                                options:0
                                metrics:nil
                                views:NSDictionaryOfVariableBindings(dismissButton)]];
+}
+
+
+#pragma mark - Button events in modal VC
+
+- (void)saveClientInformation
+{
+    if ([self.contactInfoType isEqualToString:@"email"]) {
+        if (![self NSStringIsValidEmail:self.modalField.text]) {
+            [self.modalField shake:5 withDelta:8.0 speed:0.03 completion:nil];
+            self.modalField.textColor = [UIColor alizarinColor];
+            return;
+        }
+    }
+    else if ([self.contactInfoType isEqualToString:@"phone"] || [self.contactInfoType isEqualToString:@"text"]) {
+        if (self.modalField.text.length < 12) {
+            [self.modalField shake:5 withDelta:8.0 speed:0.03 completion:nil];
+            self.modalField.textColor = [UIColor alizarinColor];
+            return;
+        }
+    }
+    
+    // Get a copy of relevant Core Data project
+    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.job.objectID];
+    request.fetchLimit = 1;
+    NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
+    Job *job = fetchedObjects[0];
+    
+    // Set the contact information for the project
+    NSString *type = self.contactInfoType;
+    NSMutableDictionary *clientInformation = job.clientInformation;
+    if (clientInformation == nil)
+        clientInformation = @{ self.contactInfoType : self.modalField.text }.mutableCopy;
+    else
+        clientInformation[self.contactInfoType] = self.modalField.text;
+    
+    [job setValue:clientInformation forKey:@"clientInformation"];
+    
+    // Save the Core Data context
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+        }
+    });
+    
+    // Perform correct action here of calling/texting/emailing
+    if ([self.contactInfoType isEqualToString:@"email"])
+        [self emailClient:nil];
+    else if ([self.contactInfoType isEqualToString:@"phone"])
+        [self callClient:nil];
+    else
+        [self textClient:nil];
+    
+    [self dismissModalVC:nil];
+}
+
+- (void)dismissModalVC:(id)sender
+{
+    [self.modalVC dismissViewControllerAnimated:YES completion:nil];
+}
+        
+        
+#pragma mark - Email validation
+        
+- (BOOL)NSStringIsValidEmail:(NSString *)checkString
+{
+    BOOL stricterFilter = YES; // Discussion http://blog.logichigh.com/2010/09/02/validating-an-e-mail-address/
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
 }
 
 

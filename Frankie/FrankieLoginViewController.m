@@ -55,7 +55,8 @@
     [self setSubviewProperties];
 }
 
-- (void)setSubviewProperties {
+- (void)setSubviewProperties
+{
     UIColor *textFieldBorderColor = [UIColor colorWithRed:235/255.f green:235/255.f blue:235/255.f alpha:1.0];
     
     self.email.backgroundColor = [UIColor clearColor];

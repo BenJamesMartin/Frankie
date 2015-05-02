@@ -45,8 +45,8 @@
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-@property (strong, nonatomic) ModalViewController *modalViewController;
-
-@property (assign, nonatomic) BOOL isEnteringPhoneNumber;
+@property (strong, nonatomic) ModalViewController *modalVC;
+@property (strong, nonatomic) FUITextField *modalField;
+@property (strong, nonatomic) NSString *contactInfoType;
 
 @end
