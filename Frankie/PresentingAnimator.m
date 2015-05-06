@@ -34,13 +34,12 @@
                               CGRectGetWidth(transitionContext.containerView.bounds) - 104.f,
                               CGRectGetHeight(transitionContext.containerView.bounds) - 400.f);
     toView.center = CGPointMake(transitionContext.containerView.center.x, -transitionContext.containerView.center.y);
-//    toView.center = CGPointMake(0, -50);
 
     [transitionContext.containerView addSubview:dimmingView];
     [transitionContext.containerView addSubview:toView];
 
     POPSpringAnimation *positionAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionY];
-    positionAnimation.toValue = @(transitionContext.containerView.center.y);
+    positionAnimation.toValue = @(transitionContext.containerView.center.y - 90);
     positionAnimation.springBounciness = 10;
     [positionAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
         [transitionContext completeTransition:YES];
@@ -56,11 +55,6 @@
     [toView.layer pop_addAnimation:positionAnimation forKey:@"positionAnimation"];
     [toView.layer pop_addAnimation:scaleAnimation forKey:@"scaleAnimation"];
     [dimmingView.layer pop_addAnimation:opacityAnimation forKey:@"opacityAnimation"];
-}
-
-- (void)dismissModal
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalVC" object:nil];
 }
 
 @end

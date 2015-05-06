@@ -673,7 +673,7 @@
     if ([self.contactInfoType isEqualToString:@"phone"] || [self.contactInfoType isEqualToString:@"text"])
         self.modalField.placeholder = @"Phone number";
     else
-        self.modalField.placeholder = @"Enter email";
+        self.modalField.placeholder = @"Email";
     self.modalField.font = [UIFont fontWithName:@"Avenir" size:14.0];
     self.modalField.backgroundColor = [UIColor clearColor];
     self.modalField.edgeInsets = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
@@ -686,7 +686,7 @@
     self.modalField.delegate = self;
     
     if ([self.contactInfoType isEqualToString:@"phone"] || [self.contactInfoType isEqualToString:@"text"])
-        self.modalField.keyboardType = UIKeyboardTypeNamePhonePad;
+        self.modalField.keyboardType = UIKeyboardTypeNumberPad;
     else
         self.modalField.keyboardType = UIKeyboardTypeEmailAddress;
     [self.modalField becomeFirstResponder];
@@ -704,7 +704,7 @@
     [submitButton setTitle:buttonTitle forState:UIControlStateNormal];
     submitButton.layer.cornerRadius = 3.0;
     submitButton.backgroundColor = [UIColor colorWithRed:1.0 green:107/255.f blue:57/255.f alpha:1.0];
-    submitButton.font = [UIFont fontWithName:@"Avenir" size:16.0];
+    submitButton.titleLabel.font = [UIFont fontWithName:@"Avenir" size:16.0];
     [submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [submitButton addTarget:self action:@selector(saveClientInformation) forControlEvents:UIControlEventTouchUpInside];
     [self.modalVC.view addSubview:submitButton];
@@ -865,6 +865,7 @@
 
 - (void)dismissModalVC:(id)sender
 {
+    [self.modalField resignFirstResponder];
     [self.modalVC dismissViewControllerAnimated:YES completion:nil];
 }
         
