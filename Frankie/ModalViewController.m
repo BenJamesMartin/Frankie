@@ -18,6 +18,11 @@
 //    [self addDoneButton];
 }
 
+- (void)dismissModalVC
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalVC" object:nil];
+}
+
 #pragma mark - Private Instance methods
 
 - (void)addDoneButton

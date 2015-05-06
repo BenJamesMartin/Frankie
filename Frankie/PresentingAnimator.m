@@ -25,13 +25,16 @@
     UIView *dimmingView = [[UIView alloc] initWithFrame:fromView.bounds];
     dimmingView.backgroundColor = [UIColor colorWithRed:84/255.f green:84/255.f blue:84/255.f alpha:1.0];
     dimmingView.layer.opacity = 0.0;
+    UITapGestureRecognizer *tapToDismiss = [[UITapGestureRecognizer alloc] initWithTarget:[transitionContext viewControllerForKey:UITransitionContextToViewControllerKey] action:@selector(dismissModalVC)];
+    [dimmingView addGestureRecognizer:tapToDismiss];
 
     UIView *toView = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey].view;
     toView.frame = CGRectMake(0,
                               0,
                               CGRectGetWidth(transitionContext.containerView.bounds) - 104.f,
-                              CGRectGetHeight(transitionContext.containerView.bounds) - 288.f);
+                              CGRectGetHeight(transitionContext.containerView.bounds) - 400.f);
     toView.center = CGPointMake(transitionContext.containerView.center.x, -transitionContext.containerView.center.y);
+//    toView.center = CGPointMake(0, -50);
 
     [transitionContext.containerView addSubview:dimmingView];
     [transitionContext.containerView addSubview:toView];
@@ -53,6 +56,11 @@
     [toView.layer pop_addAnimation:positionAnimation forKey:@"positionAnimation"];
     [toView.layer pop_addAnimation:scaleAnimation forKey:@"scaleAnimation"];
     [dimmingView.layer pop_addAnimation:opacityAnimation forKey:@"opacityAnimation"];
+}
+
+- (void)dismissModal
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalVC" object:nil];
 }
 
 @end

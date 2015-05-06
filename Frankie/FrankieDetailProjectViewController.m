@@ -38,6 +38,8 @@
     
     [self.interchangeableView addSubview:self.tableView];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissModalVC:) name:@"dismissModalVC" object:nil];
+    
     [self loadProjectData];
 }
 
@@ -245,7 +247,7 @@
     if (phoneNumber != nil && phoneNumber.length > 0)
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", phoneNumber]]];
     else {
-        [self presentModalVCWithInfo:@{ @"type" : @"phone", @"message" : @"Enter a phone number for this client:"}];
+        [self presentModalVCWithContactType:@"phone"];
     }
 }
 
@@ -256,7 +258,7 @@
     if (email != nil && email.length > 0)
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", email]]];
     else {
-        [self presentModalVCWithInfo:@{ @"type" : @"email", @"message" : @"Enter an email for this client:"}];
+        [self presentModalVCWithContactType:@"email"];
     }
 }
 
@@ -267,7 +269,7 @@
     if (phoneNumber != nil && phoneNumber.length > 0)
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms:+%@", phoneNumber]]];
     else
-        [self presentModalVCWithInfo:@{ @"type" : @"text", @"message" : @"Enter a phone number for this client:"}];
+        [self presentModalVCWithContactType:@"text"];
 }
 
 - (void)showAlertControllerWithMessage:(NSString *)message
@@ -650,36 +652,26 @@
 
 #pragma mark - Present modal VC for entering phone/email
 
-- (void)presentModalVCWithInfo:(NSDictionary *)info
+- (void)presentModalVCWithContactType:(NSString *)contactType
 {
-    self.contactInfoType = info[@"type"];
-    NSString *message = info[@"message"];
+    self.contactInfoType = contactType;
     
     self.modalVC = [ModalViewController new];
     self.modalVC.transitioningDelegate = self;
     self.modalVC.modalPresentationStyle = UIModalPresentationCustom;
     
-    CGFloat labelWidth = 140.0;
     CGFloat widthTextField = 140.0;
     CGFloat heightTextField = 40.0;
-    CGFloat yOffsetTextField = 90.0;
+    CGFloat yOffsetTextField = 70.0;
     CGFloat yOffsetSubmitButton = 140.0;
-    CGFloat yOffsetTop = -10.0;
+    CGFloat yOffsetTop = 20.0;
     CGFloat modalWidth = 220.0;
     
     [self addDoneButton];
     
-    UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(modalWidth / 2 - labelWidth / 2, yOffsetTop, labelWidth, 100)];
-    messageLabel.font = [UIFont fontWithName:@"Avenir" size:14.0];
-    messageLabel.textColor = [UIColor darkGrayColor];
-    messageLabel.text = message;
-    messageLabel.textAlignment = NSTextAlignmentCenter;
-    messageLabel.numberOfLines = 5;
-    [self.modalVC.view addSubview:messageLabel];
-    
-    self.modalField = [[FUITextField alloc] initWithFrame:CGRectMake(modalWidth / 2 - widthTextField / 2, yOffsetTextField, widthTextField, heightTextField)];
+    self.modalField = [[FUITextField alloc] initWithFrame:CGRectMake(modalWidth / 2 - widthTextField / 2, yOffsetTop, widthTextField, heightTextField)];
     if ([self.contactInfoType isEqualToString:@"phone"] || [self.contactInfoType isEqualToString:@"text"])
-        self.modalField.placeholder = @"Enter phone number";
+        self.modalField.placeholder = @"Phone number";
     else
         self.modalField.placeholder = @"Enter email";
     self.modalField.font = [UIFont fontWithName:@"Avenir" size:14.0];
@@ -701,7 +693,7 @@
     [self.modalVC.view addSubview:self.modalField];
     
     
-    UIButton *submitButton = [[UIButton alloc] initWithFrame:CGRectMake(modalWidth / 2 - widthTextField / 2, yOffsetSubmitButton, widthTextField, heightTextField)];
+    UIButton *submitButton = [[UIButton alloc] initWithFrame:CGRectMake(modalWidth / 2 - widthTextField / 2, yOffsetTextField, widthTextField, heightTextField)];
     NSString *buttonTitle = @"";
     if ([self.contactInfoType isEqualToString:@"text"])
         buttonTitle = @"Text Client";
