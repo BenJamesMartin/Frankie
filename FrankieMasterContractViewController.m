@@ -54,18 +54,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadTable" object:nil];
 }
 
-// If editing a contract, reload data when view reappears
-- (void)viewDidAppear:(BOOL)animated
-{
-    NSError *error;
-    if (![[self fetchedResultsController] performFetch:&error]) {
-    }
-    else {
-        _fetchedResultsController = nil;
-        [self.tableView reloadData];
-    }
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -117,8 +105,7 @@
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     
-    NSManagedObjectContext *context =
-    [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
     NSEntityDescription *entity =
     [NSEntityDescription entityForName:NSStringFromClass([Job class])
@@ -328,16 +315,14 @@
 
 - (void)reloadTable
 {
-    NSError *error;
-    if (![[self fetchedResultsController] performFetch:&error]) {
-        NSLog(@"error fetching");
-    }
-    else {
-        NSLog(@"successful fetch");
-        _fetchedResultsController = nil;
-        [self.tableView reloadData];
-    }
-
+//    NSError *error;
+//    if (![[self fetchedResultsController] performFetch:&error]) {
+//        NSLog(@"error fetching");
+//    }
+//    else {
+//        _fetchedResultsController = nil;
+//        [self.tableView reloadData];
+//    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -348,8 +333,17 @@
 
 #pragma mark - Table view delegate
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
+    for (NSIndexPath *i in selectedRows)
+    {
+        if (![i isEqual:indexPath]) {
+            [tableView deselectRowAtIndexPath:i animated:NO];
+            [self.tableView cellForRowAtIndexPath:indexPath].accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"custom-detail-disclosure"]];
+        }
+    }
+    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     FrankieDetailProjectViewController *dpvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieDetailProjectViewController"];
     
@@ -403,8 +397,8 @@
             [context deleteObject:job];
         }
         [context save:&error];
-        _fetchedResultsController = nil;
-        [self.tableView reloadData];
+//        _fetchedResultsController = nil;
+//        [self.tableView reloadData];
     }
 }
 
@@ -448,7 +442,7 @@
     Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
     
     // Add custom detail disclosure indicator
-    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"custom-detail-disclosure"]];
+    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"custom-detail-disclosure"] highlightedImage:[UIImage imageNamed:@"custom-detail-disclosure"]];
     
     // If the job title has been set and it has not been edited to a blank string
     if (job.title != nil && ![job.title isEqualToString:@""])
@@ -482,6 +476,7 @@
         }
     }
 
+    // If no incomplete steps were found, the project is complete
     if (nextStep == nil) {
         cell.projectCompleteLabel.alpha = 1.0;
         cell.lateStepIcon.alpha = 0.0;

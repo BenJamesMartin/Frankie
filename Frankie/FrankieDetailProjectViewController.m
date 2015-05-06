@@ -114,7 +114,7 @@
     }
     
     if (self.job.notes != nil && ![self.job.notes isEqualToString:@""]) {
-        self.notes.textAlignment = NSTextAlignmentLeft;
+        self.notes.textAlignment = NSTextAlignmentCenter;
         self.notes.text = self.job.notes;
     }
     else {
@@ -189,7 +189,7 @@
     
     [self.segmentedControl setTitleFormatter:^NSAttributedString *(HMSegmentedControl *segmentedControl, NSString *title, NSUInteger index, BOOL selected) {
         NSAttributedString *attString = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName : [UIColor darkGrayColor],
-              NSFontAttributeName: [UIFont fontWithName:@"Avenir" size:14.0]}];
+              NSFontAttributeName: [UIFont fontWithName:@"Avenir-Light" size:14.0]}];
         return attString;
     }];
     
@@ -226,6 +226,7 @@
             [self.interchangeableView addSubview:self.locationView];
             self.directionsButton.alpha = 1.0;
             self.directionsButton.userInteractionEnabled = YES;
+            self.createFirstStepButton.alpha = 0;
             self.noStepsLabel.alpha = 0;
             break;
         default:
@@ -288,10 +289,14 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSArray *steps = self.job.steps;
-    if (steps.count == 0 && self.segmentedControl.selectedSegmentIndex == 0)
+    if (steps.count == 0 && self.segmentedControl.selectedSegmentIndex == 0) {
         self.noStepsLabel.alpha = 1.0;
-    else
+        self.createFirstStepButton.alpha = 1.0;
+    }
+    else {
         self.noStepsLabel.alpha = 0.0;
+        self.createFirstStepButton.alpha = 0.0;
+    }
     return steps.count;
 }
 
@@ -884,6 +889,14 @@
     return [emailTest evaluateWithObject:checkString];
 }
 
+- (IBAction)navigateToStepDetail:(id)sender {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    // Just push step detail and make detial view update when new step is added
+    FrankieStepsDetailViewController *sdvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieStepsDetailViewController"];
+    
+    [self.navigationController pushViewController:sdvc animated:YES];
+}
 
 
 @end

@@ -290,11 +290,27 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="No steps to show." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lbv-WZ-JOJ">
-                                <rect key="frame" x="0.0" y="275" width="320" height="44"/>
-                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="18"/>
+                                <rect key="frame" x="0.0" y="290" width="320" height="44"/>
+                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="16"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sYB-1q-0xH">
+                                <rect key="frame" x="50" y="343" width="220" height="40"/>
+                                <color key="backgroundColor" red="1" green="0.41960784309999999" blue="0.22352941179999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="18"/>
+                                <state key="normal" title="Create First Step">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="navigateToStepDetail:" destination="Axd-NG-eAP" eventType="touchUpInside" id="Aks-bb-Flu"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z3V-9a-Fzw">
                                 <rect key="frame" x="50" y="476" width="220" height="40"/>
                                 <color key="backgroundColor" red="1" green="0.41960784309999999" blue="0.22352941179999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -326,6 +342,7 @@
                     <navigationItem key="navigationItem" id="meS-OM-7hN"/>
                     <connections>
                         <outlet property="clientName" destination="5HK-Dh-uSd" id="Z1A-nq-aat"/>
+                        <outlet property="createFirstStepButton" destination="sYB-1q-0xH" id="jPA-8Q-kBy"/>
                         <outlet property="dateRange" destination="edx-v2-wfD" id="xXL-wt-LAK"/>
                         <outlet property="directionsButton" destination="z3V-9a-Fzw" id="j49-UR-WrP"/>
                         <outlet property="image" destination="LPJ-3U-FLh" id="GH8-w5-VmE"/>

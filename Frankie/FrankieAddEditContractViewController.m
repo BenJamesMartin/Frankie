@@ -398,7 +398,6 @@
         }
         
         if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
         }
     }
     // Add new contract

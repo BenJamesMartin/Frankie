@@ -12,6 +12,8 @@
 #import "FrankieStepsDetailViewController.h"
 #import "FrankieStepsViewController.h"
 #import "FrankieStepsTableViewCell.h"
+#import "FrankieAppDelegate.h"
+#import "FrankieDetailProjectViewController.h"
 
 #import "ProjectStep.h"
 
@@ -113,6 +115,25 @@
             
             if (shouldAddNewObject)
                 [svc.steps addObject:self.step];
+        }
+        // Else we're adding a first step and navigating back to project detail VC
+        else {
+            FrankieDetailProjectViewController *dpvc = (FrankieDetailProjectViewController *)self.navigationController.viewControllers.lastObject;
+            
+            // Get a copy of relevant Core Data project
+            NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
+            request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", dpvc.job.objectID];
+            request.fetchLimit = 1;
+            NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
+            Job *job = fetchedObjects[0];
+            [job setValue:@[self.step] forKey:@"steps"];
+            
+            // Save the Core Data context
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+                }
+            });
         }
         
         // If a date was not set, add the default date (one month from current date as specified in ProjectStep init method) to the date text field

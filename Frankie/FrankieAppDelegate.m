@@ -55,7 +55,6 @@
 - (void)initializeObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(revealSideMenu) name:@"revealSideMenu" object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(navigateToProfile) name:@"navigateToProfile" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(navigateToProjects) name:@"navigateToProjects" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logout) name:@"logout" object:nil];

@@ -28,6 +28,7 @@
 @property (strong, nonatomic) HMSegmentedControl *segmentedControl;
 @property (strong, nonatomic) IBOutlet UIView *interchangeableView;
 @property (strong, nonatomic) IBOutlet UILabel *noStepsLabel;
+@property (strong, nonatomic) IBOutlet UIButton *createFirstStepButton;
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) MKMapView *locationView;
 
@@ -48,5 +49,6 @@
 @property (strong, nonatomic) ModalViewController *modalVC;
 @property (strong, nonatomic) FUITextField *modalField;
 @property (strong, nonatomic) NSString *contactInfoType;
+
 
 @end
