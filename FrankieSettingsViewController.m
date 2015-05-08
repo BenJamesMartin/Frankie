@@ -35,74 +35,21 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger-icon"] landscapeImagePhone:nil style:UIBarButtonItemStylePlain target:self action:@selector(revealLeftMenu)];
 
     self.tableView.contentInset = UIEdgeInsetsMake(-35, 0, 0, 0);
+    
+//    [self deleteAllContractorObjects];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)deleteAllContractorObjects
 {
-    // If it has been set, load it
-    // If it hasn't been set, it will be set later
-    
     NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Contractor class])];
-    request.predicate = [NSPredicate predicateWithFormat:@"parseId = %@", self.contractor.objectID];
-    request.fetchLimit = 1;
-    NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
-    self.contractor = fetchedObjects[0];
+    NSError *error;
+    NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
     
-    NSLog(@"self.contractor %@", self.contractor);
-    
-//    if (self.contractor != nil) {
-//        NSData *imageData;
-//        
-//        if (!([[self.profileImage imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"profile-default"]])) {
-//            UIImage *image = [self.profileImage imageForState:UIControlStateNormal];
-//            imageData = UIImageJPEGRepresentation(image, 0.9f);
-//            [entity setValue:imageData forKey:@"picture"];
-//        }
-//        if (self.nameField.text.length > 0)
-//            [entity setValue:self.nameField.text forKey:@"name"];
-//        if (self.phoneField.text.length > 0)
-//            [entity setValue:self.phoneField.text forKey:@"phone"];
-//        if (self.emailField.text.length > 0)
-//            [entity setValue:self.emailField.text forKey:@"email"];
-//
-//    }
-//    
-//    if (self.contractor != nil) {
-//        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Contractor class])];
-//        request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.contractor.objectID];
-//        request.fetchLimit = 1;
-//        NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
-//        self.contractor = fetchedObjects[0];
-//        
-//        [self.job setValue:self.projectTitle.text forKey:@"title"];
-//        NSString *priceStr =[self.price.text stringByReplacingOccurrencesOfString:@"$" withString:@""];
-//        priceStr = [priceStr stringByReplacingOccurrencesOfString:@"," withString:@""];
-//        float price = [priceStr floatValue];
-//        [self.job setValue:[NSNumber numberWithFloat:price] forKey:@"price"];
-//        [self.job setValue:self.steps forKey:@"steps"];
-//        [self.job setValue:self.clientInformation forKey:@"clientInformation"];
-//        [self.job setValue:self.locationPlacemark forKey:@"location"];
-//        [self.job setValue:self.notes forKey:@"notes"];
-//        [self.job setValue:[NSNumber numberWithBool:NO] forKeyPath:@"completed"];
-//        [self.job setValue:[[[(NSManagedObject*)self.job objectID] URIRepresentation] absoluteString] forKey:@"objectId"];
-//        
-//        NSData *imageData;
-//        // If an image has been uploaded (the image upload button's image is not the defaul upload icon)
-//        if (!([[self.uploadButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"image-upload-icon"]])) {
-//            UIImage *image = [self.uploadButton imageForState:UIControlStateNormal];
-//            imageData = UIImageJPEGRepresentation(image, 0.9f);
-//            [self.job setValue:imageData forKey:@"picture"];
-//        }
-//        else {
-//            imageData = nil;
-//        }
-//        
-//        if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-//        }
-//    }
+    for (Contractor *contractor in fetchedObjects) {
+        [context deleteObject:contractor];
+    }
+    [context save:&error];
 }
 
 - (void)revealLeftMenu
@@ -110,30 +57,93 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"revealSideMenu" object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSIndexPath *path0 = [NSIndexPath indexPathForRow:0 inSection:0];
+    NSIndexPath *path1 = [NSIndexPath indexPathForRow:1 inSection:0];
+    NSIndexPath *path2 = [NSIndexPath indexPathForRow:2 inSection:0];
+    
+    UITableViewCell *cell0 = [self.tableView cellForRowAtIndexPath:path0];
+    UITableViewCell *cell1 = [self.tableView cellForRowAtIndexPath:path1];
+    UITableViewCell *cell2 = [self.tableView cellForRowAtIndexPath:path2];
+    
+    for (UIView *subview in cell0.contentView.subviews) {
+        if ([subview isKindOfClass:[UITextField class]]) {
+            self.nameField = (UITextField *)subview;
+        }
+    }
+    for (UIView *subview in cell1.contentView.subviews) {
+        if ([subview isKindOfClass:[UITextField class]]) {
+            self.phoneField = (UITextField *)subview;
+        }
+    }
+    for (UIView *subview in cell2.contentView.subviews) {
+        if ([subview isKindOfClass:[UITextField class]]) {
+            self.emailField = (UITextField *)subview;
+        }
+    }
+ 
+    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Contractor class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"parseId = %@", [PFUser currentUser].objectId];
+    request.fetchLimit = 1;
+    NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
+    
+    if (fetchedObjects.count > 0) {
+        self.contractor = fetchedObjects[0];
+        
+        UIImage *image = [UIImage imageWithData:self.contractor.picture];
+        if (image != nil)
+            [self.profileImage setImage:image forState:UIControlStateNormal];
+        
+        self.nameField.text = self.contractor.name;
+        self.phoneField.text = self.contractor.phone;
+        self.emailField.text = self.contractor.email;
+    }
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [self.view endEditing:YES];
+    NSEntityDescription *entity;
+    BOOL shouldSaveObject = NO;
     
-    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    
-    NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Contractor class]) inManagedObjectContext:context];
-    
-    [entity setValue:[PFUser currentUser].objectId forKey:@"parseId"];
-    
-    NSData *imageData;
-    if (!([[self.profileImage imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"profile-default"]])) {
-        UIImage *image = [self.profileImage imageForState:UIControlStateNormal];
-        imageData = UIImageJPEGRepresentation(image, 0.9f);
-        [entity setValue:imageData forKey:@"picture"];
+    // Only create a new object if one doesn't exist and changes have been made
+    if (self.contractor == nil && self.nameField.text.length > 0) {
+        shouldSaveObject = YES;
+        NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Contractor class]) inManagedObjectContext:context];
+        [entity setValue:[PFUser currentUser].objectId forKey:@"parseId"];
     }
-    if (self.nameField.text.length > 0)
-        [entity setValue:self.nameField.text forKey:@"name"];
-    if (self.phoneField.text.length > 0)
-        [entity setValue:self.phoneField.text forKey:@"phone"];
-    if (self.emailField.text.length > 0)
-        [entity setValue:self.emailField.text forKey:@"email"];
-
-    if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+    // Else edit an existing contract if changes exist
+    else if (self.contractor && self.nameField.text.length > 0) {
+        shouldSaveObject = YES;
+        NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Contractor class])];
+        request.predicate = [NSPredicate predicateWithFormat:@"parseId = %@", [PFUser currentUser].objectId];
+        request.fetchLimit = 1;
+        NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
+        entity = fetchedObjects[0];
+    }
+    
+    if (shouldSaveObject) {
+        // Before saving image, check to make sure it's been changed and is not the default image
+        if (!([[self.profileImage imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"profile-default"]]) && !([[self.profileImage imageForState:UIControlStateNormal] isEqual:[UIImage imageWithData:self.contractor.picture]])) {
+            UIImage *image = [self.profileImage imageForState:UIControlStateNormal];
+            NSData *imageData = UIImageJPEGRepresentation(image, 0.9f);
+            [entity setValue:imageData forKey:@"picture"];
+        }
+        if (self.nameField.text.length > 0)
+            [entity setValue:self.nameField.text forKey:@"name"];
+        if (self.phoneField.text.length > 0)
+            [entity setValue:self.phoneField.text forKey:@"phone"];
+        if (self.emailField.text.length > 0)
+            [entity setValue:self.emailField.text forKey:@"email"];
+        
+        if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
+        }
     }
 }
 
