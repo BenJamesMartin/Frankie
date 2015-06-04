@@ -6,11 +6,11 @@
 // project.
 
 
-// Bolts
-#define COCOAPODS_POD_AVAILABLE_Bolts
-#define COCOAPODS_VERSION_MAJOR_Bolts 1
-#define COCOAPODS_VERSION_MINOR_Bolts 1
-#define COCOAPODS_VERSION_PATCH_Bolts 4
+// Bolts/Tasks
+#define COCOAPODS_POD_AVAILABLE_Bolts_Tasks
+#define COCOAPODS_VERSION_MAJOR_Bolts_Tasks 1
+#define COCOAPODS_VERSION_MINOR_Bolts_Tasks 1
+#define COCOAPODS_VERSION_PATCH_Bolts_Tasks 5
 
 // FlatUIKit
 #define COCOAPODS_POD_AVAILABLE_FlatUIKit
@@ -40,7 +40,7 @@
 #define COCOAPODS_POD_AVAILABLE_Parse
 #define COCOAPODS_VERSION_MAJOR_Parse 1
 #define COCOAPODS_VERSION_MINOR_Parse 7
-#define COCOAPODS_VERSION_PATCH_Parse 0
+#define COCOAPODS_VERSION_PATCH_Parse 4
 
 // RMDateSelectionViewController
 #define COCOAPODS_POD_AVAILABLE_RMDateSelectionViewController
@@ -53,12 +53,6 @@
 #define COCOAPODS_VERSION_MAJOR_SIAlertView 1
 #define COCOAPODS_VERSION_MINOR_SIAlertView 3
 #define COCOAPODS_VERSION_PATCH_SIAlertView 0
-
-// SVGeocoder
-#define COCOAPODS_POD_AVAILABLE_SVGeocoder
-#define COCOAPODS_VERSION_MAJOR_SVGeocoder 0
-#define COCOAPODS_VERSION_MINOR_SVGeocoder 1
-#define COCOAPODS_VERSION_PATCH_SVGeocoder 0
 
 // UITextField+Shake
 #define COCOAPODS_POD_AVAILABLE_UITextField_Shake

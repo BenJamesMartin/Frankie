@@ -44,11 +44,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-SVGeocoder.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods-UITextField+Shake.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -67,62 +62,57 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>00C73B2C17233B5C5D29BC4E</key>
+		<key>1017CF91843675BAD589489B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>03E34C05658BD0C5EB94FBB3</key>
+		<key>2CACF684F1F997C1503CA05B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>363FE68884C4BEA263A15C16</key>
+		<key>2DAADDA51ADD8B90EB41B40C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3DC5B8824DC417A4B62C56BA</key>
+		<key>4F45C7033BBFB8CB97FA0DD4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>62FC2355EAA53F8029E920BB</key>
+		<key>51AF66B8DC8D9152850564FB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>706EE977155E57C94668A023</key>
+		<key>5AAA9CDAE8E058C02853E65E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AC8C00740323E83333AD6EB1</key>
+		<key>5FF374A964BCF6626D3DFD0C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C09D18CDE9811860039C60AD</key>
+		<key>69E041455E1B411240CD7A19</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C98C0010310A37362D90C626</key>
+		<key>97BFD98AD96B3411D7C84315</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C9BDD52F7B5A56A963616EE5</key>
+		<key>A1FB9A991F8EED400EFB4488</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D7523C839F080F94B36D7E8E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F46A1726ABA7A286D4F1F6B3</key>
+		<key>E0A837961C158EE3B5FF4A02</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -375,7 +375,7 @@
         self.job = fetchedObjects[0];
         
         [self.job setValue:self.projectTitle.text forKey:@"title"];
-        NSString *priceStr =[self.price.text stringByReplacingOccurrencesOfString:@"$" withString:@""];
+        NSString *priceStr = [self.price.text stringByReplacingOccurrencesOfString:@"$" withString:@""];
         priceStr = [priceStr stringByReplacingOccurrencesOfString:@"," withString:@""];
         float price = [priceStr floatValue];
         [self.job setValue:[NSNumber numberWithFloat:price] forKey:@"price"];

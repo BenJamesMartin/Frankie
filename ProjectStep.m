@@ -10,11 +10,11 @@
 
 @implementation ProjectStep
 
-static NSString *const kPicture = @"Picture";
-static NSString *const kName = @"Name";
-static NSString *const kDueDate = @"DueDate";
-static NSString *const kCompleted = @"Completed";
-static NSString *const kCompletionDate = @"CompletionDate";
+static NSString * const kPicture = @"Picture";
+static NSString * const kName = @"Name";
+static NSString * const kDueDate = @"DueDate";
+static NSString * const kCompleted = @"Completed";
+static NSString * const kCompletionDate = @"CompletionDate";
 
 - (id)init {
     self = [super init];

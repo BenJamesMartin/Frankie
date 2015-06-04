@@ -161,36 +161,70 @@
 
 #pragma mark - Format phone number
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    
-    if (textField.tag != 1)
-        return YES;
-    
-    int length = [self getLength:textField.text];
-    
-    if(length == 10)
-    {
-        if(range.length == 0)
-            return NO;
-    }
-    
-    if(length == 3)
-    {
-        NSString *num = [self formatNumber:textField.text];
-        textField.text = [NSString stringWithFormat:@"%@-",num];
-        if(range.length > 0)
-            textField.text = [NSString stringWithFormat:@"%@-",[num substringToIndex:3]];
-    }
-    else if(length == 6)
-    {
-        NSString *num = [self formatNumber:textField.text];
-        textField.text = [NSString stringWithFormat:@"%@-%@-",[num  substringToIndex:3],[num substringFromIndex:3]];
-        if(range.length > 0)
-            textField.text = [NSString stringWithFormat:@"%@-%@",[num substringToIndex:3],[num substringFromIndex:3]];
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if ([textField isEqual:self.phoneNumberField]) {
+        NSString *newText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        BOOL deleting = [newText length] < [textField.text length];
+        
+        NSString *strippedNumber = [newText stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, [newText length])];
+        NSUInteger digits = [strippedNumber length];
+        
+        if (digits > 10)
+            strippedNumber = [strippedNumber substringToIndex:10];
+        
+        UITextRange *selectedRange = [textField selectedTextRange];
+        NSInteger oldLength = [textField.text length];
+        
+        if (digits == 0)
+            textField.text = @"";
+        else if (digits < 3 || (digits == 3 && deleting))
+            textField.text = [NSString stringWithFormat:@"(%@", strippedNumber];
+        else if (digits < 6 || (digits == 6 && deleting))
+            textField.text = [NSString stringWithFormat:@"(%@) %@", [strippedNumber substringToIndex:3], [strippedNumber substringFromIndex:3]];
+        else
+            textField.text = [NSString stringWithFormat:@"(%@) %@-%@", [strippedNumber substringToIndex:3], [strippedNumber substringWithRange:NSMakeRange(3, 3)], [strippedNumber substringFromIndex:6]];
+        
+        UITextPosition *newPosition = [textField positionFromPosition:selectedRange.start offset:[textField.text length] - oldLength];
+        UITextRange *newRange = [textField textRangeFromPosition:newPosition toPosition:newPosition];
+        [textField setSelectedTextRange:newRange];
+        
+        return NO;
     }
     
     return YES;
 }
+
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+//    
+//    if (textField.tag != 1)
+//        return YES;
+//    
+//    int length = [self getLength:textField.text];
+//    
+//    if(length == 10)
+//    {
+//        if(range.length == 0)
+//            return NO;
+//    }
+//    
+//    if(length == 3)
+//    {
+//        NSString *num = [self formatNumber:textField.text];
+//        textField.text = [NSString stringWithFormat:@"%@-",num];
+//        if(range.length > 0)
+//            textField.text = [NSString stringWithFormat:@"%@-",[num substringToIndex:3]];
+//    }
+//    else if(length == 6)
+//    {
+//        NSString *num = [self formatNumber:textField.text];
+//        textField.text = [NSString stringWithFormat:@"%@-%@-",[num  substringToIndex:3],[num substringFromIndex:3]];
+//        if(range.length > 0)
+//            textField.text = [NSString stringWithFormat:@"%@-%@",[num substringToIndex:3],[num substringFromIndex:3]];
+//    }
+//    
+//    return YES;
+//}
 
 - (NSString*)formatNumber:(NSString*)mobileNumber
 {

@@ -25,14 +25,25 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Parse setup
     [Parse setApplicationId:@"khSDDzBANcF6RXKWBojSeDOweONmVysgIjvs5ceW" clientKey:@"urVIj0DX37q8Vc79SBRrob5T4okhIusgu4qwt6Kq"];
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    currentInstallation.channels = @[ @"global" ];
+    [currentInstallation saveInBackground];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    
+    // Push Notifications
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                    UIUserNotificationTypeBadge |
+                                                    UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:nil];
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];
+
     // Initialize side menu with Storyboard's root navigation controller
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     self.nc = [storyboard instantiateViewControllerWithIdentifier:@"NC"];
     self.rsvc = [[PPRevealSideViewController alloc] initWithRootViewController:self.nc];
     self.rsvc.view.backgroundColor = [UIColor colorWithRed:240/255.f green:240/255.f blue:240/255.f alpha:1.0];
@@ -67,7 +78,8 @@
 
 - (void)logout
 {
-    [PFUser logOutInBackground];
+//    [PFUser logOutInBackground];
+    [PFUser logOut];
     [self.rsvc popViewControllerAnimated:NO];
     [self.nc popToRootViewControllerAnimated:YES];
 }
@@ -188,12 +200,30 @@
     return _persistentStoreCoordinator;
 }
 
+
 #pragma mark - Application's Documents directory
 
 // Returns the URL to the application's Documents directory.
 - (NSURL *)applicationDocumentsDirectory
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+
+#pragma mark - Push notifications
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSLog(@"Did Register for Remote Notifications with Device Token (%@)", deviceToken);
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"Did Fail to Register for Remote Notifications");
+    NSLog(@"%@, %@", error, error.localizedDescription);
+    
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [PFPush handlePush:userInfo];
 }
 
 @end

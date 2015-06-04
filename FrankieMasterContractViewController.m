@@ -348,6 +348,7 @@
     FrankieDetailProjectViewController *dpvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieDetailProjectViewController"];
     
     Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
+    
     dpvc.job = job;
     
     [self.navigationController pushViewController:dpvc animated:YES];
