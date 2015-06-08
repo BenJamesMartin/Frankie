@@ -338,8 +338,8 @@
         [self formatDateLabelAsDaysSinceForCell:cell];
     }
     
-    if (step.picture != nil && ![step.picture isEqual:[UIImage imageNamed:@"image-upload-icon"]])
-        cell.picture.image = step.picture;
+    if (step.thumbnail != nil && ![step.picture isEqual:[UIImage imageNamed:@"image-upload-icon"]])
+        cell.picture.image = step.thumbnail;
     else
         cell.picture.image = [UIImage imageNamed:@"image-upload-icon-small"];
     

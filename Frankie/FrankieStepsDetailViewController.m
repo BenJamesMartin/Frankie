@@ -388,16 +388,18 @@
             UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
             
-            self.step.picture = newImage;
+            self.step.thumbnail = newImage;
         });
     };
     
+    // If using camera
     if (self.mediaPicker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         image = [info objectForKey:UIImagePickerControllerOriginalImage];
         self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.uploadButton setImage:image forState:UIControlStateNormal];
         completionBlock(image);
     }
+    // Else using photo library
     else {
         NSURL *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];

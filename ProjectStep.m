@@ -11,6 +11,7 @@
 @implementation ProjectStep
 
 static NSString * const kPicture = @"Picture";
+static NSString * const kThumbnail = @"Thumbnail";
 static NSString * const kName = @"Name";
 static NSString * const kDueDate = @"DueDate";
 static NSString * const kCompleted = @"Completed";
@@ -46,6 +47,7 @@ static NSString * const kCompletionDate = @"CompletionDate";
 {
     if ((self=[super init])) {
         self.picture = [decoder decodeObjectForKey:kPicture];
+        self.picture = [decoder decodeObjectForKey:kThumbnail];
         self.name = [decoder decodeObjectForKey:kName];
         self.dueDate = [decoder decodeObjectForKey:kDueDate];
         self.completed = [[decoder decodeObjectForKey:kCompleted] boolValue];
@@ -57,6 +59,7 @@ static NSString * const kCompletionDate = @"CompletionDate";
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
     [encoder encodeObject:self.picture forKey:kPicture];
+    [encoder encodeObject:self.picture forKey:kThumbnail];
     [encoder encodeObject:self.name forKey:kName];
     [encoder encodeObject:self.dueDate forKey:kDueDate];
     [encoder encodeObject:[NSNumber numberWithBool:self.completed] forKey:kCompleted];

@@ -180,8 +180,6 @@
         }
     }
     
-    NSLog(@"self.project title text %@", self.projectTitle.text);
-    
     for (UIView *subview in cell1.contentView.subviews) {
         if (subview.tag == 2) {
             UITextField *tf = (UITextField *)subview;

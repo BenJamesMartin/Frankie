@@ -18,12 +18,19 @@
 
 @implementation FrankieClientInformationViewController
 
+
+#pragma mark - View lifecycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     self.clientInformation = [NSMutableDictionary new];
     self.infoField = @[@"name", @"phone", @"email"];
+    
     self.childTableView = (FrankieClientInformationTableViewController *)self.childViewControllers[0];
+    self.childTableView.nameField.delegate = self;
+    self.childTableView.phoneField.delegate = self;
+    self.childTableView.emailField.delegate = self;
     
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Save"
                                                                  style:UIBarButtonItemStylePlain
@@ -33,30 +40,20 @@
     self.navigationItem.leftBarButtonItem = backItem;
 }
 
-- (void)doneEditing
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [self.view endEditing:YES];
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
-    self.clientInformation = [[FrankieProjectManager sharedManager] fetchClientInformation].mutableCopy;
-    
-    self.childTableView.nameField.text = [self.clientInformation objectForKey:@"name"];
-    self.childTableView.phoneField.text = [self.clientInformation objectForKey:@"phone"];
-    self.childTableView.emailField.text = [self.clientInformation objectForKey:@"email"];
+    NSMutableDictionary *clientInformation = [[FrankieProjectManager sharedManager] fetchClientInformation].mutableCopy;
+    if (clientInformation) {
+        self.clientInformation = clientInformation;
+        self.childTableView.nameField.text = [self.clientInformation objectForKey:@"name"];
+        self.childTableView.phoneField.text = [self.clientInformation objectForKey:@"phone"];
+        self.childTableView.emailField.text = [self.clientInformation objectForKey:@"email"];
+    }
 }
 
 // Save info
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [self.view endEditing:YES];
-    
     self.clientInformation[@"name"] = self.childTableView.nameField.text;
     self.clientInformation[@"phone"] = self.childTableView.phoneField.text;
     self.clientInformation[@"email"] = self.childTableView.emailField.text;
@@ -83,18 +80,22 @@
     }
 }
 
-- (BOOL)NSStringIsValidEmail:(NSString *)checkString
+
+#pragma mark - Left navigation "Save" button
+
+- (void)doneEditing
 {
-    BOOL stricterFilter = YES;
-    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
-    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
-    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
-    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
-    return [emailTest evaluateWithObject:checkString];
+    // Check inputs
+    if ([self inputsAreValid])
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+
+#pragma mark - Simple keyboard dismissal
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.view endEditing:YES];
 }
 
 
@@ -103,49 +104,20 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     textField.textColor = [UIColor darkGrayColor];
-    
-    if (textField.tag == 1)
-        self.phoneNumberField = textField;
-    
-    if (textField.tag == 2)
-        self.emailField = textField;
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    if (textField == self.childTableView.phoneField) {
-        // If the phone number entered is not complete (10 numbers and 2 dashes added automatically), shake text field and change text color to red
-        if (self.childTableView.phoneField.text.length < 12) {
-            [self.childTableView.phoneField shake:10 withDelta:5 speed:0.05 completion:^{
-                self.childTableView.phoneField.textColor = [UIColor alizarinColor];
-            }];
-            return;
-        }
-    }
-    
-    if (textField == self.childTableView.emailField) {
-        // If the email entered is not valid, shake text field and change text color to red
-        if (![self NSStringIsValidEmail:textField.text]) {
-            [self.childTableView.emailField shake:10 withDelta:5 speed:0.05 completion:^{
-                self.childTableView.emailField.textColor = [UIColor alizarinColor];
-            }];
-            return;
-        }
-    }
-}
-
+// Action that occurs when return button is tapped
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
     return YES;
 }
 
-
-#pragma mark - Format phone number
-
+// Format phone number
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if ([textField isEqual:self.phoneNumberField]) {
+    if ([textField isEqual:self.childTableView.phoneField]) {
+        
         NSString *newText = [textField.text stringByReplacingCharactersInRange:range withString:string];
         BOOL deleting = [newText length] < [textField.text length];
         
@@ -177,89 +149,55 @@
     return YES;
 }
 
-//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-//    
-//    if (textField.tag != 1)
-//        return YES;
-//    
-//    int length = [self getLength:textField.text];
-//    
-//    if(length == 10)
-//    {
-//        if(range.length == 0)
-//            return NO;
-//    }
-//    
-//    if(length == 3)
-//    {
-//        NSString *num = [self formatNumber:textField.text];
-//        textField.text = [NSString stringWithFormat:@"%@-",num];
-//        if(range.length > 0)
-//            textField.text = [NSString stringWithFormat:@"%@-",[num substringToIndex:3]];
-//    }
-//    else if(length == 6)
-//    {
-//        NSString *num = [self formatNumber:textField.text];
-//        textField.text = [NSString stringWithFormat:@"%@-%@-",[num  substringToIndex:3],[num substringFromIndex:3]];
-//        if(range.length > 0)
-//            textField.text = [NSString stringWithFormat:@"%@-%@",[num substringToIndex:3],[num substringFromIndex:3]];
-//    }
-//    
-//    return YES;
-//}
 
-- (NSString*)formatNumber:(NSString*)mobileNumber
+#pragma mark - Valid email checker
+
+- (BOOL)NSStringIsValidEmail:(NSString *)checkString
 {
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@")" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@" " withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"+" withString:@""];
-    
-    int length = (int)[mobileNumber length];
-    if (length > 10) {
-        mobileNumber = [mobileNumber substringFromIndex: length-10];
+    BOOL stricterFilter = YES;
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
+}
+
+#pragma mark - Validate phone and email fields when leaving VC
+
+- (BOOL)inputsAreValid
+{
+    // Length of 14 = 10 digits + 2 parentheses + 1 space + 1 dash
+    if (self.childTableView.phoneField.text.length == 14 && [self NSStringIsValidEmail:self.childTableView.emailField.text]) {
+        return YES;
+    }
+    else {
+        [self invalidateInput];
+        return NO;
+    }
+}
+
+// Shake input to indicate it is incomplete or not formatted correctly
+- (void)invalidateInput
+{
+    // If the phone number entered is not complete (10 numbers and 2 dashes added automatically), shake text field and change text color to red
+    if (self.childTableView.phoneField.text.length < 12) {
+        [self.childTableView.phoneField shake:10 withDelta:5 speed:0.05 completion:^{
+            self.childTableView.phoneField.textColor = [UIColor alizarinColor];
+        }];
     }
     
-    return mobileNumber;
+    // If the email entered is not valid, shake text field and change text color to red
+    if (![self NSStringIsValidEmail:self.childTableView.emailField.text]) {
+        [self.childTableView.emailField shake:10 withDelta:5 speed:0.05 completion:^{
+            self.childTableView.emailField.textColor = [UIColor alizarinColor];
+        }];
+    }
 }
 
 
-- (int)getLength:(NSString*)mobileNumber
-{
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@")" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@" " withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"+" withString:@""];
-    
-    int length = (int)[mobileNumber length];
-    
-    return length;
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
-    view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
-    return view;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
-    view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
-    return view;
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
