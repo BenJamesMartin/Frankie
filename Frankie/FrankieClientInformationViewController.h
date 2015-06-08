@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FrankieClientInformationTableViewController.h"
 
 @interface FrankieClientInformationViewController : UIViewController <UITextFieldDelegate>
 
@@ -18,6 +19,7 @@
 @property (strong, nonatomic) UITextField *phoneNumberField;
 @property (strong, nonatomic) UITextField *emailField;
 
+@property (strong, nonatomic) FrankieClientInformationTableViewController *childTableView;
 
 
 @end

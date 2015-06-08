@@ -19,11 +19,14 @@
 
 + (FrankieProjectManager *)sharedManager;
 
-- (void)saveClientInformation:(NSDictionary *)clientInformation;
-
+// Load various attributes
+- (NSDictionary *)fetchClientInformation;
 - (CLPlacemark *)fetchLocation;
-- (void)saveLocation:(CLPlacemark *)location;
+- (NSString *)fetchNotes;
 
+// Save various attributes
+- (void)saveClientInformation:(NSDictionary *)clientInformation;
+- (void)saveLocation:(CLPlacemark *)location;
 - (void)saveNotes:(NSString *)notes;
 
 @end

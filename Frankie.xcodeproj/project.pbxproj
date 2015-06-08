@@ -20,6 +20,7 @@
 		B5487AE61B1FD1D90093AD37 /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = B5487AE51B1FD1D90093AD37 /* Project.m */; };
 		B548A03A1AD4AECB00C74DF5 /* StepsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B548A0391AD4AECB00C74DF5 /* StepsCell.xib */; };
 		B548A0401AD4BDDB00C74DF5 /* FrankieStepsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B548A03F1AD4BDDB00C74DF5 /* FrankieStepsDetailViewController.m */; };
+		B54F7BE11B255EA000378B8C /* FrankieClientInformationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54F7BE01B255EA000378B8C /* FrankieClientInformationTableViewController.m */; };
 		B55BB699187B647200BE3703 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B55BB697187B647200BE3703 /* InfoPlist.strings */; };
 		B55BB69B187B647200BE3703 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B55BB69A187B647200BE3703 /* main.m */; };
 		B55BB69F187B647200BE3703 /* FrankieAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B55BB69E187B647200BE3703 /* FrankieAppDelegate.m */; };
@@ -81,6 +82,8 @@
 		B548A0391AD4AECB00C74DF5 /* StepsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StepsCell.xib; sourceTree = "<group>"; };
 		B548A03E1AD4BDDB00C74DF5 /* FrankieStepsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieStepsDetailViewController.h; sourceTree = "<group>"; };
 		B548A03F1AD4BDDB00C74DF5 /* FrankieStepsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieStepsDetailViewController.m; sourceTree = "<group>"; };
+		B54F7BDF1B255EA000378B8C /* FrankieClientInformationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankieClientInformationTableViewController.h; sourceTree = "<group>"; };
+		B54F7BE01B255EA000378B8C /* FrankieClientInformationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankieClientInformationTableViewController.m; sourceTree = "<group>"; };
 		B55BB68B187B647200BE3703 /* Frankie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Frankie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B55BB696187B647200BE3703 /* Frankie-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Frankie-Info.plist"; sourceTree = "<group>"; };
 		B55BB698187B647200BE3703 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -173,9 +176,8 @@
 		B536D7DD1AD29F6A00181B23 /* Supplementary Views */ = {
 			isa = PBXGroup;
 			children = (
+				B54F7BDE1B255E7E00378B8C /* Client Information */,
 				B536D7E91AD3EDD000181B23 /* Steps */,
-				B5AA5D4B1AD20ECE00942153 /* FrankieClientInformationViewController.h */,
-				B5AA5D4C1AD20ECE00942153 /* FrankieClientInformationViewController.m */,
 				B5AA5D511AD21BFF00942153 /* FrankieLocationViewController.h */,
 				B5AA5D521AD21BFF00942153 /* FrankieLocationViewController.m */,
 				B5AB72D01AD610CC002F7ED2 /* FrankieNotesViewController.h */,
@@ -218,6 +220,17 @@
 				B5487ADC1B1FCF090093AD37 /* FrankieProjectManager.m */,
 			);
 			name = Singletons;
+			sourceTree = "<group>";
+		};
+		B54F7BDE1B255E7E00378B8C /* Client Information */ = {
+			isa = PBXGroup;
+			children = (
+				B5AA5D4B1AD20ECE00942153 /* FrankieClientInformationViewController.h */,
+				B5AA5D4C1AD20ECE00942153 /* FrankieClientInformationViewController.m */,
+				B54F7BDF1B255EA000378B8C /* FrankieClientInformationTableViewController.h */,
+				B54F7BE01B255EA000378B8C /* FrankieClientInformationTableViewController.m */,
+			);
+			name = "Client Information";
 			sourceTree = "<group>";
 		};
 		B55BB682187B647200BE3703 = {
@@ -559,6 +572,7 @@
 				B5F7C1B41AEB1A8F0056345D /* Contractor.m in Sources */,
 				B5B99A3B1ACB937B001A2421 /* RTNActivityView.m in Sources */,
 				B55BB69F187B647200BE3703 /* FrankieAppDelegate.m in Sources */,
+				B54F7BE11B255EA000378B8C /* FrankieClientInformationTableViewController.m in Sources */,
 				B5AB72D21AD610CC002F7ED2 /* FrankieNotesViewController.m in Sources */,
 				B55BB69B187B647200BE3703 /* main.m in Sources */,
 				B5EE9CC81ADCA41E0000DFBD /* FrankieMasterProjectTableViewCell.m in Sources */,

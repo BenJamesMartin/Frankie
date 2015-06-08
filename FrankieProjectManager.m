@@ -53,17 +53,30 @@
 }
 
 
+#pragma mark - Load various attributes
+
+- (NSDictionary *)fetchClientInformation
+{
+    return self.currentProject.clientInformation;
+}
+
+- (CLPlacemark *)fetchLocation
+{
+    return self.currentProject.location;
+}
+
+- (NSString *)fetchNotes
+{
+    return self.currentProject.notes;
+}
+
+
 #pragma mark - Save various attributes
 
 - (void)saveClientInformation:(NSDictionary *)clientInformation
 {
     [self.currentProject setValue:clientInformation forKey:@"clientInformation"];
     [self saveContext];
-}
-
-- (CLPlacemark *)fetchLocation
-{
-    return self.currentProject.location;
 }
 
 - (void)saveLocation:(CLPlacemark *)location

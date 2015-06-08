@@ -23,6 +23,7 @@
 
     self.clientInformation = [NSMutableDictionary new];
     self.infoField = @[@"name", @"phone", @"email"];
+    self.childTableView = (FrankieClientInformationTableViewController *)self.childViewControllers[0];
     
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
                                                                  style:UIBarButtonItemStylePlain
@@ -42,10 +43,23 @@
     [self.view endEditing:YES];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    self.clientInformation = [[FrankieProjectManager sharedManager] fetchClientInformation].mutableCopy;
+    
+    self.childTableView.nameField.text = [self.clientInformation objectForKey:@"name"];
+    self.childTableView.phoneField.text = [self.clientInformation objectForKey:@"phone"];
+    self.childTableView.emailField.text = [self.clientInformation objectForKey:@"email"];
+}
+
 // Save info
 - (void)viewWillDisappear:(BOOL)animated
 {
     [self.view endEditing:YES];
+    
+    self.clientInformation[@"name"] = self.childTableView.nameField.text;
+    self.clientInformation[@"phone"] = self.childTableView.phoneField.text;
+    self.clientInformation[@"email"] = self.childTableView.emailField.text;
     
     [[FrankieProjectManager sharedManager] saveClientInformation:self.clientInformation];
     
@@ -83,38 +97,6 @@
     [super didReceiveMemoryWarning];
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 3;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSString *cellIdentifier = [NSString stringWithFormat:@"Cell%lu", indexPath.row];
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
-    
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
-    }
-    
-    return cell;
-}
-
-#pragma mark - UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 44; // Default height
-}
-
 
 #pragma mark - Text field delegate
 
@@ -131,28 +113,25 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    if (textField == self.phoneNumberField) {
+    if (textField == self.childTableView.phoneField) {
         // If the phone number entered is not complete (10 numbers and 2 dashes added automatically), shake text field and change text color to red
-        if (self.phoneNumberField.text.length < 12) {
-            [self.phoneNumberField shake:10 withDelta:5 speed:0.05 completion:^{
-                self.phoneNumberField.textColor = [UIColor alizarinColor];
+        if (self.childTableView.phoneField.text.length < 12) {
+            [self.childTableView.phoneField shake:10 withDelta:5 speed:0.05 completion:^{
+                self.childTableView.phoneField.textColor = [UIColor alizarinColor];
             }];
             return;
         }
     }
     
-    if (textField == self.emailField) {
+    if (textField == self.childTableView.emailField) {
         // If the email entered is not valid, shake text field and change text color to red
         if (![self NSStringIsValidEmail:textField.text]) {
-            [self.emailField shake:10 withDelta:5 speed:0.05 completion:^{
-                self.emailField.textColor = [UIColor alizarinColor];
+            [self.childTableView.emailField shake:10 withDelta:5 speed:0.05 completion:^{
+                self.childTableView.emailField.textColor = [UIColor alizarinColor];
             }];
             return;
         }
     }
-    
-    // If inputs are correct, set client information
-    self.clientInformation[self.infoField[textField.tag]] = textField.text;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

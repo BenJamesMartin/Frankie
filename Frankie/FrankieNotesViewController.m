@@ -39,9 +39,9 @@
     [self.notes becomeFirstResponder];
 }
 
-- (void)doneEditing
+- (void)viewWillAppear:(BOOL)animated
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    self.notes.text = [[FrankieProjectManager sharedManager] fetchNotes];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -82,6 +82,11 @@
         cell.accessoryView = label;
     }
 
+}
+
+- (void)doneEditing
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
