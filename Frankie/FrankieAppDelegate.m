@@ -11,7 +11,7 @@
 #import "FrankieAppDelegate.h"
 #import "FrankieLoginViewController.h"
 #import "FrankieSideMenuViewController.h"
-#import "Job.h"
+#import "Project.h"
 
 @interface FrankieAppDelegate ()
 

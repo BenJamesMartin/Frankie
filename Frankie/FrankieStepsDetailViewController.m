@@ -122,11 +122,11 @@
             
             // Get a copy of relevant Core Data project
             NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
-            request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", dpvc.job.objectID];
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Project class])];
+            request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", dpvc.project.objectID];
             request.fetchLimit = 1;
             NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
-            Job *job = fetchedObjects[0];
+            Project *job = fetchedObjects[0];
             [job setValue:@[self.step] forKey:@"steps"];
             
             // Save the Core Data context

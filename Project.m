@@ -1,18 +1,19 @@
 //
-//  Job.m
+//  Project.m
 //  Frankie
 //
-//  Created by Benjamin Martin on 4/14/15.
+//  Created by Benjamin Martin on 6/3/15.
 //  Copyright (c) 2015 Benjamin Martin. All rights reserved.
 //
 
-#import "Job.h"
+#import "Project.h"
 
 
-@implementation Job
+@implementation Project
 
 @dynamic clientInformation;
 @dynamic completed;
+@dynamic createdAt;
 @dynamic location;
 @dynamic notes;
 @dynamic objectId;
@@ -21,6 +22,5 @@
 @dynamic price;
 @dynamic steps;
 @dynamic title;
-@dynamic createdAt;
 
 @end

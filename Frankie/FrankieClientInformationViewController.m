@@ -10,6 +10,7 @@
 
 #import "FrankieClientInformationViewController.h"
 #import "FrankieAddEditContractViewController.h"
+#import "FrankieProjectManager.h"
 
 @interface FrankieClientInformationViewController ()
 
@@ -45,6 +46,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [self.view endEditing:YES];
+    
+    [[FrankieProjectManager sharedManager] saveClientInformation:self.clientInformation];
     
     FrankieAddEditContractViewController *avc = [self.navigationController.viewControllers lastObject];
     avc.clientInformation = self.clientInformation;

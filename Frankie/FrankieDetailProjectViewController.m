@@ -9,6 +9,7 @@
 #import "FrankieDetailProjectViewController.h"
 #import "FrankieAddEditContractViewController.h"
 #import "FrankieAppDelegate.h"
+#import "FrankieProjectManager.h"
 #import "RTNActivityView.h"
 #import "ProjectStep.h"
 #import "PresentingAnimator.h"
@@ -25,7 +26,7 @@
     UIBarButtonItem *editProjectButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editProject)];
     self.navigationItem.rightBarButtonItem = editProjectButton;
     
-    self.navigationItem.title = self.job.title;
+    self.navigationItem.title = self.project.title;
     [self drawSegmentedControl];
     self.locationView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, 320, 312)];
     
@@ -58,12 +59,12 @@
 {
     // Save any changes in steps
     NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
-    request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.job.objectID];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Project class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.project.objectID];
     request.fetchLimit = 1;
     NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
-    Job *job = fetchedObjects[0];
-    [job setValue:self.job.steps forKey:@"steps"];
+    Project *job = fetchedObjects[0];
+    [job setValue:self.project.steps forKey:@"steps"];
 
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
@@ -81,7 +82,7 @@
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     FrankieAddEditContractViewController *aevc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieAddEditContractViewController"];
-    aevc.job = self.job;
+    aevc.project = self.project;
     [self.navigationController pushViewController:aevc animated:YES];
 }
 
@@ -91,9 +92,10 @@
 - (void)loadProjectData
 {
     // Load (or reload) project title, client information,
-    self.navigationItem.title = self.job.title;
+    self.navigationItem.title = self.project.title;
+    self.project = [FrankieProjectManager sharedManager].currentProject;
     
-    NSDictionary *clientInformation = self.job.clientInformation;
+    NSDictionary *clientInformation = self.project.clientInformation;
     NSString *name = clientInformation[@"name"];
     if (name != nil && name.length > 0)
         self.clientName.text = name;
@@ -102,7 +104,7 @@
     
     self.dateRange.text = [self setDateRangeText];
     
-    UIImage *image = [UIImage imageWithData:self.job.picture];
+    UIImage *image = [UIImage imageWithData:self.project.picture];
     if (image != nil && ![image isEqual:[UIImage imageNamed:@"image-upload-icon"]]) {
         self.image.contentMode = UIViewContentModeScaleAspectFill;
         self.image.layer.borderWidth = 0.0;
@@ -115,9 +117,9 @@
         self.image.layer.borderWidth = 2.0;
     }
     
-    if (self.job.notes != nil && ![self.job.notes isEqualToString:@""]) {
+    if (self.project.notes != nil && ![self.project.notes isEqualToString:@""]) {
         self.notes.textAlignment = NSTextAlignmentCenter;
-        self.notes.text = self.job.notes;
+        self.notes.text = self.project.notes;
     }
     else {
         self.notes.textAlignment = NSTextAlignmentCenter;
@@ -130,7 +132,7 @@
 
 - (void)centerOnProjectLocation
 {
-    CLPlacemark *placemark = self.job.location;
+    CLPlacemark *placemark = self.project.location;
     if (placemark != nil) {
         MKCoordinateRegion region;
         MKCoordinateSpan span;
@@ -155,18 +157,18 @@
 // Convenience method for calculating date range
 - (NSString *)setDateRangeText
 {
-    NSDate *startDate = self.job.createdAt;
+    NSDate *startDate = self.project.createdAt;
     
     NSDateFormatter *formatter = [NSDateFormatter new];
     formatter.dateFormat = @"MMMM dd, yyyy";
     NSString *startDateString = [formatter stringFromDate:startDate];
     
-    NSArray *steps = self.job.steps;
+    NSArray *steps = self.project.steps;
     if (steps.count > 0) {
         NSDate *latestDueDate = [NSDate date];
         
         // Find project step's latest due date
-        for (ProjectStep *step in self.job.steps) {
+        for (ProjectStep *step in self.project.steps) {
             // If the step's due date is later, it returns 1 (> 0)
             if ([step.dueDate compare:latestDueDate] > 0)
                 latestDueDate = step.dueDate;
@@ -241,7 +243,7 @@
 
 - (IBAction)callClient:(id)sender
 {
-    NSDictionary *clientInformation = self.job.clientInformation;
+    NSDictionary *clientInformation = self.project.clientInformation;
     NSString *phoneNumber = clientInformation[@"phone"];
     phoneNumber = [phoneNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
     if (phoneNumber != nil && phoneNumber.length > 0)
@@ -253,7 +255,7 @@
 
 - (IBAction)emailClient:(id)sender
 {
-    NSDictionary *clientInformation = self.job.clientInformation;
+    NSDictionary *clientInformation = self.project.clientInformation;
     NSString *email = clientInformation[@"email"];
     if (email != nil && email.length > 0)
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", email]]];
@@ -264,7 +266,7 @@
 
 - (IBAction)textClient:(id)sender
 {
-    NSDictionary *clientInformation = self.job.clientInformation;
+    NSDictionary *clientInformation = self.project.clientInformation;
     NSString *phoneNumber = clientInformation[@"phone"];
     if (phoneNumber != nil && phoneNumber.length > 0)
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms:+%@", phoneNumber]]];
@@ -290,7 +292,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSArray *steps = self.job.steps;
+    NSArray *steps = self.project.steps;
     if (steps.count == 0 && self.segmentedControl.selectedSegmentIndex == 0) {
         self.noStepsLabel.alpha = 1.0;
         self.createFirstStepButton.alpha = 1.0;
@@ -318,7 +320,7 @@
 
 - (FrankieProjectDetailStepsTableViewCell *)configureCell:(FrankieProjectDetailStepsTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    ProjectStep *step = self.job.steps[indexPath.row];
+    ProjectStep *step = self.project.steps[indexPath.row];
     cell.step = step;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
@@ -423,7 +425,7 @@
         self.gestureHasEnded = YES;
         
         // Toggle cell completion state
-        NSArray *steps = self.job.steps;
+        NSArray *steps = self.project.steps;
         int index = (int)[steps indexOfObject:cell.step];
         ProjectStep *step = steps[index];
         
@@ -541,7 +543,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    NSArray *steps = self.job.steps;
+    NSArray *steps = self.project.steps;
     if (steps.count > 0) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
         view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
@@ -555,7 +557,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    NSArray *steps = self.job.steps;
+    NSArray *steps = self.project.steps;
     if (steps.count > 0) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
         view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
@@ -569,7 +571,7 @@
 {
     self.hasProvidedDirections = NO;
     // If the user has provided a project location, prompt for their location to obtain directions
-    if (self.job.location != nil) {
+    if (self.project.location != nil) {
         CLLocationManager *locationManager = [CLLocationManager new];
         [locationManager startUpdatingLocation];
         self.locationManager = [CLLocationManager new];
@@ -609,7 +611,7 @@
             NSString *sourceState = sourcePlacemark.administrativeArea;
             sourceState = [sourceState stringByReplacingOccurrencesOfString:@" " withString:@"+"];
             
-            CLPlacemark *destinationPlacemark = self.job.location;
+            CLPlacemark *destinationPlacemark = self.project.location;
             NSString *destinationStreetNumber = destinationPlacemark.subThoroughfare;
             NSString *destinationStreetName = destinationPlacemark.thoroughfare;
             destinationStreetName = [destinationStreetName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
@@ -830,11 +832,11 @@
     
     // Get a copy of relevant Core Data project
     NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
-    request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.job.objectID];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Project class])];
+    request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.project.objectID];
     request.fetchLimit = 1;
     NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
-    Job *job = fetchedObjects[0];
+    Project *job = fetchedObjects[0];
     
     // Set the contact information for the project
     NSString *type = self.contactInfoType;

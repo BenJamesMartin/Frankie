@@ -11,7 +11,7 @@
 
 #import "RTNActivityView.h"
 #import "FrankieRegisterViewController.h"
-#import "FrankieMasterContractViewController.h"
+#import "FrankieMasterProjectViewController.h"
 #import "FrankieAppDelegate.h"
 #import "SIAlertView.h"
 
@@ -119,7 +119,7 @@
                 [alertView show];
                 
                 FrankieAppDelegate *delegate = (FrankieAppDelegate *)[[UIApplication sharedApplication] delegate];
-                FrankieMasterContractViewController *masterVC = [[FrankieMasterContractViewController alloc] init];
+                FrankieMasterProjectViewController *masterVC = [[FrankieMasterProjectViewController alloc] init];
                 delegate.masterVC = masterVC;
                 [self.navigationController pushViewController:masterVC animated:YES];
                 [RTNActivityView hide];

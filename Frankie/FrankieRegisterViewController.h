@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <FlatUIKit/FlatUIKit.h>
 
-#import "FrankieMasterContractViewController.h"
+#import "FrankieMasterProjectViewController.h"
 
 @interface FrankieRegisterViewController : UIViewController <UITextFieldDelegate>
 

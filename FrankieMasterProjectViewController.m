@@ -10,23 +10,24 @@
 #import <CoreData/CoreData.h>
 #import <Parse/Parse.h>
 
-#import "FrankieMasterContractViewController.h"
-#import "FrankieMasterContractTableViewCell.h"
+#import "FrankieMasterProjectViewController.h"
+#import "FrankieMasterProjectTableViewCell.h"
 #import "FrankieAddEditContractViewController.h"
 #import "FrankieDetailProjectViewController.h"
 #import "FrankieLoginViewController.h"
 #import "FrankieSettingsViewController.h"
 #import "FrankieAppDelegate.h"
 #import "FrankieSideMenuViewController.h"
-#import "Job.h"
+#import "FrankieProjectManager.h"
+#import "Project.h"
 #import "ProjectStep.h"
 #import "SIAlertView.h"
 
-@interface FrankieMasterContractViewController ()
+@interface FrankieMasterProjectViewController ()
 
 @end
 
-@implementation FrankieMasterContractViewController
+@implementation FrankieMasterProjectViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -44,14 +45,12 @@
     [self setNavigationBarAttributes];
 //    [self syncParseWithCoreData];
     
-    [self.tableView registerNib:[UINib nibWithNibName:@"FrankieMasterContractTableViewCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FrankieMasterProjectTableViewCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     
     // Error handling when loading from fetched results controller
     NSError *error;
     if (![[self fetchedResultsController] performFetch:&error]) {
     }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadTable" object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -108,7 +107,7 @@
     NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
     NSEntityDescription *entity =
-    [NSEntityDescription entityForName:NSStringFromClass([Job class])
+    [NSEntityDescription entityForName:NSStringFromClass([Project class])
                 inManagedObjectContext:context];
     
     [fetchRequest setEntity:entity];
@@ -158,7 +157,7 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:(FrankieMasterContractTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            [self configureCell:(FrankieMasterProjectTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
 //            [self.tableView cellForRowAtIndexPath:indexPath];
             break;
             
@@ -217,7 +216,7 @@
     NSError *error;
     NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     
-    NSEntityDescription *entityDesc = [NSEntityDescription entityForName:NSStringFromClass([Job class])
+    NSEntityDescription *entityDesc = [NSEntityDescription entityForName:NSStringFromClass([Project class])
                                                   inManagedObjectContext:context];
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -238,7 +237,7 @@
             for (PFObject *project in objects) {
                 // Add project to set
             }
-            for (Job *project in fetchedObjects) {
+            for (Project *project in fetchedObjects) {
                 // Add project to set
             }
             
@@ -248,7 +247,7 @@
             // Delete objects from Parse that don't exist in CD but do in Parse.
             
             for (PFObject *project in objects) {
-                for (Job *job in fetchedObjects)
+                for (Project *job in fetchedObjects)
                 {
                     
                     if ([job.parseId isEqualToString:[project objectId]]) {
@@ -261,7 +260,7 @@
                 }
                 found = NO;
             }
-            for (Job *job in fetchedObjects)
+            for (Project *job in fetchedObjects)
             {
                 for (PFObject *project in objects) {
                     if ([job.parseId isEqualToString:[project objectId]]) {
@@ -275,7 +274,7 @@
                 found = NO;
             }
             for (PFObject *project in projectsToAdd) {
-                NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Job class]) inManagedObjectContext:context];
+                NSEntityDescription *entity = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Project class]) inManagedObjectContext:context];
                 
                 [entity setValue:project[@"title"] forKeyPath:@"title"];
                 [entity setValue:project[@"end"] forKeyPath:@"dueDate"];
@@ -290,11 +289,10 @@
                 [entity setValue:[[[(NSManagedObject*)entity objectID] URIRepresentation] absoluteString] forKeyPath:@"objectId"];
                 [entity setValue:project[@"completed"] forKeyPath:@"completed"];
             }
-            for (Job *job in projectsToDelete) {
+            for (Project *job in projectsToDelete) {
                 [context deleteObject:job];
             }
             if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
             }
         }
     }];
@@ -311,18 +309,6 @@
 {
     [PFUser logOut];
     [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-- (void)reloadTable
-{
-//    NSError *error;
-//    if (![[self fetchedResultsController] performFetch:&error]) {
-//        NSLog(@"error fetching");
-//    }
-//    else {
-//        _fetchedResultsController = nil;
-//        [self.tableView reloadData];
-//    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -347,10 +333,11 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     FrankieDetailProjectViewController *dpvc = [storyboard instantiateViewControllerWithIdentifier:@"FrankieDetailProjectViewController"];
     
-    Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
+    Project *project = [_fetchedResultsController objectAtIndexPath:indexPath];
+    dpvc.project = project;
     
-    dpvc.job = job;
-    
+//    [[FrankieProjectManager sharedManager] setCurrentProject:project];
+    [FrankieProjectManager sharedManager].currentProject = project;
     [self.navigationController pushViewController:dpvc animated:YES];
 }
 
@@ -369,7 +356,7 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
+        Project *job = [_fetchedResultsController objectAtIndexPath:indexPath];
         
         // Protect from trying to delete a parse object immediately after it was created.
         // This causes the program to crash with error "Can not do a comparison for query type: (null)"
@@ -387,14 +374,14 @@
         
         NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Job class])];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Project class])];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF == %@", job.objectID];
         [request setPredicate:predicate];
         
         NSError *error;
         NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
         
-        for (Job *job in fetchedObjects) {
+        for (Project *job in fetchedObjects) {
             [context deleteObject:job];
         }
         [context save:&error];
@@ -427,10 +414,10 @@
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIdentifier = @"Cell";
-    FrankieMasterContractTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    FrankieMasterProjectTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     
     if (cell == nil) {
-        cell = [[FrankieMasterContractTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        cell = [[FrankieMasterProjectTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     
     [self configureCell:cell atIndexPath:indexPath];
@@ -438,9 +425,9 @@
     return cell;
 }
 
-- (void)configureCell:(FrankieMasterContractTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureCell:(FrankieMasterProjectTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    Job *job = [_fetchedResultsController objectAtIndexPath:indexPath];
+    Project *job = [_fetchedResultsController objectAtIndexPath:indexPath];
     
     // Add custom detail disclosure indicator
     cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"custom-detail-disclosure"] highlightedImage:[UIImage imageNamed:@"custom-detail-disclosure"]];

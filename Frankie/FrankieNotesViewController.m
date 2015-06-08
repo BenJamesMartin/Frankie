@@ -8,6 +8,7 @@
 
 #import "FrankieNotesViewController.h"
 #import "FrankieAddEditContractViewController.h"
+#import "FrankieProjectManager.h"
 
 @interface FrankieNotesViewController ()
 
@@ -48,6 +49,8 @@
     FrankieAddEditContractViewController *avc = [self.navigationController.viewControllers lastObject];
     avc.notes = self.notes.text;
     [self.view endEditing:YES];
+    
+    [[FrankieProjectManager sharedManager] saveNotes:self.notes.text];
     
     // Add up to three words to notes table view cell in add contract VC
     if (self.notes.text.length > 0) {

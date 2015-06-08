@@ -8,9 +8,12 @@
 
 #import "FrankieLocationViewController.h"
 #import "FrankieAddEditContractViewController.h"
+#import "FrankieProjectManager.h"
 #import "RTNActivityView.h"
 
 @interface FrankieLocationViewController ()
+
+@property (strong, nonatomic) UISearchBar *searchBar;
 
 @end
 
@@ -20,11 +23,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 200, 30)];
-    searchBar.delegate = self;
-    self.navigationItem.titleView = searchBar;
+    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 200, 30)];
+    self.searchBar.delegate = self;
+    self.navigationItem.titleView = self.searchBar;
     
-    [searchBar setTintColor:[UIColor whiteColor]];
+    [self.searchBar setTintColor:[UIColor whiteColor]];
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:[UIColor colorFromHexCode:@"007AFF"]];
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor darkGrayColor]}];
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setDefaultTextAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"Avenir-Light" size:14.0]}];
@@ -35,10 +38,21 @@
     // Dispose of any resources that can be recreated.
 }
 
+// Load existing data on viewDidAppear
+- (void)viewDidAppear:(BOOL)animated
+{
+    self.placemark = [[FrankieProjectManager sharedManager] fetchLocation];
+    if (self.placemark) {
+        [self addAnnotationAtLocation:self.placemark];
+        self.searchBar.text = [NSString stringWithFormat:@"%@ %@", self.placemark.subThoroughfare, self.placemark.thoroughfare];
+    }
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     FrankieAddEditContractViewController *avc = [self.navigationController.viewControllers lastObject];
     avc.locationPlacemark = self.placemark;
+    [[FrankieProjectManager sharedManager] saveLocation:self.placemark];
  
     if (self.placemark != nil) {
         // Modify table view cell in add contract VC associated with location VC
@@ -75,15 +89,19 @@
             [self presentViewController:alert animated:YES completion:nil];
         }
         else {
-            MKPlacemark *mkPlacemark = [[MKPlacemark alloc] initWithPlacemark:placemark];
-            [self.mapView addAnnotation:mkPlacemark];
-            MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(mkPlacemark.coordinate, 1000, 1000);
-            [self.mapView setRegion:region animated:YES];
-            
             self.placemark = placemark;
+            [self addAnnotationAtLocation:placemark];
             [searchBar resignFirstResponder];
         }
     }];
+}
+
+- (void)addAnnotationAtLocation:(CLPlacemark *)location
+{
+    MKPlacemark *mkPlacemark = [[MKPlacemark alloc] initWithPlacemark:location];
+    [self.mapView addAnnotation:mkPlacemark];
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(mkPlacemark.coordinate, 1000, 1000);
+    [self.mapView setRegion:region animated:YES];
 }
 
 /*

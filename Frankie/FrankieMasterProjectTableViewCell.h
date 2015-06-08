@@ -1,5 +1,5 @@
 //
-//  FrankieMasterContractTableViewCell.h
+//  FrankieMasterProjectTableViewCell.h
 //  Frankie
 //
 //  Created by Benjamin Martin on 4/13/15.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FrankieMasterContractTableViewCell : UITableViewCell
+@interface FrankieMasterProjectTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UIImageView *picture;
 @property (strong, nonatomic) IBOutlet UILabel *title;

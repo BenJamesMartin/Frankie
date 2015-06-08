@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-@class FrankieMasterContractViewController;
+@class FrankieMasterProjectViewController;
 
-@interface FrankieMasterContractViewController : UITableViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate>
+@interface FrankieMasterProjectViewController : UITableViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 

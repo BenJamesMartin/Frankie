@@ -10,7 +10,7 @@
 #import <UITextField+Shake/UITextField+Shake.h>
 
 #import "FrankieLoginViewController.h"
-#import "FrankieMasterContractViewController.h"
+#import "FrankieMasterProjectViewController.h"
 #import "FrankieAppDelegate.h"
 #import "SIAlertView.h"
 #import "RTNActivityView.h"
@@ -49,7 +49,7 @@
     
     // Take the user to his contracts if he's already logged in
     if ([PFUser currentUser]) {
-        [self navigateToMasterContractViewController];
+        [self navigateToMasterContractViewControllerAnimated:NO];
     }
     
     [self setSubviewProperties];
@@ -80,13 +80,13 @@
     self.password.textColor = [UIColor darkGrayColor];
 }
 
-- (void)navigateToMasterContractViewController
+- (void)navigateToMasterContractViewControllerAnimated:(BOOL)animated
 {
     FrankieAppDelegate *delegate = (FrankieAppDelegate *)[[UIApplication sharedApplication] delegate];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-    FrankieMasterContractViewController *masterVC = [storyboard instantiateViewControllerWithIdentifier:@"Master"];
+    FrankieMasterProjectViewController *masterVC = [storyboard instantiateViewControllerWithIdentifier:@"Master"];
     delegate.masterVC = masterVC;
-    [self.navigationController pushViewController:masterVC animated:YES];
+    [self.navigationController pushViewController:masterVC animated:animated];
 }
 
 -(void)keyboardShow
@@ -177,7 +177,7 @@
                     [self invalidateTextField:self.password];
                 }
                 else {
-                    [self navigateToMasterContractViewController];
+                    [self navigateToMasterContractViewControllerAnimated:YES];
                 }
             }];
         }

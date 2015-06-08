@@ -13,12 +13,12 @@
 #import <pop/POP.h>
 #import <FlatUIKit/FlatUIKit.h>
 #import "ModalViewController.h"
-#import "Job.h"
+#import "Project.h"
 #import "FrankieProjectDetailStepsTableViewCell.h"
 
 @interface FrankieDetailProjectViewController : UIViewController <UITextViewDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, POPAnimationDelegate, UIViewControllerTransitioningDelegate>
 
-@property (strong, nonatomic) Job *job;
+@property (strong, nonatomic) Project *project;
 
 @property (strong, nonatomic) IBOutlet UIImageView *image;
 @property (strong, nonatomic) IBOutlet UILabel *clientName;

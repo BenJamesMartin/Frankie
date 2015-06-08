@@ -715,7 +715,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="createOrEditContract:" destination="zVc-VQ-w16" eventType="touchUpInside" id="Weh-FQ-Agz"/>
+                                    <action selector="createOrEditProject:" destination="zVc-VQ-w16" eventType="touchUpInside" id="rzF-g3-9nW"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -940,7 +940,7 @@
         <!--Projects-->
         <scene sceneID="tO2-p8-agP">
             <objects>
-                <tableViewController storyboardIdentifier="Master" id="RwG-Et-A39" customClass="FrankieMasterContractViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="Master" id="RwG-Et-A39" customClass="FrankieMasterProjectViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="87" sectionHeaderHeight="22" sectionFooterHeight="22" id="16W-X7-GXx">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1060,7 +1060,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="createOrEditContract:" destination="zVc-VQ-w16" eventType="touchUpInside" id="2hJ-V3-biH"/>
+                                    <action selector="createOrEditProject:" destination="zVc-VQ-w16" eventType="touchUpInside" id="Njh-O9-AhC"/>
                                     <action selector="createStep:" destination="VsT-R0-WFb" eventType="touchUpInside" id="3cf-GT-Zga"/>
                                 </connections>
                             </button>

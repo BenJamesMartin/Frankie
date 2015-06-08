@@ -15,7 +15,7 @@
 #import "FrankieClientInformationViewController.h"
 #import "FrankieLocationViewController.h"
 #import "FrankieNotesViewController.h"
-#import "Job.h"
+#import "Project.h"
 
 @interface FrankieAddEditContractViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UINavigationControllerDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
@@ -48,11 +48,11 @@
 // When loading contract from step VC (navigating backwards), do not set job model
 @property (assign, nonatomic) BOOL shouldSetJobInViewDidAppear;
 
-@property (strong, nonatomic) Job *job;
+@property (strong, nonatomic) Project *project;
 
 // Used to determine if step cell should navigate directly to add/edit step VC to create first step instead of master step VC showing all steps (of which there'd be none)
 @property (assign, nonatomic) BOOL isCreatingFirstStep;
 
-- (IBAction)createOrEditContract:(id)sender;
+- (IBAction)createOrEditProject:(id)sender;
 
 @end
