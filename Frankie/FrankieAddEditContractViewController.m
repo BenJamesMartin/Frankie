@@ -58,11 +58,12 @@
     }
     // If we're editing the job, change the back button title to a more appropriate "Done"
     else {
-        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Save"
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(createOrEditProject:)];
         
+        [self.buildProjectButton setTitle:@"Save" forState:UIControlStateNormal];
         self.navigationItem.leftBarButtonItem = backItem;
     }
 
@@ -179,6 +180,8 @@
         }
     }
     
+    NSLog(@"self.project title text %@", self.projectTitle.text);
+    
     for (UIView *subview in cell1.contentView.subviews) {
         if (subview.tag == 2) {
             UITextField *tf = (UITextField *)subview;
@@ -204,15 +207,8 @@
 {
     // Create reference to proper cells
     // Doesn't work properly because not all are visible
-    NSIndexPath *path2 = [NSIndexPath indexPathForRow:2 inSection:0];
-    NSIndexPath *path3 = [NSIndexPath indexPathForRow:3 inSection:0];
-    NSIndexPath *path4 = [NSIndexPath indexPathForRow:4 inSection:0];
-    NSIndexPath *path5 = [NSIndexPath indexPathForRow:5 inSection:0];
     
-    UITableViewCell *cell2 = [self.tableView cellForRowAtIndexPath:path2];
-    UITableViewCell *cell3 = [self.tableView cellForRowAtIndexPath:path3];
-    UITableViewCell *cell4 = [self.tableView cellForRowAtIndexPath:path4];
-    UITableViewCell *cell5 = [self.tableView cellForRowAtIndexPath:path5];
+    // Add null as a placeholder for any fields that haven't been set. This preserves the mapping of label to table view cell. When text is being set in cellForRow, will not set if equal to null.
     
     NSArray *steps = self.project.steps;
     if (steps.count > 0) {
@@ -224,11 +220,6 @@
         stepsLabel.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
         stepsLabel.textColor = [UIColor darkGrayColor];
         [stepsLabel sizeToFit];
-        cell2.accessoryView = stepsLabel;
-        cell2.accessoryView.alpha = 0.0;
-        [UIView animateWithDuration:0.5 animations:^{
-            cell2.accessoryView.alpha = 1.0;
-        }];
         
         [self.cellLabels addObject:stepsLabel];
     }
@@ -243,11 +234,6 @@
         clientInfoLabel.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
         clientInfoLabel.textColor = [UIColor darkGrayColor];
         [clientInfoLabel sizeToFit];
-        cell3.accessoryView = clientInfoLabel;
-        cell3.accessoryView.alpha = 0.0;
-        [UIView animateWithDuration:0.5 animations:^{
-            cell3.accessoryView.alpha = 1.0;
-        }];
         
         [self.cellLabels addObject:clientInfoLabel];
     }
@@ -262,11 +248,6 @@
         locationLabel.font = [UIFont fontWithName:@"Avenir-Light" size:16.0];
         locationLabel.textColor = [UIColor darkGrayColor];
         [locationLabel sizeToFit];
-        cell4.accessoryView = locationLabel;
-        cell4.accessoryView.alpha = 0.0;
-        [UIView animateWithDuration:0.5 animations:^{
-            cell4.accessoryView.alpha = 1.0;
-        }];
         
         [self.cellLabels addObject:locationLabel];
     }
@@ -298,11 +279,6 @@
             if (notesLabel.frame.size.width > 135) {
                 notesLabel.frame = CGRectMake(notesLabel.frame.origin.x, notesLabel.frame.origin.y, 135, notesLabel.frame.size.height);
             }
-            cell5.accessoryView = notesLabel;
-            cell5.accessoryView.alpha = 0.0;
-            [UIView animateWithDuration:0.5 animations:^{
-                cell5.accessoryView.alpha = 1.0;
-            }];
             
             [self.cellLabels addObject:notesLabel];
         }
@@ -638,15 +614,16 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     
+    // Only set cell labels for cells after price label
     if (indexPath.row > 1) {
-        if (indexPath.row - 2 < self.cellLabels.count) {
-            if (![[self.cellLabels objectAtIndex:indexPath.row - 2] isEqual:[NSNull null]]) {
-                UILabel *label = [self.cellLabels objectAtIndex:indexPath.row - 2];
-                cell.accessoryView = label;
-            }
+        // Check to see if the object is null
+        if (![[self.cellLabels objectAtIndex:indexPath.row - 2] isEqual:[NSNull null]]) {
+            UILabel *label = [self.cellLabels objectAtIndex:indexPath.row - 2];
+            cell.accessoryView = label;
         }
     }
     
+    // Store a reference to the steps cell for manipulation in other view controllers
     if (indexPath.row == 2) {
         self.stepsCell = cell;
     }

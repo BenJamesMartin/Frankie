@@ -29,7 +29,7 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"StepsCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Save"
                                                                  style:UIBarButtonItemStylePlain
                                                                 target:self
                                                                 action:@selector(doneEditing)];

@@ -25,7 +25,7 @@
     self.infoField = @[@"name", @"phone", @"email"];
     self.childTableView = (FrankieClientInformationTableViewController *)self.childViewControllers[0];
     
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Save"
                                                                  style:UIBarButtonItemStylePlain
                                                                 target:self
                                                                 action:@selector(doneEditing)];

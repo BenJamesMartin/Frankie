@@ -29,7 +29,7 @@
     // Rounded corners
     self.notes.layer.cornerRadius = 3.0;
     
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Save"
                                                                  style:UIBarButtonItemStylePlain
                                                                 target:self
                                                                 action:@selector(doneEditing)];

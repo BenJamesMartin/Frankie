@@ -34,7 +34,7 @@
     // Editing existing step - load its data
     if (self.step != nil) {
         [self loadStep];
-        [self editLeftBarButtonItemWithTitle:@"Done"];
+        [self editLeftBarButtonItemWithTitle:@"Save"];
         self.hasChangedBackButton = YES;
         self.navigationItem.title = self.step.name;
     }

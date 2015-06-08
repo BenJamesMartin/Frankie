@@ -706,7 +706,7 @@
                                 <rect key="frame" x="50" y="490" width="220" height="40"/>
                                 <color key="backgroundColor" red="1" green="0.41960784313725491" blue="0.22352941176470587" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="18"/>
-                                <state key="normal" title="submit">
+                                <state key="normal" title="Build Project">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -722,6 +722,7 @@
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <connections>
+                        <outlet property="buildProjectButton" destination="1Sa-Yf-Cvu" id="GK2-BW-pCn"/>
                         <outlet property="tableView" destination="api-8o-Rjq" id="D87-vX-ALv"/>
                         <outlet property="uploadButton" destination="TC5-Tc-cJM" id="h1C-w5-LPY"/>
                         <segue destination="qBv-If-0Nh" kind="custom" id="aWu-j0-gBV"/>

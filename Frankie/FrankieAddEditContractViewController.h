@@ -48,6 +48,8 @@
 // When loading contract from step VC (navigating backwards), do not set job model
 @property (assign, nonatomic) BOOL shouldSetJobInViewDidAppear;
 
+@property (strong, nonatomic) IBOutlet UIButton *buildProjectButton;
+
 @property (strong, nonatomic) Project *project;
 
 // Used to determine if step cell should navigate directly to add/edit step VC to create first step instead of master step VC showing all steps (of which there'd be none)
