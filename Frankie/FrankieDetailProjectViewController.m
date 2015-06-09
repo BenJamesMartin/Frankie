@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Benjamin Martin. All rights reserved.
 //
 
+#import <UITextField+Shake/UITextField+Shake.h>
+#import <MessageUI/MessageUI.h>
+
 #import "FrankieDetailProjectViewController.h"
 #import "FrankieAddEditContractViewController.h"
 #import "FrankieAppDelegate.h"
@@ -14,7 +17,10 @@
 #import "ProjectStep.h"
 #import "PresentingAnimator.h"
 #import "DismissingAnimator.h"
-#import <UITextField+Shake/UITextField+Shake.h>
+
+@interface FrankieDetailProjectViewController () <MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate>
+
+@end
 
 @implementation FrankieDetailProjectViewController
 
@@ -240,12 +246,17 @@
 
 
 #pragma mark - Contact client actions
+// Calling already presents a modal that stays in app
+// Text and email modals require the user of the native MessageUI library
 
 - (IBAction)callClient:(id)sender
 {
+    // Fetch phone number from client information
     NSDictionary *clientInformation = self.project.clientInformation;
     NSString *phoneNumber = clientInformation[@"phone"];
-    phoneNumber = [phoneNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    // Remove phone number spacing characters
+    NSCharacterSet *charactersToRemove = [NSCharacterSet characterSetWithCharactersInString:@" -()"];
+    phoneNumber = [[phoneNumber componentsSeparatedByCharactersInSet:charactersToRemove] componentsJoinedByString:@""];
     if (phoneNumber != nil && phoneNumber.length > 0)
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", phoneNumber]]];
     else {
@@ -255,6 +266,10 @@
 
 - (IBAction)emailClient:(id)sender
 {
+    [self showEmailModal];
+    return;
+    
+    
     NSDictionary *clientInformation = self.project.clientInformation;
     NSString *email = clientInformation[@"email"];
     if (email != nil && email.length > 0)
@@ -266,12 +281,92 @@
 
 - (IBAction)textClient:(id)sender
 {
+    [self showSMSModal];
+    return;
+}
+
+- (void)showEmailModal
+{
+    NSDictionary *clientInformation = self.project.clientInformation;
+    NSString *email = clientInformation[@"email"];
+    // Remove phone number spacing characters
+    MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc] init];
+    mailController.mailComposeDelegate = self;
+    [mailController setToRecipients:@[email]];
+    [mailController setMessageBody:nil isHTML:NO];
+    
+    // Present message view controller on screen
+    [self presentViewController:mailController animated:YES completion:nil];
+}
+
+
+- (void)showSMSModal
+{
+    // Get phone number from client info. Formatting of phone number not necessary.
     NSDictionary *clientInformation = self.project.clientInformation;
     NSString *phoneNumber = clientInformation[@"phone"];
-    if (phoneNumber != nil && phoneNumber.length > 0)
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms:+%@", phoneNumber]]];
-    else
-        [self presentModalVCWithContactType:@"text"];
+    
+    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+    messageController.messageComposeDelegate = self;
+    [messageController setRecipients:@[phoneNumber]];
+    [messageController setBody:nil];
+    
+    // Present message view controller on screen
+    [self presentViewController:messageController animated:YES completion:nil];
+}
+
+#pragma mark - Email and text message compose modal delegate methods
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result) {
+        case MessageComposeResultCancelled:
+            break;
+            
+        case MessageComposeResultFailed:
+        {
+            UIAlertController *warning = [UIAlertController alertControllerWithTitle:@"Error" message:@"Failed to send message." preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Done" style:UIAlertActionStyleCancel handler:nil];
+            [warning addAction:cancel];
+            [self presentViewController:warning animated:YES completion:nil];
+
+            break;
+        }
+            
+        case MessageComposeResultSent:
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult) result
+{
+    switch (result) {
+        case MessageComposeResultCancelled:
+            break;
+            
+        case MessageComposeResultFailed:
+        {
+            UIAlertController *warning = [UIAlertController alertControllerWithTitle:@"Error" message:@"Failed to send message." preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Done" style:UIAlertActionStyleCancel handler:nil];
+            [warning addAction:cancel];
+            [self presentViewController:warning animated:YES completion:nil];
+            
+            break;
+        }
+            
+        case MessageComposeResultSent:
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)showAlertControllerWithMessage:(NSString *)message

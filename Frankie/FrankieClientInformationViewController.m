@@ -116,6 +116,9 @@
 // Format phone number
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    // If color was set to red from invalid input, set it back to default dark gray
+    textField.textColor = [UIColor darkGrayColor];
+    
     if ([textField isEqual:self.childTableView.phoneField]) {
         
         NSString *newText = [textField.text stringByReplacingCharactersInRange:range withString:string];
@@ -166,8 +169,9 @@
 
 - (BOOL)inputsAreValid
 {
+    // Fine to leave field alone if its blank (text length of 0)
     // Length of 14 = 10 digits + 2 parentheses + 1 space + 1 dash
-    if (self.childTableView.phoneField.text.length == 14 && [self NSStringIsValidEmail:self.childTableView.emailField.text]) {
+    if ((self.childTableView.phoneField.text.length == 14 || self.childTableView.phoneField.text.length == 0) &&  ([self NSStringIsValidEmail:self.childTableView.emailField.text] || self.childTableView.emailField.text.length == 0)) {
         return YES;
     }
     else {
@@ -180,14 +184,14 @@
 - (void)invalidateInput
 {
     // If the phone number entered is not complete (10 numbers and 2 dashes added automatically), shake text field and change text color to red
-    if (self.childTableView.phoneField.text.length < 12) {
+    if (self.childTableView.phoneField.text.length < 12 && self.childTableView.phoneField.text.length > 0) {
         [self.childTableView.phoneField shake:10 withDelta:5 speed:0.05 completion:^{
             self.childTableView.phoneField.textColor = [UIColor alizarinColor];
         }];
     }
     
     // If the email entered is not valid, shake text field and change text color to red
-    if (![self NSStringIsValidEmail:self.childTableView.emailField.text]) {
+    if (![self NSStringIsValidEmail:self.childTableView.emailField.text] && self.childTableView.emailField.text.length > 0) {
         [self.childTableView.emailField shake:10 withDelta:5 speed:0.05 completion:^{
             self.childTableView.emailField.textColor = [UIColor alizarinColor];
         }];
