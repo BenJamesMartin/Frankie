@@ -53,16 +53,20 @@
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(cancelCreation)];
+        // Reset current project
+        [FrankieProjectManager sharedManager].currentProject = nil;
         
         self.navigationItem.leftBarButtonItem = backItem;
     }
     // If we're editing the job, change the back button title to a more appropriate "Done"
+    // Also load data for the project
     else {
         UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"Save"
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(createOrEditProject:)];
         
+        self.project = [FrankieProjectManager sharedManager].currentProject;
         [self.buildProjectButton setTitle:@"Save" forState:UIControlStateNormal];
         self.navigationItem.leftBarButtonItem = backItem;
     }
@@ -136,11 +140,8 @@
     // Regardless of whether we're loading data for an existing contract, create references to the title and price text fields on the table view
     [self createTextFieldsReferences];
     
-    // If we're editing an existing job (navigating from master view), load the data for that job.
     // If we're navigating back from steps VC, we should not write over steps.
     if (self.project != nil && self.shouldSetJobInViewDidAppear) {
-        self.project =  [FrankieProjectManager sharedManager].currentProject;
-        
         self.steps = self.project.steps;
         self.shouldSetJobInViewDidAppear = NO;
     }
