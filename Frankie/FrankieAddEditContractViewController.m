@@ -83,8 +83,6 @@
 
     self.projectHasBeenEdited = NO;
     
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
-    
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];

@@ -60,7 +60,25 @@
     
     [self initializeObservers];
     
+    [self setNavigationBarFont];
     return YES;
+}
+
+- (void)setNavigationBarFont
+{
+    // Set font of left and right bar button items
+    NSDictionary *barButtonAppearanceDict = @{
+                                              NSFontAttributeName : [UIFont fontWithName:@"Avenir-Light" size:15.0],
+                                              NSForegroundColorAttributeName: [UIColor whiteColor]
+                                            };
+    [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonAppearanceDict forState:UIControlStateNormal];
+
+    // Set font of navigation bar title
+    NSDictionary *barAppearanceDict = @{
+                                        NSFontAttributeName : [UIFont fontWithName:@"Avenir-Medium" size:18.0],
+                                        NSForegroundColorAttributeName: [UIColor whiteColor]
+                                      };
+    [[UINavigationBar appearance] setTitleTextAttributes:barAppearanceDict];
 }
 
 - (void)initializeObservers

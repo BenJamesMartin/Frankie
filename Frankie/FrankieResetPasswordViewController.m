@@ -31,7 +31,6 @@
 {
     [super viewDidLoad];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     self.navigationItem.title = @"Reset Password";
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
