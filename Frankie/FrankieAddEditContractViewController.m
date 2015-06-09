@@ -471,6 +471,9 @@
     [self.mediaPicker setDelegate:self];
     self.mediaPicker.allowsEditing = YES;
     
+    // Set navigation bar title color to dark gray
+    [self setNavigationBarTextColor:[UIColor darkGrayColor]];
+    
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         UIAlertController *uploadPhotoController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         
@@ -500,7 +503,9 @@
 
 # pragma mark - UIImagePickerController delegate methods
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self setNavigationBarTextColor:[UIColor whiteColor]];
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
@@ -522,7 +527,29 @@
              // error handling
          }];
     }
+    
+    // Reset navigation bar title color to white
+    [self setNavigationBarTextColor:[UIColor whiteColor]];
+    
     [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+
+#pragma mark - Change navigation bar title/bar button item colors
+
+- (void)setNavigationBarTextColor:(UIColor *)color
+{
+    NSDictionary *barAppearanceDict = @{
+                                        NSFontAttributeName : [UIFont fontWithName:@"Avenir-Medium" size:19.0],
+                                        NSForegroundColorAttributeName: color
+                                        };
+    [[UINavigationBar appearance] setTitleTextAttributes:barAppearanceDict];
+    
+    NSDictionary *barButtonAppearanceDict = @{
+                                              NSFontAttributeName : [UIFont fontWithName:@"Avenir-Light" size:16.0],
+                                              NSForegroundColorAttributeName: color
+                                              };
+    [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonAppearanceDict forState:UIControlStateNormal];
 }
 
 #pragma mark - UITextField delegate

@@ -287,6 +287,13 @@
 
 - (void)showEmailModal
 {
+    // Because the SMS modal navigation bar color is white, set the title color as dark gray
+    NSDictionary *barAppearanceDict = @{
+                                        NSFontAttributeName : [UIFont fontWithName:@"Avenir-Medium" size:19.0],
+                                        NSForegroundColorAttributeName: [UIColor darkGrayColor]
+                                        };
+    [[UINavigationBar appearance] setTitleTextAttributes:barAppearanceDict];
+    
     NSDictionary *clientInformation = self.project.clientInformation;
     NSString *email = clientInformation[@"email"];
     // Remove phone number spacing characters
@@ -302,6 +309,13 @@
 
 - (void)showSMSModal
 {
+    // Because the SMS modal navigation bar color is white, set the title color as dark gray
+    NSDictionary *barAppearanceDict = @{
+                                        NSFontAttributeName : [UIFont fontWithName:@"Avenir-Medium" size:19.0],
+                                        NSForegroundColorAttributeName: [UIColor darkGrayColor]
+                                      };
+    [[UINavigationBar appearance] setTitleTextAttributes:barAppearanceDict];
+    
     // Get phone number from client info. Formatting of phone number not necessary.
     NSDictionary *clientInformation = self.project.clientInformation;
     NSString *phoneNumber = clientInformation[@"phone"];
@@ -340,6 +354,13 @@
             break;
     }
     
+    // Reset navigation bar title to white
+    NSDictionary *barAppearanceDict = @{
+                                        NSFontAttributeName : [UIFont fontWithName:@"Avenir-Medium" size:19.0],
+                                        NSForegroundColorAttributeName: [UIColor whiteColor]
+                                        };
+    [[UINavigationBar appearance] setTitleTextAttributes:barAppearanceDict];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -365,6 +386,13 @@
         default:
             break;
     }
+    
+    // Reset navigation bar title to white
+    NSDictionary *barAppearanceDict = @{
+                                        NSFontAttributeName : [UIFont fontWithName:@"Avenir-Medium" size:19.0],
+                                        NSForegroundColorAttributeName: [UIColor whiteColor]
+                                      };
+    [[UINavigationBar appearance] setTitleTextAttributes:barAppearanceDict];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

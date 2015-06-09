@@ -272,6 +272,23 @@
 }
 
 
+#pragma mark - Table view header/footer views
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
+    view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
+    return view;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
+    view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
+    return view;
+}
+
+
 #pragma mark - Text field delegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
@@ -328,7 +345,8 @@
     [self.view endEditing:YES];
 }
 
-- (IBAction)choosePhoto:(id)sender {
+- (IBAction)choosePhoto:(id)sender
+{
     if (!self.hasChangedBackButton) {
         [self editLeftBarButtonItemWithTitle:@"Create"];
     }
@@ -353,6 +371,7 @@
         UIAlertAction *chooseExisting = [UIAlertAction actionWithTitle:@"Choose Existing" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             self.mediaPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
             [self presentViewController:self.mediaPicker animated:YES completion:NULL];
+            [self setNavigationBarTextColor:[UIColor darkGrayColor]];
         }];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             
@@ -366,17 +385,21 @@
     else {
         self.mediaPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentViewController:self.mediaPicker animated:YES completion:NULL];
+        [self setNavigationBarTextColor:[UIColor darkGrayColor]];
     }
 }
 
 
 # pragma mark - UIImagePickerController delegate methods
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self setNavigationBarTextColor:[UIColor whiteColor]];
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
     self.hasSelectedImage = YES;
     UIImage *image;
     
@@ -415,22 +438,39 @@
             }];
     }
     
+    [self setNavigationBarTextColor:[UIColor whiteColor]];
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+
+#pragma mark - Change navigation bar title/bar button item colors
+
+- (void)setNavigationBarTextColor:(UIColor *)color
 {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
-    view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
-    return view;
+    NSDictionary *barAppearanceDict = @{
+                                        NSFontAttributeName : [UIFont fontWithName:@"Avenir-Medium" size:19.0],
+                                        NSForegroundColorAttributeName: color
+                                        };
+    [[UINavigationBar appearance] setTitleTextAttributes:barAppearanceDict];
+    
+    // Set navigation title color
+    NSDictionary *barButtonAppearanceDict = @{
+                                              NSFontAttributeName : [UIFont fontWithName:@"Avenir-Light" size:16.0],
+                                              NSForegroundColorAttributeName: color
+                                              };
+    [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonAppearanceDict forState:UIControlStateNormal];
+    
+    // Set status bar color appropriately
+    if ([color isEqual:[UIColor whiteColor]]) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    }
+    else {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+    }
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
-    view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
-    return view;
-}
+
+#pragma mark - Create Step button action
 
 - (IBAction)createStep:(id)sender
 {
