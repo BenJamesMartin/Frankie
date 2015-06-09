@@ -9,12 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 
-#import "ProjectStep.h"
+#import "Step.h"
 
 @interface FrankieStepsDetailViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) ProjectStep *step;
+@property (strong, nonatomic) Step *step;
 
 @property (strong, nonatomic) IBOutlet UIButton *uploadButton;
 @property (strong, nonatomic) UIImagePickerController *mediaPicker;

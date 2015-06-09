@@ -14,7 +14,7 @@
 #import "FrankieDetailProjectViewController.h"
 #import "FrankieProjectManager.h"
 #import "FrankieAppDelegate.h"
-#import "ProjectStep.h"
+#import "Step.h"
 #import "Project.h"
 #import "RTNActivityView.h"
 
@@ -355,6 +355,7 @@
 
 - (IBAction)createOrEditProject:(id)sender
 {
+    // Every project requires a title. If no title has been specified, scroll to where the title cell is and shake the text field.
     if (self.projectTitle.text.length == 0) {
         [UIView animateWithDuration:0.2 animations:^{
             [self.tableView setContentOffset:CGPointZero animated:NO];
@@ -370,11 +371,13 @@
     // Edit existing contract
     if (self.project != nil) {
         // Fetch object from Core Data
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Project class])];
-        request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.project.objectID];
-        request.fetchLimit = 1;
-        NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
-        self.project = fetchedObjects[0];
+//        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Project class])];
+//        request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.project.objectID];
+//        request.fetchLimit = 1;
+//        NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
+//        self.project = fetchedObjects[0];
+        
+        self.project = [FrankieProjectManager sharedManager].currentProject;
         
         [self.project setValue:self.projectTitle.text forKey:@"title"];
         NSString *priceStr = [self.price.text stringByReplacingOccurrencesOfString:@"$" withString:@""];
@@ -396,8 +399,7 @@
             imageData = nil;
         }
         
-        if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-        }
+        [[FrankieProjectManager sharedManager] saveContext];
     }
     // Add new contract
     else {
@@ -409,7 +411,7 @@
         priceStr = [priceStr stringByReplacingOccurrencesOfString:@"," withString:@""];
         float price = [priceStr floatValue];
         [entity setValue:[NSNumber numberWithFloat:price] forKey:@"price"];
-        [entity setValue:self.steps forKey:@"steps"];
+        [entity setValue:[NSSet setWithArray:self.steps] forKey:@"steps"];
         [entity setValue:self.clientInformation forKey:@"clientInformation"];
         [entity setValue:self.locationPlacemark forKey:@"location"];
         [entity setValue:self.notes forKey:@"notes"];

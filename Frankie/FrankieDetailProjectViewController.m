@@ -14,7 +14,7 @@
 #import "FrankieAppDelegate.h"
 #import "FrankieProjectManager.h"
 #import "RTNActivityView.h"
-#import "ProjectStep.h"
+#import "Step.h"
 #import "PresentingAnimator.h"
 #import "DismissingAnimator.h"
 
@@ -169,12 +169,12 @@
     formatter.dateFormat = @"MMMM dd, yyyy";
     NSString *startDateString = [formatter stringFromDate:startDate];
     
-    NSArray *steps = self.project.steps;
+    NSArray *steps = self.project.steps.allObjects;
     if (steps.count > 0) {
         NSDate *latestDueDate = [NSDate date];
         
         // Find project step's latest due date
-        for (ProjectStep *step in self.project.steps) {
+        for (Step *step in self.project.steps) {
             // If the step's due date is later, it returns 1 (> 0)
             if ([step.dueDate compare:latestDueDate] > 0)
                 latestDueDate = step.dueDate;
@@ -443,7 +443,7 @@
 
 - (FrankieProjectDetailStepsTableViewCell *)configureCell:(FrankieProjectDetailStepsTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    ProjectStep *step = self.project.steps[indexPath.row];
+    Step *step = self.project.steps.allObjects[indexPath.row];
     cell.step = step;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
@@ -462,7 +462,7 @@
     }
     
     if (step.thumbnail != nil && ![step.picture isEqual:[UIImage imageNamed:@"image-upload-icon"]])
-        cell.picture.image = step.thumbnail;
+        cell.picture.image = [UIImage imageWithData:step.thumbnail];
     else
         cell.picture.image = [UIImage imageNamed:@"image-upload-icon-small"];
     
@@ -480,7 +480,7 @@
 
 - (void)formatDateLabelAsDaysSinceForCell:(FrankieProjectDetailStepsTableViewCell *)cell
 {
-    ProjectStep *step = cell.step;
+    Step *step = cell.step;
     double timeSinceDueDateInSeconds = [step.dueDate timeIntervalSinceNow];
     int numberOfDays;
     if (timeSinceDueDateInSeconds / 86400 >= 0) {
@@ -548,11 +548,11 @@
         self.gestureHasEnded = YES;
         
         // Toggle cell completion state
-        NSArray *steps = self.project.steps;
+        NSArray *steps = self.project.steps.allObjects;
         int index = (int)[steps indexOfObject:cell.step];
-        ProjectStep *step = steps[index];
+        Step *step = steps[index];
         
-        step.completed = !step.completed;
+        step.completed = [NSNumber numberWithBool:!(step.completed.boolValue)];
         step.completionDate = (step.completionDate ? step.completionDate : [NSDate date]);
     }
 }
@@ -574,7 +574,7 @@
         } completion:^(BOOL finished) {
             if ([self.cellToAnimate.checkmarkImage.image isEqual:[UIImage imageNamed:@"checkmark-empty"]]) {
                 self.cellToAnimate.checkmarkImage.image = [UIImage imageNamed:@"checkmark-filled"];
-                ProjectStep *step = self.cellToAnimate.step;
+                Step *step = self.cellToAnimate.step;
                 NSDateFormatter *formatter = [NSDateFormatter new];
                 formatter.dateFormat = @"MMMM dd, yyyy";
                 NSString *formattedDate = [formatter stringFromDate:step.completionDate];
@@ -666,7 +666,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    NSArray *steps = self.project.steps;
+    NSArray *steps = self.project.steps.allObjects;
     if (steps.count > 0) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
         view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];
@@ -680,7 +680,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    NSArray *steps = self.project.steps;
+    NSArray *steps = self.project.steps.allObjects;
     if (steps.count > 0) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
         view.backgroundColor = [UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.0];

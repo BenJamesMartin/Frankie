@@ -2,11 +2,12 @@
 //  Project.m
 //  Frankie
 //
-//  Created by Benjamin Martin on 6/3/15.
+//  Created by Benjamin Martin on 6/9/15.
 //  Copyright (c) 2015 Benjamin Martin. All rights reserved.
 //
 
 #import "Project.h"
+#import "Contractor.h"
 
 
 @implementation Project
@@ -20,7 +21,8 @@
 @dynamic parseId;
 @dynamic picture;
 @dynamic price;
-@dynamic steps;
 @dynamic title;
+@dynamic steps;
+@dynamic contractor;
 
 @end

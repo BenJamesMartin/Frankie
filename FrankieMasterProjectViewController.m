@@ -20,7 +20,7 @@
 #import "FrankieSideMenuViewController.h"
 #import "FrankieProjectManager.h"
 #import "Project.h"
-#import "ProjectStep.h"
+#import "Step.h"
 #import "SIAlertView.h"
 
 @interface FrankieMasterProjectViewController ()
@@ -453,9 +453,9 @@
         return;
     }
     
-    ProjectStep *nextStep;
-    for (ProjectStep *step in steps) {
-        if (!step.completed) {
+    Step *nextStep;
+    for (Step *step in steps) {
+        if (!step.completed.boolValue) {
             nextStep = step;
             break;
         }

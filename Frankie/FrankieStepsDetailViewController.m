@@ -7,7 +7,7 @@
 //
 
 #import <RMDateSelectionViewController/RMDateSelectionViewController.h>
-
+#import "FrankieStepManager.h"
 #import "FrankieAddEditContractViewController.h"
 #import "FrankieStepsDetailViewController.h"
 #import "FrankieStepsViewController.h"
@@ -15,7 +15,6 @@
 #import "FrankieAppDelegate.h"
 #import "FrankieDetailProjectViewController.h"
 
-#import "ProjectStep.h"
 
 @interface FrankieStepsDetailViewController ()
 
@@ -40,7 +39,7 @@
     }
     // Creating a new step
     else {
-        self.step = [ProjectStep new];
+        self.step =  [[FrankieStepManager sharedManager] newStep];
         self.navigationItem.title = @"New Step";
     }
 
@@ -220,7 +219,7 @@
     self.dueDateField.text = [formatter stringFromDate:self.step.dueDate];
     if (self.step.picture != nil) {
         self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        [self.uploadButton setImage:self.step.picture forState:UIControlStateNormal];
+        [self.uploadButton setImage:[UIImage imageWithData:self.step.picture] forState:UIControlStateNormal];
     }
     else {
         [self.uploadButton setImage:[UIImage imageNamed:@"image-upload-icon"] forState:UIControlStateNormal];
@@ -411,7 +410,7 @@
             UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
             
-            self.step.thumbnail = newImage;
+            self.step.thumbnail = UIImagePNGRepresentation(newImage);
         });
     };
     
@@ -430,7 +429,7 @@
             UIImage *copyOfOriginalImage = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
             self.uploadButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
             [self.uploadButton setImage:copyOfOriginalImage forState:UIControlStateNormal];
-            self.step.picture = copyOfOriginalImage;
+            self.step.picture = UIImagePNGRepresentation(copyOfOriginalImage);
             completionBlock(copyOfOriginalImage);
         }
             failureBlock:^(NSError *error) {

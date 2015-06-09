@@ -10,7 +10,7 @@
 #import "FrankieStepsTableViewCell.h"
 
 #import "FrankieAddEditContractViewController.h"
-#import "ProjectStep.h"
+#import "Step.h"
 
 @interface FrankieStepsViewController ()
 
@@ -154,14 +154,14 @@
         cell = [[FrankieStepsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    ProjectStep *step = self.steps[indexPath.row];
+    Step *step = self.steps[indexPath.row];
     
     NSDateFormatter *formatter = [NSDateFormatter new];
     formatter.dateFormat = @"MMMM dd, yyyy";
     
     cell.name.text = step.name;
     if (step.picture != nil) {
-        cell.picture.image = step.picture;
+        cell.picture.image = [UIImage imageWithData:step.picture];
     }
     else {
         cell.picture.image = [UIImage imageNamed:@"image-upload-icon-small"];

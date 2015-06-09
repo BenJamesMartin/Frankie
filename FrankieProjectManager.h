@@ -18,6 +18,7 @@
 @property (strong, nonatomic) Project *currentProject;
 
 + (FrankieProjectManager *)sharedManager;
+- (BOOL)saveContext;
 
 // Load various attributes
 - (NSDictionary *)fetchClientInformation;
