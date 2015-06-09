@@ -812,71 +812,43 @@
 }
 
 
-#pragma mark - Format phone number
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    textField.textColor = [UIColor grayColor];
-    
+// Format phone number
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    // If color was set to red from invalid input, set it back to default dark gray
+    textField.textColor = [UIColor darkGrayColor];
     if ([self.contactInfoType isEqualToString:@"email"])
         return YES;
     
-    int length = [self getLength:textField.text];
+    NSString *newText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    BOOL deleting = [newText length] < [textField.text length];
     
-    if (length == 10)
-    {
-        NSLog(@"length is 10");
-        if (range.length == 0) {
-            NSLog(@"not changing");
-            return NO;
-        }
-    }
+    NSString *strippedNumber = [newText stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, [newText length])];
+    NSUInteger digits = [strippedNumber length];
     
-    if (length == 3) {
-        NSString *num = [self formatNumber:textField.text];
-        textField.text = [NSString stringWithFormat:@"%@-",num];
-        if(range.length > 0)
-            textField.text = [NSString stringWithFormat:@"%@-",[num substringToIndex:3]];
-    }
-    else if (length == 6) {
-        NSString *num = [self formatNumber:textField.text];
-        textField.text = [NSString stringWithFormat:@"%@-%@-",[num  substringToIndex:3],[num substringFromIndex:3]];
-        if(range.length > 0)
-            textField.text = [NSString stringWithFormat:@"%@-%@",[num substringToIndex:3],[num substringFromIndex:3]];
-    }
+    if (digits > 10)
+        strippedNumber = [strippedNumber substringToIndex:10];
+    
+    UITextRange *selectedRange = [textField selectedTextRange];
+    NSInteger oldLength = [textField.text length];
+    
+    if (digits == 0)
+        textField.text = @"";
+    else if (digits < 3 || (digits == 3 && deleting))
+        textField.text = [NSString stringWithFormat:@"(%@", strippedNumber];
+    else if (digits < 6 || (digits == 6 && deleting))
+        textField.text = [NSString stringWithFormat:@"(%@) %@", [strippedNumber substringToIndex:3], [strippedNumber substringFromIndex:3]];
+    else
+        textField.text = [NSString stringWithFormat:@"(%@) %@-%@", [strippedNumber substringToIndex:3], [strippedNumber substringWithRange:NSMakeRange(3, 3)], [strippedNumber substringFromIndex:6]];
+    
+    UITextPosition *newPosition = [textField positionFromPosition:selectedRange.start offset:[textField.text length] - oldLength];
+    UITextRange *newRange = [textField textRangeFromPosition:newPosition toPosition:newPosition];
+    [textField setSelectedTextRange:newRange];
+    
+    return NO;
     
     return YES;
 }
-
-- (NSString*)formatNumber:(NSString*)mobileNumber
-{
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@")" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@" " withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"+" withString:@""];
-    
-    int length = (int)[mobileNumber length];
-    if (length > 10) {
-        mobileNumber = [mobileNumber substringFromIndex: length-10];
-    }
-    
-    return mobileNumber;
-}
-
-
-- (int)getLength:(NSString*)mobileNumber
-{
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@")" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@" " withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"+" withString:@""];
-    
-    int length = (int)[mobileNumber length];
-    
-    return length;
-}
-
 
 #pragma mark - Add done button to modal VC
 
@@ -910,6 +882,7 @@
 
 - (void)saveClientInformation
 {
+    // Check to make sure input is valid
     if ([self.contactInfoType isEqualToString:@"email"]) {
         if (![self NSStringIsValidEmail:self.modalField.text]) {
             [self.modalField shake:5 withDelta:8.0 speed:0.03 completion:nil];
@@ -925,29 +898,9 @@
         }
     }
     
-    // Get a copy of relevant Core Data project
-    NSManagedObjectContext *context = [(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Project class])];
-    request.predicate = [NSPredicate predicateWithFormat:@"SELF = %@", self.project.objectID];
-    request.fetchLimit = 1;
-    NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
-    Project *job = fetchedObjects[0];
-    
-    // Set the contact information for the project
-    NSString *type = self.contactInfoType;
-    NSMutableDictionary *clientInformation = job.clientInformation;
-    if (clientInformation == nil)
-        clientInformation = @{ self.contactInfoType : self.modalField.text }.mutableCopy;
-    else
-        clientInformation[self.contactInfoType] = self.modalField.text;
-    
-    [job setValue:clientInformation forKey:@"clientInformation"];
-    
-    // Save the Core Data context
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        if ([(FrankieAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext]) {
-        }
-    });
+    NSMutableDictionary *clientInfo = ((NSDictionary *)[FrankieProjectManager sharedManager].currentProject.clientInformation).mutableCopy;
+    clientInfo[self.contactInfoType] = self.modalField.text;
+    [[FrankieProjectManager sharedManager] saveClientInformation:clientInfo];
     
     // Perform correct action here of calling/texting/emailing
     if ([self.contactInfoType isEqualToString:@"email"])
